@@ -10,8 +10,30 @@ import ec.*;
 import ec.simple.*;
 import ec.vector.*;
 
-public class FirstProblem extends Problem implements SimpleProblemForm
-{
+import il.ac.bgu.cs.bp.bpjs.execution.BProgramRunner;
+import il.ac.bgu.cs.bp.bpjs.execution.listeners.PrintBProgramRunnerListener;
+import il.ac.bgu.cs.bp.bpjs.model.BProgram;
+import il.ac.bgu.cs.bp.bpjs.model.ResourceBProgram;
+
+
+public class FirstProblem extends Problem implements SimpleProblemForm {
+
+    private int bp_run() {
+        // This will load the program file from <Project>/src/main/resources/
+        final BProgram bprog = new ResourceBProgram("FourInARow.js");
+
+        BProgramRunner rnr = new BProgramRunner(bprog);
+
+        // Print program events to the console
+        rnr.addListener( new PrintBProgramRunnerListener() );
+
+        // go!
+        rnr.run();
+
+        // just a place holder, we should return something smarter...
+        return 1;
+    }
+
     public void evaluate(final EvolutionState state,
                          final Individual ind,
                          final int subpopulation,
@@ -21,6 +43,8 @@ public class FirstProblem extends Problem implements SimpleProblemForm
 
         if (!(ind instanceof BitVectorIndividual))
             state.output.fatal("Whoa!  It's not a BitVectorIndividual!!!",null);
+
+        bp_run();   // currently ignoring the returned value
 
         int sum=0;
         BitVectorIndividual ind2 = (BitVectorIndividual)ind;
