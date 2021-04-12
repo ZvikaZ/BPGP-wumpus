@@ -7,6 +7,9 @@
 
 
 import ec.*;
+import ec.gp.*;
+import ec.gp.ge.GEIndividual;
+import ec.gp.koza.*;
 import ec.simple.*;
 import ec.vector.*;
 
@@ -16,8 +19,7 @@ import il.ac.bgu.cs.bp.bpjs.model.BProgram;
 import il.ac.bgu.cs.bp.bpjs.model.ResourceBProgram;
 
 
-public class FirstProblem extends Problem implements SimpleProblemForm {
-
+public class FirstProblem extends GPProblem implements SimpleProblemForm {
     private int bp_run() {
         // This will load the program file from <Project>/src/main/resources/
         final BProgram bprog = new ResourceBProgram("FourInARow.js");
@@ -25,6 +27,7 @@ public class FirstProblem extends Problem implements SimpleProblemForm {
         BProgramRunner rnr = new BProgramRunner(bprog);
 
         // Print program events to the console
+        // TODO don't print!
         rnr.addListener( new PrintBProgramRunnerListener() );
 
         // go!
@@ -41,24 +44,15 @@ public class FirstProblem extends Problem implements SimpleProblemForm {
     {
         if (ind.evaluated) return;
 
-        if (!(ind instanceof BitVectorIndividual))
-            state.output.fatal("Whoa!  It's not a BitVectorIndividual!!!",null);
+        if (!(ind instanceof GEIndividual))
+            state.output.fatal("Whoa!  It's not a GEIndividual!!!",null);
 
-        bp_run();   // currently ignoring the returned value
+        int run_result = bp_run();   // TODO currently it's garbage value
 
-        int sum=0;
-        BitVectorIndividual ind2 = (BitVectorIndividual)ind;
-
-        for(int x=0; x<ind2.genome.length; x++)
-            sum += (ind2.genome[x] ? 1 : 0);
-
-        if (!(ind2.fitness instanceof SimpleFitness))
-            state.output.fatal("Whoa!  It's not a SimpleFitness!!!",null);
-        ((SimpleFitness)ind2.fitness).setFitness(state,
-                /// ...the fitness...
-                sum/(double)ind2.genome.length,
-                ///... is the individual ideal?  Indicate here...
-                sum == ind2.genome.length);
-        ind2.evaluated = true;
+        KozaFitness f = ((KozaFitness)ind.fitness);
+        f.setStandardizedFitness(state, run_result);
+        //Z f.hits = sum;   //TODO what's this?
+        ind.evaluated = true;
+        //TODO the previous problem used 'ind2'. does it matter?
     }
 }

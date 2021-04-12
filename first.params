@@ -1,57 +1,58 @@
-# Copyright 2006 by Sean Luke and George Mason University
-# Licensed under the Academic Free License version 3.0
-# See the file "LICENSE" for more information
+#TODO: replace with relative path
+parent.0 = /home/zvikah/projects/ecj/ecj/ecj/src/main/resources/ec/gp/ge/ge.params
+parent.1 = /home/zvikah/projects/ecj/ecj/ecj/src/main/resources/ec/gp/koza/koza.params
 
-# The parameters that were laid out in Tutorial 1 (see the documentation)
-print-unaccessed-params = true
+# Stolen from koza/params -- overwriting just
+# a little for readability
+# You need to create at least one function set,
+# called "f0", which your first tree will use.
 
-breedthreads	= 1
-evalthreads	= 1
-seed.0		= time
+gp.fs.size = 1
+gp.fs.0.name = f0
 
-state		= ec.simple.SimpleEvolutionState
+### The functions, carefully ordered :-)  (See below)
 
-pop		= ec.Population
-init		= ec.simple.SimpleInitializer
-finish		= ec.simple.SimpleFinisher
-breed		= ec.simple.SimpleBreeder
-eval		= ec.simple.SimpleEvaluator
-stat		= ec.simple.SimpleStatistics
-exch		= ec.simple.SimpleExchanger
+gp.fs.0.func.0 = ec.app.ant.func.Left
+gp.fs.0.func.0.nc = nc0
+gp.fs.0.func.1 = ec.app.ant.func.Right
+gp.fs.0.func.1.nc = nc0
+gp.fs.0.func.2 = ec.app.ant.func.Move
+gp.fs.0.func.2.nc = nc0
+gp.fs.0.func.3 = ec.app.ant.func.IfFoodAhead
+gp.fs.0.func.3.nc = nc2
+gp.fs.0.func.4 = ec.app.ant.func.Progn2
+gp.fs.0.func.4.nc = nc2
+gp.fs.0.func.5 = ec.app.ant.func.Progn3
+gp.fs.0.func.5.nc = nc3
+# We won't use this one here
+gp.fs.0.func.6 = ec.app.ant.func.Progn4
+gp.fs.0.func.6.nc = nc4
 
-# it was 200 generations
-generations		= 2
-quit-on-run-complete	= true
-checkpoint		= false
-checkpoint-prefix	= ec
-checkpoint-modulo	= 1
 
-stat.file		= $out.stat
+#
+# We specify our problem here
+#
 
-pop.subpops		= 1
-pop.subpop.0		= ec.Subpopulation
+#Z eval.problem = ec.app.ant.Ant
+eval.problem = FirstProblem
+# Because our GPData is completely empty, we can just use
+# GPData directly
+eval.problem.data = ec.gp.GPData
 
-#original 10
-pop.subpop.0.size 		= 5
+# Here we determine what kind of Ant we're doing:
 
-# don't retry generation - duplication is fine
-pop.subpop.0.duplicate-retries 	= 0
-pop.subpop.0.species 		= ec.vector.BitVectorSpecies
+# no progn4, 400 moves, Santa Fe trail
+gp.fs.0.size = 6
+#Z eval.problem.moves = 400
+#Z eval.problem.file = santafe.trl
 
-pop.subpop.0.species.fitness 	= ec.simple.SimpleFitness
-pop.subpop.0.species.ind	= ec.vector.BitVectorIndividual
 
-pop.subpop.0.species.genome-size	= 200
-pop.subpop.0.species.crossover-type	= one
-pop.subpop.0.species.mutation-type	= flip
-pop.subpop.0.species.mutation-prob	= 0.01
+ge.species.file.0 = ant.grammar
 
-pop.subpop.0.species.pipe			= ec.vector.breed.VectorMutationPipeline
-pop.subpop.0.species.pipe.source.0		= ec.vector.breed.VectorCrossoverPipeline
-pop.subpop.0.species.pipe.source.0.source.0	= ec.select.TournamentSelection
-pop.subpop.0.species.pipe.source.0.source.1	= ec.select.TournamentSelection
-
-select.tournament.size		= 2
-
-#Z eval.problem		= ec.app.tutorial1.MaxOnes
-eval.problem		= FirstProblem
+eval.problem.problem = FirstProblem
+#Z eval.problem.problem = ec.app.ant.Ant
+#Z # Because our GPData is completely empty, we can just use
+#Z # the default rather than a custom subclass
+#Z eval.problem.problem.data = ec.gp.GPData
+#Z eval.problem.problem.moves = 400
+#Z eval.problem.problem.file = santa
