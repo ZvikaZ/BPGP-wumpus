@@ -8,28 +8,11 @@ gp.fs.0.size = 1
 gp.fs.0.func.0 = func.BThread
 gp.fs.0.func.0.nc = nc0
 
-eval.problem = FirstProblem
-
-# Because our GPData is completely empty, we can just use
-# GPData directly
-eval.problem.data = ec.gp.GPData
-
-# Here we determine what kind of Ant we're doing:
-
-# no progn4, 400 moves, Santa Fe trail
-#Z eval.problem.moves = 400
-#Z eval.problem.file = santafe.trl
-
+eval.problem.problem = FirstProblem
+#TODO maybe we need real data here?
+eval.problem.problem.data = ec.gp.GPData
 
 ge.species.file.0 = ant.grammar
-
-eval.problem.problem = FirstProblem
-#Z eval.problem.problem = ec.app.ant.Ant
-#Z # Because our GPData is completely empty, we can just use
-#Z # the default rather than a custom subclass
-#Z eval.problem.problem.data = ec.gp.GPData
-#Z eval.problem.problem.moves = 400
-#Z eval.problem.problem.file = santa
 
 #TODO increase... maybe 200?
 generations		= 2

@@ -8,15 +8,16 @@
 
 import ec.*;
 import ec.gp.*;
-import ec.gp.ge.GEIndividual;
 import ec.gp.koza.*;
 import ec.simple.*;
-import ec.vector.*;
 
 import il.ac.bgu.cs.bp.bpjs.execution.BProgramRunner;
 import il.ac.bgu.cs.bp.bpjs.execution.listeners.PrintBProgramRunnerListener;
 import il.ac.bgu.cs.bp.bpjs.model.BProgram;
 import il.ac.bgu.cs.bp.bpjs.model.ResourceBProgram;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 
 public class FirstProblem extends GPProblem implements SimpleProblemForm {
@@ -44,15 +45,25 @@ public class FirstProblem extends GPProblem implements SimpleProblemForm {
     {
         if (ind.evaluated) return;
 
-        if (!(ind instanceof GEIndividual))
-            state.output.fatal("Whoa!  It's not a GEIndividual!!!",null);
 
+        if (!(ind instanceof GPIndividual))
+            state.output.fatal("Whoa!  It's not a GPIndividual!!!",null);
+
+        String code = treeToString(((GPIndividual) ind).trees[0], state);
         int run_result = bp_run();   // TODO currently it's garbage value
 
         KozaFitness f = ((KozaFitness)ind.fitness);
         f.setStandardizedFitness(state, run_result);
-        //Z f.hits = sum;   //TODO what's this?
         ind.evaluated = true;
         //TODO the previous problem used 'ind2'. does it matter?
+    }
+
+    private String treeToString(GPTree tree, EvolutionState state) {
+        StringWriter out    = new StringWriter();
+        PrintWriter writer = new PrintWriter(out);
+
+        tree.printTree(state, writer);
+        writer.flush();
+        return out.toString();
     }
 }

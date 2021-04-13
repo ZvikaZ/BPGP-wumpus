@@ -3,9 +3,9 @@ TODO
 
 NEXT
 ----
-- Map to GP, and verify out.stat
-    - use /home/zvikah/projects/ecj/ecj/ecj/src/main/java/ec/app/ant/func/IfFoodAhead.java
-
+- use real grammar
+- insert grammar to js file
+- eval bpjs run result
 
 LATER
 -----
