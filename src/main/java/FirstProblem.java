@@ -32,7 +32,7 @@ public class FirstProblem extends GPProblem implements SimpleProblemForm {
         rnr.addListener( new PrintBProgramRunnerListener() );
 
         // go!
-//        rnr.run();
+        rnr.run();
 
         // just a place holder, we should return something smarter...
         return 1;
