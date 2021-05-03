@@ -5,8 +5,8 @@ import ec.app.ant.*;
 import ec.gp.*;
 import ec.util.*;
 
-public class BThread extends GPNode { // implements EvalPrint {
-    public String toString() { return "BThread"; }
+public class Request extends GPNode { // implements EvalPrint {
+    public String toString() { return "Request"; }
 
     public void eval(final EvolutionState state,
                      final int thread,

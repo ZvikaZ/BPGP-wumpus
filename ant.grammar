@@ -4,5 +4,8 @@
 #<op> ::=  (progn2 <op> <op>)
 #<op> ::= (progn3 <op> <op> <op>)
 #<op> ::= (left) | (right) | (move)
-<start> ::= <op>
-<op> ::= (BThread)
+# allow more bts
+<start> ::= <bt>
+<bt> ::= <request>
+# TODO...
+<request> ::= (Request)

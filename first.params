@@ -5,7 +5,7 @@ parent.1 = /home/zvikah/projects/ecj/ecj/ecj/src/main/resources/ec/gp/koza/koza.
 gp.fs.size = 1
 gp.fs.0.name = f0
 gp.fs.0.size = 1
-gp.fs.0.func.0 = func.BThread
+gp.fs.0.func.0 = func.Request
 gp.fs.0.func.0.nc = nc0
 
 eval.problem.problem = FirstProblem
