@@ -4,9 +4,11 @@ parent.1 = /home/zvikah/projects/ecj/ecj/ecj/src/main/resources/ec/gp/koza/koza.
 
 gp.fs.size = 1
 gp.fs.0.name = f0
-gp.fs.0.size = 1
+gp.fs.0.size = 2
 gp.fs.0.func.0 = func.Request
 gp.fs.0.func.0.nc = nc0
+gp.fs.0.func.1 = func.WaitFor
+gp.fs.0.func.1.nc = nc0
 
 eval.problem.problem = FirstProblem
 #TODO maybe we need real data here?

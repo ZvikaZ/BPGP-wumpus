@@ -6,6 +6,7 @@
 #<op> ::= (left) | (right) | (move)
 # allow more bts
 <start> ::= <bt>
-<bt> ::= <request>
+<bt> ::= <request> | <wait-for> <request> | <wait-for> <wait-for> <request>
 # TODO...
 <request> ::= (Request)
+<wait-for> ::= (WaitFor)
