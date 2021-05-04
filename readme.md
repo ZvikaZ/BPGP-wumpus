@@ -10,6 +10,6 @@ NEXT
 LATER
 -----
 - some explanations in this file...
-- move .params, .grammar (and maybe others) to resources dir
 - clean ecj warnings
+- get rid of absolute path in first.params
 

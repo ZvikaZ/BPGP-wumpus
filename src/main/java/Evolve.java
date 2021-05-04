@@ -1,4 +1,4 @@
-// run with -file first.params
+// run with -file src/main/resources/first.params
 
 import ec.*;
 
