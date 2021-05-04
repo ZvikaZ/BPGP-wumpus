@@ -1,6 +1,6 @@
-#TODO: replace with relative path
-parent.0 = /home/zvikah/projects/ecj/ecj/ecj/src/main/resources/ec/gp/ge/ge.params
-parent.1 = /home/zvikah/projects/ecj/ecj/ecj/src/main/resources/ec/gp/koza/koza.params
+# @ec.Evolve = <ECJ-DIR>/ecj/src/main/resources/ec/ , but inside Maven's .jar
+parent.0 = @ec.Evolve gp/ge/ge.params
+parent.1 = @ec.Evolve gp/koza/koza.params
 
 gp.fs.size = 1
 gp.fs.0.name = f0

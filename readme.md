@@ -11,5 +11,4 @@ LATER
 -----
 - some explanations in this file...
 - clean ecj warnings
-- get rid of absolute path in first.params
 
