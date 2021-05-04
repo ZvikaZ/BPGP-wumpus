@@ -19,8 +19,7 @@ gp.fs.0.func.3 = func.Request
 gp.fs.0.func.3.nc = nc0
 
 eval.problem.problem = FirstProblem
-#TODO maybe we need real data here?
-eval.problem.problem.data = ec.gp.GPData
+eval.problem.problem.data = func.StringData
 
 ge.species.file.0 = first.grammar
 

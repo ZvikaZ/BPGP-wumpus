@@ -17,15 +17,16 @@ public class Cons extends GPNode { // implements EvalPrint {
                      final GPIndividual individual,
                      final Problem problem)
         {
-            double result = 3;
-//        double result;
-//        DoubleData rd = ((DoubleData)(input));
-//
-//        children[0].eval(state,thread,input,stack,individual,problem);
-//        result = rd.x;
-//
-//        children[1].eval(state,thread,input,stack,individual,problem);
-//        rd.x = result + rd.x;
+            String result = "";
+            StringData rd = ((StringData)(input));
+
+            children[0].eval(state,thread,input,stack,individual,problem);
+            result += rd.str;
+
+            children[1].eval(state,thread,input,stack,individual,problem);
+            result += rd.str;
+
+            rd.str = result;
         }
 }
 

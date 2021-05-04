@@ -19,6 +19,8 @@ import il.ac.bgu.cs.bp.bpjs.model.ResourceBProgram;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import func.StringData;
+
 
 public class FirstProblem extends GPProblem implements SimpleProblemForm {
     private int bp_run() {
@@ -45,11 +47,17 @@ public class FirstProblem extends GPProblem implements SimpleProblemForm {
     {
         if (ind.evaluated) return;
 
+        StringData input = (StringData)(this.input);
 
         if (!(ind instanceof GPIndividual))
             state.output.fatal("Whoa!  It's not a GPIndividual!!!",null);
 
+        ((GPIndividual)ind).trees[0].child.eval(state, threadnum, input, stack, (GPIndividual)ind, this);
+        System.out.println("problem evaluated: " + input.str + "\n.");
+
         String code = treeToString(((GPIndividual) ind).trees[0], state);
+        System.out.println("treeToString result: " + code);
+
         int run_result = bp_run();   // TODO currently it's garbage value
 
         KozaFitness f = ((KozaFitness)ind.fitness);

@@ -14,15 +14,9 @@ public class Request extends GPNode { // implements EvalPrint {
                      final GPIndividual individual,
                      final Problem problem)
         {
-            double result = 3;
-//        double result;
-//        DoubleData rd = ((DoubleData)(input));
-//
-//        children[0].eval(state,thread,input,stack,individual,problem);
-//        result = rd.x;
-//
-//        children[1].eval(state,thread,input,stack,individual,problem);
-//        rd.x = result + rd.x;
+            StringData rd = (StringData)input;
+            //TODO parameters for 'request'
+            rd.str = "bp.sync({ request:[ StaticEvents.Draw ] });\n";
         }
 }
 
