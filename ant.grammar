@@ -1,12 +1,10 @@
-# TODO modify everything here, including the filename
-#<prog> ::= <op>
-#<op> ::= (if-food-ahead <op> <op>)
-#<op> ::=  (progn2 <op> <op>)
-#<op> ::= (progn3 <op> <op> <op>)
-#<op> ::= (left) | (right) | (move)
-# allow more bts
+# TODO modify filename
+#
+# TODO allow more bts with something like: ...
+# <start> ::= <bt> | (Cons <bt> <start>)
+# .. but for now, let's be simpler:
 <start> ::= <bt>
-<bt> ::= <request> | <wait-for> <request> | <wait-for> <wait-for> <request>
+<bt> ::= <request> | (Cons <wait-for> <request>) | (Cons3 <wait-for> <wait-for> <request>)
 # TODO...
 <request> ::= (Request)
 <wait-for> ::= (WaitFor)
