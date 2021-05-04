@@ -1,10 +1,6 @@
 
-/*
-  Copyright 2006 by Sean Luke
-  Licensed under the Academic Free License version 3.0
-  See the file "LICENSE" for more information
-*/
 
+import org.apache.commons.io.IOUtils;
 
 import ec.*;
 import ec.gp.*;
@@ -14,18 +10,24 @@ import ec.simple.*;
 import il.ac.bgu.cs.bp.bpjs.execution.BProgramRunner;
 import il.ac.bgu.cs.bp.bpjs.execution.listeners.PrintBProgramRunnerListener;
 import il.ac.bgu.cs.bp.bpjs.model.BProgram;
-import il.ac.bgu.cs.bp.bpjs.model.ResourceBProgram;
+import il.ac.bgu.cs.bp.bpjs.model.StringBProgram;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URL;
 
 import func.StringData;
 
 
 public class FirstProblem extends GPProblem implements SimpleProblemForm {
-    private int bp_run() {
+    private int bp_run(String generatedCode) {
         // This will load the program file from <Project>/src/main/resources/
-        final BProgram bprog = new ResourceBProgram("FourInARow.js");
+//        final BProgram bprog = new ResourceBProgram("FourInARow.js");
+//        InputStream inputStream = this.getClass().getResourceAsStream("FourInARow.js");
+        String code = resourceToString("FourInARow.js");
+        code += "\n\n" + generatedCode;
+        final BProgram bprog = new StringBProgram(code);
 
         BProgramRunner rnr = new BProgramRunner(bprog);
 
@@ -38,6 +40,17 @@ public class FirstProblem extends GPProblem implements SimpleProblemForm {
 
         // just a place holder, we should return something smarter...
         return 1;
+    }
+
+    private String resourceToString(String resourceName) {
+        URL url = this.getClass().getResource(resourceName);
+        String result = null;
+        try {
+            result = IOUtils.toString(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     public void evaluate(final EvolutionState state,
@@ -55,10 +68,10 @@ public class FirstProblem extends GPProblem implements SimpleProblemForm {
         ((GPIndividual)ind).trees[0].child.eval(state, threadnum, input, stack, (GPIndividual)ind, this);
         System.out.println("problem evaluated: " + input.str + "\n.");
 
-        String code = treeToString(((GPIndividual) ind).trees[0], state);
-        System.out.println("treeToString result: " + code);
+        String niceTree = treeToString(((GPIndividual) ind).trees[0], state);
+        System.out.println("treeToString result: " + niceTree);
 
-        int run_result = bp_run();   // TODO currently it's garbage value
+        int run_result = bp_run(input.str);   // TODO currently it's garbage value
 
         KozaFitness f = ((KozaFitness)ind.fitness);
         f.setStandardizedFitness(state, run_result);
