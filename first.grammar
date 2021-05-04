@@ -1,5 +1,3 @@
-# TODO modify filename
-#
 # TODO allow more bts with something like: ...
 # <start> ::= <bt> | (Cons <bt> <start>)
 # .. but for now, let's be simpler:

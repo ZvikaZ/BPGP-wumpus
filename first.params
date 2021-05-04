@@ -22,7 +22,7 @@ eval.problem.problem = FirstProblem
 #TODO maybe we need real data here?
 eval.problem.problem.data = ec.gp.GPData
 
-ge.species.file.0 = ant.grammar
+ge.species.file.0 = first.grammar
 
 #TODO increase... maybe 200 generations, 10 (or more?) individuals in subpop?
 generations	= 2

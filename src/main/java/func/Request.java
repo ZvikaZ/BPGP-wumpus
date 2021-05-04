@@ -1,7 +1,6 @@
 package func;
 
 import ec.*;
-import ec.app.ant.*;
 import ec.gp.*;
 import ec.util.*;
 
