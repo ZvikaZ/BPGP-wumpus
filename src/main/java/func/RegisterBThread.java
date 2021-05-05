@@ -10,6 +10,8 @@ import ec.gp.GPNode;
 public class RegisterBThread extends GPNode { // implements EvalPrint {
     public String toString() { return "RegisterBThread"; }
 
+    public int expectedChildren() { return 1; }
+
     public void eval(final EvolutionState state,
                      final int thread,
                      final GPData input,

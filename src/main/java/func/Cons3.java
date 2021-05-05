@@ -10,6 +10,8 @@ import ec.gp.GPNode;
 public class Cons3 extends GPNode { // implements EvalPrint {
     public String toString() { return "Cons3"; }
 
+    public int expectedChildren() { return 3; }
+
     public void eval(final EvolutionState state,
                      final int thread,
                      final GPData input,

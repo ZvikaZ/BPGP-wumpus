@@ -2,10 +2,11 @@ package func;
 
 import ec.*;
 import ec.gp.*;
-import ec.util.*;
 
 public class Request extends GPNode { // implements EvalPrint {
     public String toString() { return "Request"; }
+
+    public int expectedChildren() { return 1; }
 
     public void eval(final EvolutionState state,
                      final int thread,
@@ -14,9 +15,19 @@ public class Request extends GPNode { // implements EvalPrint {
                      final GPIndividual individual,
                      final Problem problem)
         {
-            StringData rd = (StringData)input;
-            //TODO parameters for 'request'
-            rd.str = "bp.sync({ request:[ StaticEvents.Draw ] });\n";
+            String result = "bp.sync({ request:[ ";
+
+            StringData rd = ((StringData)(input));
+            rd.pushSeperator(", ");
+
+            children[0].eval(state,thread,input,stack,individual,problem);
+            result += rd.str;
+
+            result += " ] });\n";
+
+            rd.str = result;
+            rd.popSeparator();
+
         }
 }
 

@@ -4,7 +4,7 @@ parent.1 = @ec.Evolve gp/koza/koza.params
 
 gp.fs.size = 1
 gp.fs.0.name = f0
-gp.fs.0.size = 5
+gp.fs.0.size = 7
 
 # cons has 2 children, con3 has 3 children
 gp.fs.0.func.0 = func.Cons
@@ -15,12 +15,16 @@ gp.fs.0.func.1.nc = nc3
 # 1 child
 gp.fs.0.func.2 = func.RegisterBThread
 gp.fs.0.func.2.nc = nc1
+gp.fs.0.func.3 = func.WaitFor
+gp.fs.0.func.3.nc = nc1
+gp.fs.0.func.4 = func.Request
+gp.fs.0.func.4.nc = nc1
 
 # no children
-gp.fs.0.func.3 = func.WaitFor
-gp.fs.0.func.3.nc = nc0
-gp.fs.0.func.4 = func.Request
-gp.fs.0.func.4.nc = nc0
+gp.fs.0.func.5 = func.YellowCoinEs
+gp.fs.0.func.5.nc = nc0
+gp.fs.0.func.6 = func.RedCoinEs
+gp.fs.0.func.6.nc = nc0
 
 eval.problem.problem = FirstProblem
 eval.problem.problem.data = func.StringData

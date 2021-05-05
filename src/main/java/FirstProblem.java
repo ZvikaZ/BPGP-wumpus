@@ -37,7 +37,7 @@ public class FirstProblem extends GPProblem implements SimpleProblemForm {
         // go!
         rnr.run();
 
-        // just a place holder, we should return something smarter...
+        // TODO just a place holder, we should return something smarter...
         return 1;
     }
 
@@ -65,10 +65,10 @@ public class FirstProblem extends GPProblem implements SimpleProblemForm {
             state.output.fatal("Whoa!  It's not a GPIndividual!!!",null);
 
         ((GPIndividual)ind).trees[0].child.eval(state, threadnum, input, stack, (GPIndividual)ind, this);
-        System.out.println("problem evaluated: " + input.str + "\n.");
+        System.out.println("generated code:\n" + input.str + "-------");
 
         String niceTree = treeToString(((GPIndividual) ind).trees[0], state);
-        System.out.println("treeToString result: " + niceTree);
+        System.out.println("grammar: " + niceTree + "========\n");
 
         int run_result = bp_run(input.str);   // TODO currently it's garbage value
 

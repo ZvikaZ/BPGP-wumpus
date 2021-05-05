@@ -10,6 +10,8 @@ import ec.gp.GPNode;
 public class WaitFor extends GPNode { // implements EvalPrint {
     public String toString() { return "WaitFor"; }
 
+    public int expectedChildren() { return 1; }
+
     public void eval(final EvolutionState state,
                      final int thread,
                      final GPData input,
@@ -17,9 +19,19 @@ public class WaitFor extends GPNode { // implements EvalPrint {
                      final GPIndividual individual,
                      final Problem problem)
         {
-            StringData rd = (StringData)input;
-            //TODO parameters for 'waitFor'
-            rd.str = "bp.sync({ waitFor:[ StaticEvents.RedWin, StaticEvents.YellowWin, StaticEvents.Draw ] });\n";
+            String result = "bp.sync({ waitFor:[ ";
+
+            StringData rd = ((StringData)(input));
+            rd.pushSeperator(", ");
+
+            children[0].eval(state,thread,input,stack,individual,problem);
+            result += rd.str;
+
+            result += " ] });\n";
+
+            rd.str = result;
+            rd.popSeparator();
+
         }
 }
 

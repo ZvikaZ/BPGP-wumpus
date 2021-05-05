@@ -10,6 +10,8 @@ import ec.gp.GPNode;
 public class Cons extends GPNode { // implements EvalPrint {
     public String toString() { return "Cons"; }
 
+    public int expectedChildren() { return 2; }
+
     public void eval(final EvolutionState state,
                      final int thread,
                      final GPData input,
@@ -24,7 +26,7 @@ public class Cons extends GPNode { // implements EvalPrint {
             result += rd.str;
 
             children[1].eval(state,thread,input,stack,individual,problem);
-            result += rd.str;
+            result += rd.seperator + rd.str;
 
             rd.str = result;
         }

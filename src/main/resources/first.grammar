@@ -2,8 +2,14 @@
 # <start> ::= <bt> | (Cons <bt> <start>)
 # .. but for now, let's be simpler:
 <start> ::= (RegisterBThread <bt>)
+# TODO have flexible number of waits
 <bt> ::= <request> | (Cons <wait-for> <request>) | (Cons3 <wait-for> <wait-for> <request>)
 # TODO...
-<request> ::= (Request)
-<wait-for> ::= (WaitFor)
+<request> ::= (Request <event-set>)
+<wait-for> ::= (WaitFor <event-set>)
+# impossible... <event-set> ::= <event><event-set> | <event>
+<event-set> ::= (Cons <event> <event-set>) | <event>
+# TODO automatic extract events
+# TODO more events
+<event> ::= (YellowCoinEs) | (RedCoinEs)
 #TODO block?
