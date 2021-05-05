@@ -2,6 +2,8 @@ package func;
 
 import ec.gp.*;
 
+import java.util.Stack;
+
 public class StringData extends GPData {
     // return value
     public String str;
@@ -16,18 +18,15 @@ public class StringData extends GPData {
             return seperator;
     }
 
-    // if needed, we'll implement it as a real stack; currently it's not needed...
-    private String origSeperator;
-    void pushSeperator(String seperator) {
-        if (origSeperator != null)
-            throw new RuntimeException();
+    Stack<String> origSeperator = new Stack<String>();
 
-        this.origSeperator = this.seperator;
+    void pushSeperator(String seperator) {
+        this.origSeperator.push(this.seperator);
         this.seperator = seperator;
     }
 
     void popSeparator() {
-        seperator = origSeperator;
+        seperator = origSeperator.pop();
     }
 
     public void copyTo(final GPData gpd) {
