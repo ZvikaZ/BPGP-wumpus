@@ -23,8 +23,7 @@ import func.StringData;
 public class FirstProblem extends GPProblem implements SimpleProblemForm {
     private int bp_run(String generatedCode) {
         // This will load the program file from <Project>/src/main/resources/
-//        final BProgram bprog = new ResourceBProgram("FourInARow.js");
-//        InputStream inputStream = this.getClass().getResourceAsStream("FourInARow.js");
+        // TODO take file name from user (param file, or cli flag)
         String code = resourceToString("FourInARow.js");
         code += "\n\n" + generatedCode;
         final BProgram bprog = new StringBProgram(code);

@@ -1,10 +1,13 @@
-// run with -file src/main/resources/first.params
-
 import ec.*;
 
-public class Evolve {
-    // based on ec.Evolve - has 'simple main' in comments:
+public class BpgpEvolve {
     public static void main(String[] args) {
+        String[] evolveArgs = {"-file", "src/main/resources/first.params"};
+        evolve(evolveArgs);
+    }
+
+    // based on ec.Evolve - has 'simple main' in comments:
+    private static void evolve(String[] args) {
         EvolutionState state = ec.Evolve.possiblyRestoreFromCheckpoint(args);
         if (state != null)  // loaded from checkpoint
             state.run(EvolutionState.C_STARTED_FROM_CHECKPOINT);
