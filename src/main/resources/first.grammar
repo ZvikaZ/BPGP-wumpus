@@ -1,15 +1,19 @@
 # TODO allow more bts with something like: ...
-# <start> ::= <bt> | (Cons <bt> <start>)
+# <start> ::= (RegisterBThread <bt>) | (Cons (RegisterBThread <bt>) <start>)
 # .. but for now, let's be simpler:
 <start> ::= (RegisterBThread <bt>)
 # TODO have flexible number of waits
 <bt> ::= <request> | (Cons <wait-for> <request>) | (Cons3 <wait-for> <wait-for> <request>)
-# TODO...
-<request> ::= (Request <event-set>)
+# TODO do we want requestable-event-set?
+<request> ::= (Request <requestable-event>)
 <wait-for> ::= (WaitFor <event-set>)
-# impossible... <event-set> ::= <event><event-set> | <event>
-<event-set> ::= (Cons <event> <event-set>) | <event>
-# TODO automatic extract events
+# TODO event-set might have same event duplicated. Is it bad?
+<event-set> ::= <event>  | (Cons <event> <event-set>)
+# TODO automatic extract events from input program
 # TODO more events
 <event> ::= (YellowCoinEs) | (RedCoinEs)
-#TODO block?
+<requestable-event> ::= (PutInCol <col> <color>)
+<col> ::= (ERC)
+<color> ::= (Yellow) | (Red)
+#
+#TODO do want to have block?

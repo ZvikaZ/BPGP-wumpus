@@ -4,7 +4,7 @@ parent.1 = @ec.Evolve gp/koza/koza.params
 
 gp.fs.size = 1
 gp.fs.0.name = f0
-gp.fs.0.size = 7
+gp.fs.0.size = 11
 
 # cons has 2 children, con3 has 3 children
 gp.fs.0.func.0 = func.Cons
@@ -25,6 +25,21 @@ gp.fs.0.func.5 = func.YellowCoinEs
 gp.fs.0.func.5.nc = nc0
 gp.fs.0.func.6 = func.RedCoinEs
 gp.fs.0.func.6.nc = nc0
+
+#
+gp.fs.0.func.7 = func.PutInCol
+gp.fs.0.func.7.nc = nc2
+
+#
+gp.fs.0.func.8 = func.ColERC
+gp.fs.0.func.8.nc = nc0
+
+# terminals
+gp.fs.0.func.9 = func.Yellow
+gp.fs.0.func.9.nc = nc0
+gp.fs.0.func.10 = func.Red
+gp.fs.0.func.10.nc = nc0
+
 
 eval.problem.problem = FirstProblem
 eval.problem.problem.data = func.StringData

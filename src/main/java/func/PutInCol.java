@@ -7,8 +7,8 @@ import ec.gp.GPData;
 import ec.gp.GPIndividual;
 import ec.gp.GPNode;
 
-public class Cons extends GPNode { // implements EvalPrint {
-    public String toString() { return "Cons"; }
+public class PutInCol extends GPNode { // implements EvalPrint {
+    public String toString() { return "PutInCol"; }
 
     public int expectedChildren() { return 2; }
 
@@ -19,16 +19,22 @@ public class Cons extends GPNode { // implements EvalPrint {
                      final GPIndividual individual,
                      final Problem problem)
         {
-            String result = "";
+            String result = "putInCol(";
+
             StringData rd = ((StringData)(input));
+            rd.pushSeperator(", ");
 
             children[0].eval(state,thread,input,stack,individual,problem);
             result += rd.str;
 
+            result += ", ";
+
             children[1].eval(state,thread,input,stack,individual,problem);
-            result += rd.getSeperator() + rd.str;
+            result += "\"" + rd.str + "\")";
 
             rd.str = result;
+            rd.popSeparator();
+
         }
 }
 

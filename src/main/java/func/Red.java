@@ -8,8 +8,8 @@ import ec.gp.GPIndividual;
 import ec.gp.GPNode;
 
 //TODO there must be smarter, and more scalable, way to do this
-public class RedCoinEs extends GPNode { // implements EvalPrint {
-    public String toString() { return "RedCoinEs"; }
+public class Red extends GPNode { // implements EvalPrint {
+    public String toString() { return "Red"; }
 
     public int expectedChildren() { return 0; }
 
@@ -21,7 +21,7 @@ public class RedCoinEs extends GPNode { // implements EvalPrint {
                      final Problem problem)
         {
             StringData rd = (StringData)input;
-            rd.str = "redCoinEs";
+            rd.str = "Red";
         }
 }
 

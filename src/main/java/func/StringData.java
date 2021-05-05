@@ -7,12 +7,21 @@ public class StringData extends GPData {
     public String str;
 
     // used for cons
-    public String seperator;
+    private String seperator;
 
-    // if needed, we'll implement it as a realstack; currently it's not needed...
-    private String origSeperator = null;
+    public String getSeperator() {
+        if (seperator == null)
+            return "";
+        else
+            return seperator;
+    }
+
+    // if needed, we'll implement it as a real stack; currently it's not needed...
+    private String origSeperator;
     void pushSeperator(String seperator) {
-        assert origSeperator == null;
+        if (origSeperator != null)
+            throw new RuntimeException();
+
         this.origSeperator = this.seperator;
         this.seperator = seperator;
     }

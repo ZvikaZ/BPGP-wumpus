@@ -21,7 +21,7 @@ public class YellowCoinEs extends GPNode { // implements EvalPrint {
                      final Problem problem)
         {
             StringData rd = (StringData)input;
-            rd.str = "YellowCoinEs";
+            rd.str = "yellowCoinEs";
         }
 }
 
