@@ -1,9 +1,9 @@
 # TODO allow more bts with something like: ...
 # <start> ::= (RegisterBThread <bt>) | (Cons (RegisterBThread <bt>) <start>)
 # .. but for now, let's be simpler:
+#
 <start> ::= (RegisterBThread <bt>)
-# TODO have flexible number of waits
-<bt> ::= <request> | (Cons <wait-for> <request>) | (Cons3 <wait-for> <wait-for> <request>)
+<bt> ::= <request> | (Cons <wait-for> <bt>)
 # TODO do we want requestable-event-set?
 <request> ::= (Request <requestable-event>)
 <wait-for> ::= (WaitFor <event-set>)

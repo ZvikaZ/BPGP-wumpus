@@ -20,6 +20,7 @@ public class ColERC extends ERC {
     public String toString() {
         //TODO it seems I must return "ERC", and use that in the grammar
         //but if I want two differnt ERCs? seems like a bug...
+        //see 5.3.1.2, and 5.2.9 (name) in manual -> maybe it can help
         return "ERC";
     }
 
@@ -71,7 +72,7 @@ public class ColERC extends ERC {
     public void eval(EvolutionState state, int thread, GPData input, ADFStack stack,
                      GPIndividual individual, Problem Problem) {
         StringData rd = ((StringData)(input));
-        rd.str = "" + value;      //TODO?
+        rd.str = "" + value;
     }
 }
 

@@ -4,13 +4,11 @@ parent.1 = @ec.Evolve gp/koza/koza.params
 
 gp.fs.size = 1
 gp.fs.0.name = f0
-gp.fs.0.size = 11
+gp.fs.0.size = 10
 
 # cons has 2 children, con3 has 3 children
 gp.fs.0.func.0 = func.Cons
 gp.fs.0.func.0.nc = nc2
-gp.fs.0.func.1 = func.Cons3
-gp.fs.0.func.1.nc = nc3
 
 # 1 child
 gp.fs.0.func.2 = func.RegisterBThread
@@ -37,8 +35,8 @@ gp.fs.0.func.8.nc = nc0
 # terminals
 gp.fs.0.func.9 = func.Yellow
 gp.fs.0.func.9.nc = nc0
-gp.fs.0.func.10 = func.Red
-gp.fs.0.func.10.nc = nc0
+gp.fs.0.func.1 = func.Red
+gp.fs.0.func.1.nc = nc0
 
 
 eval.problem.problem = FirstProblem
@@ -48,4 +46,4 @@ ge.species.file.0 = first.grammar
 
 #TODO increase... maybe 200 generations, 10 (or more?) individuals in subpop?
 generations	= 2
-pop.subpop.0.size	= 3
+pop.subpop.0.size	= 5

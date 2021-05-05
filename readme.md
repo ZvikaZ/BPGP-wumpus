@@ -3,9 +3,10 @@ TODO
 
 NEXT
 ----
+- introduce second ERC, for event terminals
 - use real grammar
-- insert grammar to js file
 - eval bpjs run result
+- ERC.mutateNode
 
 LATER
 -----
