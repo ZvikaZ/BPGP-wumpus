@@ -4,3 +4,7 @@ target/
 
 out.stat
 bpRun.log
+
+.*.swp
+slurm-*.out
+
