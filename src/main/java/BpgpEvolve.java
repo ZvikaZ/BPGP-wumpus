@@ -2,9 +2,15 @@ import ec.*;
 
 public class BpgpEvolve {
     public static void main(String[] args) {
-        String[] evolveArgs = {"-file", "src/main/resources/first.params"};
+        String[] evolveArgs = {"-file", getResourceFileName("first.params")};
         evolve(evolveArgs);
     }
+
+    private static String getResourceFileName(String resource) {
+        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        return classLoader.getResource(resource).getPath();
+    }
+
 
     // based on ec.Evolve - has 'simple main' in comments:
     private static void evolve(String[] args) {
