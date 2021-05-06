@@ -3,10 +3,10 @@ TODO
 
 NEXT
 ----
-- out.stat: print code
 - increase numbers  
 - ERC.mutateNode
 - coevolution of both sides
+- parallelize
 
 LATER
 -----

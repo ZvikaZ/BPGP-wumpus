@@ -14,10 +14,10 @@ import org.apache.commons.io.IOUtils;
 
 import func.StringData;
 
-
 public class FirstProblem extends GPProblem implements SimpleProblemForm {
     static final String bpRunLog = "bpRun.log";
-    static final int numOfRandomRuns = 4;		//TODO increase
+    static final int numOfRandomRuns = 6;       //TODO increase
+    static final boolean debug = false;
 
     private int bpRun(String generatedCode) {
         // This will load the program file from <Project>/src/main/resources/
@@ -51,7 +51,8 @@ public class FirstProblem extends GPProblem implements SimpleProblemForm {
     //TODO be flexible - currently it wants Yellow to win
     // Koza fitness: 0 is best, infinity is worst
     private int getRunFitness(BEvent runResult) {
-        System.out.println("result event: " + runResult);
+        if (debug)
+            System.out.println("result event: " + runResult);
         if (runResult.name.contains("Win") && runResult.name.contains("Yellow"))
             return 0;
         else if (runResult.name.contains("Win") && runResult.name.contains("Red"))
@@ -96,7 +97,8 @@ public class FirstProblem extends GPProblem implements SimpleProblemForm {
         int totalRunResults = 0;
         for (int i=0; i < numOfRandomRuns; i++) {
             int runResult = bpRun(input.str);
-            System.out.println("runResult:" + runResult);
+            if (debug)
+                System.out.println("runResult:" + runResult);
             totalRunResults += runResult;
         }
 
@@ -115,4 +117,18 @@ public class FirstProblem extends GPProblem implements SimpleProblemForm {
         writer.flush();
         return out.toString();
     }
+
+    public void describe(
+        final EvolutionState state,
+        final Individual ind,
+        final int subpopulation,
+        final int threadnum,
+        final int log)
+    {
+        ((GPIndividual)ind).trees[0].child.eval(state, threadnum, input, stack, (GPIndividual)ind, this);
+        state.output.println("\n\nBest Individual's code\n======================", log);
+        state.output.println(((StringData) input).str, log);
+    }
+
+
 }
