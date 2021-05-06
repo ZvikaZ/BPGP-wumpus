@@ -16,4 +16,5 @@
 <col> ::= (ColumnERC)
 <color> ::= (ColorERC)
 #
-#TODO do want to have block?
+#TODO use priorities?
+#TODO do want to have 'block's?

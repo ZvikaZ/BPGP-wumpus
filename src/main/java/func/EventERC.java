@@ -14,7 +14,11 @@ public class EventERC extends ERC {
     public int value;
 
     // TODO read from user-supplied file
-    static public String[] events = {"yellowCoinEs", "redCoinEs"};
+    static public String[] events = {
+            "yellowCoinEs", "redCoinEs",
+            "redColES ", "yellowColES",
+            "AnyPut", "col0ES", "col1ES", "col2ES", "col3ES", "col4ES", "col5ES", "col6ES",
+    };
 
     public String name() {
         return "EventERC";
