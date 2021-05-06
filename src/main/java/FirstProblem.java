@@ -1,44 +1,65 @@
-
-
-import org.apache.commons.io.IOUtils;
-
 import ec.*;
 import ec.gp.*;
-import ec.gp.koza.*;
 import ec.simple.*;
+import ec.gp.koza.KozaFitness;
 
 import il.ac.bgu.cs.bp.bpjs.execution.BProgramRunner;
-import il.ac.bgu.cs.bp.bpjs.execution.listeners.PrintBProgramRunnerListener;
 import il.ac.bgu.cs.bp.bpjs.model.BProgram;
 import il.ac.bgu.cs.bp.bpjs.model.StringBProgram;
+import il.ac.bgu.cs.bp.bpjs.model.BEvent;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.net.URL;
+import org.apache.commons.io.IOUtils;
 
 import func.StringData;
 
 
 public class FirstProblem extends GPProblem implements SimpleProblemForm {
-    private int bp_run(String generatedCode) {
+    static final String bpRunLog = "bpRun.log";
+    static final int numOfRandomRuns = 4;		//TODO increase
+
+    private int bpRun(String generatedCode) {
         // This will load the program file from <Project>/src/main/resources/
         // TODO take file name from user (param file, or cli flag)
         String code = resourceToString("FourInARow.js");
+
+        // TODO redirect these to some file, waiting for https://github.com/bThink-BGU/BPjs/issues/163
+        code = "bp.log.setLevel(\"Warn\");\n" + code;
+
         code += "\n\n" + generatedCode;
+
         final BProgram bprog = new StringBProgram(code);
 
         BProgramRunner rnr = new BProgramRunner(bprog);
+        BpgpListener listener = null;
 
-        // Print program events to the console
-        // TODO don't print!
-        rnr.addListener( new PrintBProgramRunnerListener() );
+        try {
+            // TODO keep log from previous runs (?)
+            PrintStream ps = new PrintStream(bpRunLog);
+            listener = rnr.addListener( new BpgpListener(ps) );
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         // go!
         rnr.run();
 
-        // TODO just a place holder, we should return something smarter...
-        return 1;
+        return getRunFitness(listener.runResult);
+    }
+
+    //TODO be flexible - currently it wants Yellow to win
+    // Koza fitness: 0 is best, infinity is worst
+    private int getRunFitness(BEvent runResult) {
+        System.out.println("result event: " + runResult);
+        if (runResult.name.contains("Win") && runResult.name.contains("Yellow"))
+            return 0;
+        else if (runResult.name.contains("Win") && runResult.name.contains("Red"))
+            return 2;
+        if (runResult.name.contains("Draw"))
+            return 1;
+        else
+            throw new RuntimeException();
     }
 
     private String resourceToString(String resourceName) {
@@ -65,17 +86,25 @@ public class FirstProblem extends GPProblem implements SimpleProblemForm {
             state.output.fatal("Whoa!  It's not a GPIndividual!!!",null);
 
         ((GPIndividual)ind).trees[0].child.eval(state, threadnum, input, stack, (GPIndividual)ind, this);
-        System.out.println("generated code:\n" + input.str + "-------");
+        System.out.println("==============");
+        System.out.println("Generation: " + state.generation);
+        System.out.println("---------\n" + input.str + "---------");
 
         String niceTree = treeToString(((GPIndividual) ind).trees[0], state);
-        System.out.println("grammar: " + niceTree + "========\n");
+        System.out.println("grammar: " + niceTree + "---------");
 
-        int run_result = bp_run(input.str);   // TODO currently it's garbage value
+        int totalRunResults = 0;
+        for (int i=0; i < numOfRandomRuns; i++) {
+            int runResult = bpRun(input.str);
+            System.out.println("runResult:" + runResult);
+            totalRunResults += runResult;
+        }
 
+        System.out.println("totalRunResults: " + totalRunResults);
         KozaFitness f = ((KozaFitness)ind.fitness);
-        f.setStandardizedFitness(state, run_result);
+        f.setStandardizedFitness(state, totalRunResults);
+        f.printFitnessForHumans(state, 0);
         ind.evaluated = true;
-        //TODO the previous problem used 'ind2'. does it matter?
     }
 
     private String treeToString(GPTree tree, EvolutionState state) {

@@ -3,12 +3,14 @@ TODO
 
 NEXT
 ----
-- eval bpjs run result
+- out.stat: print code
+- increase numbers  
 - ERC.mutateNode
-- less output from BPJS  
+- coevolution of both sides
 
 LATER
 -----
+- play against preknown good program
 - rename 'first'
 - some explanations in this file...
 - clean ecj warnings
