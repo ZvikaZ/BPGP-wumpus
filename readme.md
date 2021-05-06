@@ -3,10 +3,9 @@ TODO
 
 NEXT
 ----
-- increase numbers  
-- ERC.mutateNode
-- coevolution of both sides
 - parallelize
+- increase numbers  
+- coevolution of both sides
 
 LATER
 -----

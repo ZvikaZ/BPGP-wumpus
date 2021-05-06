@@ -59,15 +59,15 @@ public class ColumnERC extends ERC {
         value = state.random[thread].nextLong(this.MAX);
     }
 
+    //TODO make sure that it ever happens...
     public void mutateNode(EvolutionState state, int thread) {
-//        double v;
-//        do v = value + state.random[thread].nextGaussian() * 0.01;
-//        while( v < 0.0 || v >= 1.0 );
-//        value = v;
-        //TODO - good mutation
-        // for the time being, let's at least have this brute mutation...
-        resetNode(state, thread);
+        value += state.random[thread].nextGaussian();
+        if (value < 0)
+            value = 0;
+        if (value >= MAX)
+            value = MAX - 1;
     }
+
     public void eval(EvolutionState state, int thread, GPData input, ADFStack stack,
                      GPIndividual individual, Problem Problem) {
         StringData rd = ((StringData)(input));
