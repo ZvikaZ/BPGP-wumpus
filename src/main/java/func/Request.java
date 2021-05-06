@@ -15,7 +15,7 @@ public class Request extends GPNode { // implements EvalPrint {
                      final GPIndividual individual,
                      final Problem problem)
         {
-            String result = "bp.sync({ request:[ ";
+            String result = "\t\tbp.sync({ request:[ ";
 
             StringData rd = ((StringData)(input));
             rd.pushSeperator(", ");

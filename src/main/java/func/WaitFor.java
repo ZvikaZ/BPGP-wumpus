@@ -19,7 +19,7 @@ public class WaitFor extends GPNode { // implements EvalPrint {
                      final GPIndividual individual,
                      final Problem problem)
         {
-            String result = "bp.sync({ waitFor:[ ";
+            String result = "\t\tbp.sync({ waitFor:[ ";
 
             StringData rd = ((StringData)(input));
             rd.pushSeperator(", ");
