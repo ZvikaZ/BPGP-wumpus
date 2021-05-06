@@ -13,15 +13,12 @@ import ec.gp.GPNode;
 
 import java.io.*;
 
-public class ColERC extends ERC {
+public class ColumnERC extends ERC {
     public long value;
     static public long MAX = 7;     //TODO have it more generic?
 
-    public String toString() {
-        //TODO it seems I must return "ERC", and use that in the grammar
-        //but if I want two differnt ERCs? seems like a bug...
-        //see 5.3.1.2, and 5.2.9 (name) in manual -> maybe it can help
-        return "ERC";
+    public String name() {
+        return "ColumnERC";
     }
 
     public String toStringForHumans() {
@@ -36,7 +33,7 @@ public class ColERC extends ERC {
         int pos = dret.pos;
         String data = dret.data;
         Code.decode(dret);
-        if (dret.type != DecodeReturn.T_DOUBLE) {
+        if (dret.type != DecodeReturn.T_LONG) {
             // uh oh! Restore and signal error.
             dret.data = data;
             dret.pos = pos;
@@ -47,7 +44,7 @@ public class ColERC extends ERC {
     }
 
     public boolean nodeEquals(GPNode node) {
-        return (node.getClass() == this.getClass() && ((ColERC)node).value == value);
+        return (node.getClass() == this.getClass() && ((ColumnERC)node).value == value);
     }
 
     public void readNode(EvolutionState state, DataInput dataInput) throws IOException {
@@ -55,7 +52,7 @@ public class ColERC extends ERC {
     }
 
     public void writeNode(EvolutionState state, DataOutput dataOutput) throws IOException {
-        dataOutput.writeDouble(value);
+        dataOutput.writeLong(value);
     }
 
     public void resetNode(EvolutionState state, int thread) {

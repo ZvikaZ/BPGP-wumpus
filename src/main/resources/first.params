@@ -4,39 +4,33 @@ parent.1 = @ec.Evolve gp/koza/koza.params
 
 gp.fs.size = 1
 gp.fs.0.name = f0
-gp.fs.0.size = 10
+gp.fs.0.size = 8
 
-# cons has 2 children, con3 has 3 children
+# Cons
 gp.fs.0.func.0 = func.Cons
 gp.fs.0.func.0.nc = nc2
 
-# 1 child
-gp.fs.0.func.2 = func.RegisterBThread
+# BP constructs
+gp.fs.0.func.1 = func.RegisterBThread
+gp.fs.0.func.1.nc = nc1
+gp.fs.0.func.2 = func.WaitFor
 gp.fs.0.func.2.nc = nc1
-gp.fs.0.func.3 = func.WaitFor
+gp.fs.0.func.3 = func.Request
 gp.fs.0.func.3.nc = nc1
-gp.fs.0.func.4 = func.Request
-gp.fs.0.func.4.nc = nc1
 
-# no children
-gp.fs.0.func.5 = func.YellowCoinEs
+# ERCs
+gp.fs.0.func.4 = func.EventERC
+gp.fs.0.func.4.nc = nc0
+
+# Specific ERCs
+gp.fs.0.func.5 = func.ColumnERC
 gp.fs.0.func.5.nc = nc0
-gp.fs.0.func.6 = func.RedCoinEs
+gp.fs.0.func.6 = func.ColorERC
 gp.fs.0.func.6.nc = nc0
 
-#
+# Specific events
 gp.fs.0.func.7 = func.PutInCol
 gp.fs.0.func.7.nc = nc2
-
-#
-gp.fs.0.func.8 = func.ColERC
-gp.fs.0.func.8.nc = nc0
-
-# terminals
-gp.fs.0.func.9 = func.Yellow
-gp.fs.0.func.9.nc = nc0
-gp.fs.0.func.1 = func.Red
-gp.fs.0.func.1.nc = nc0
 
 
 eval.problem.problem = FirstProblem
@@ -47,3 +41,5 @@ ge.species.file.0 = first.grammar
 #TODO increase... maybe 200 generations, 10 (or more?) individuals in subpop?
 generations	= 2
 pop.subpop.0.size	= 5
+
+# seed.0 = 1

@@ -11,9 +11,9 @@
 <event-set> ::= <event>  | (Cons <event> <event-set>)
 # TODO automatic extract events from input program
 # TODO more events
-<event> ::= (YellowCoinEs) | (RedCoinEs)
+<event> ::= (EventERC)
 <requestable-event> ::= (PutInCol <col> <color>)
-<col> ::= (ERC)
-<color> ::= (Yellow) | (Red)
+<col> ::= (ColumnERC)
+<color> ::= (ColorERC)
 #
 #TODO do want to have block?
