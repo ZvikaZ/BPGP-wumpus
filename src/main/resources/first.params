@@ -42,4 +42,4 @@ ge.species.file.0 = first.grammar
 generations	= 200
 pop.subpop.0.size	= 10
 
-seed.0 = 1
+# seed.0 = 1
