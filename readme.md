@@ -3,10 +3,9 @@ TODO
 
 NEXT
 ----
-- use real grammar
 - eval bpjs run result
-- less output from BPJS  
 - ERC.mutateNode
+- less output from BPJS  
 
 LATER
 -----

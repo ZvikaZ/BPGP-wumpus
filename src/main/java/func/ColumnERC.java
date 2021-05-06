@@ -64,7 +64,9 @@ public class ColumnERC extends ERC {
 //        do v = value + state.random[thread].nextGaussian() * 0.01;
 //        while( v < 0.0 || v >= 1.0 );
 //        value = v;
-        //TODO
+        //TODO - good mutation
+        // for the time being, let's at least have this brute mutation...
+        resetNode(state, thread);
     }
     public void eval(EvolutionState state, int thread, GPData input, ADFStack stack,
                      GPIndividual individual, Problem Problem) {
