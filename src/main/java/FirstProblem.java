@@ -16,7 +16,7 @@ import func.StringData;
 
 public class FirstProblem extends GPProblem implements SimpleProblemForm {
     static final String bpRunLog = "bpRun.log";
-    static final int numOfRandomRuns = 6;       //TODO increase
+    static final int numOfRandomRuns = 40;
     static final boolean debug = false;
 
     private int bpRun(String generatedCode) {
@@ -48,8 +48,8 @@ public class FirstProblem extends GPProblem implements SimpleProblemForm {
         return getRunFitness(listener.runResult);
     }
 
-    //TODO be flexible - currently it wants Yellow to win
     // Koza fitness: 0 is best, infinity is worst
+    // TODO be flexible - currently it wants Yellow to win
     private int getRunFitness(BEvent runResult) {
         if (debug)
             System.out.println("result event: " + runResult);

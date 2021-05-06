@@ -4,7 +4,6 @@ TODO
 NEXT
 ----
 - parallelize
-- increase numbers  
 - coevolution of both sides
 
 LATER

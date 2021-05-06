@@ -39,7 +39,7 @@ eval.problem.problem.data = func.StringData
 ge.species.file.0 = first.grammar
 
 #TODO increase... maybe 200 generations, 10 (or more?) individuals in subpop?
-generations	= 3
-pop.subpop.0.size	= 5
+generations	= 200
+pop.subpop.0.size	= 10
 
 seed.0 = 1
