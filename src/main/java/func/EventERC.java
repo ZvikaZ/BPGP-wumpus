@@ -63,7 +63,7 @@ public class EventERC extends ERC {
     }
 
     public void mutateNode(EvolutionState state, int thread) {
-        resetNode(state, thread);
+        throw new RuntimeException();
     }
 
     public void eval(EvolutionState state, int thread, GPData input, ADFStack stack,

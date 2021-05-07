@@ -59,13 +59,8 @@ public class ColumnERC extends ERC {
         value = state.random[thread].nextLong(this.MAX);
     }
 
-    //TODO make sure that it ever happens...
     public void mutateNode(EvolutionState state, int thread) {
-        value += state.random[thread].nextGaussian();
-        if (value < 0)
-            value = 0;
-        if (value >= MAX)
-            value = MAX - 1;
+        throw new RuntimeException();
     }
 
     public void eval(EvolutionState state, int thread, GPData input, ADFStack stack,

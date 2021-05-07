@@ -60,7 +60,7 @@ public class ColorERC extends ERC {
     }
 
     public void mutateNode(EvolutionState state, int thread) {
-        value = !value;
+        throw new RuntimeException();
     }
 
     public void eval(EvolutionState state, int thread, GPData input, ADFStack stack,
