@@ -4,7 +4,6 @@ TODO
 NEXT
 ----
 - print seed -> to screen, and to stats
-- regression: add date directory  
 - parallelize
 - coevolution of both sides
 - sensible initialization
