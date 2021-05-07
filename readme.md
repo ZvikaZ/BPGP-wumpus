@@ -4,8 +4,6 @@ TODO
 NEXT
 ----
 - print seed -> to screen, and to stats
-- start with 3 bts
-- debug <start>
 - regression: add date directory  
 - parallelize
 - coevolution of both sides
@@ -13,6 +11,7 @@ NEXT
 
 LATER
 -----
+- print genome, derivation
 - play against preknown good program
 - maven standalone on clean copy 
 - rename 'first'

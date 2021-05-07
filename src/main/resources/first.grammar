@@ -1,4 +1,6 @@
-<start> ::= <register-bt> | (Cons <register-bt> <start>)
+# TODO isn't it too much, starting with 3?
+<start> ::= (Cons3 <statement> <statement> <statement>)
+<statement> ::= (Cons <statement> <register-bt>) | <register-bt>
 <register-bt> ::= (RegisterBThread <bt>)
 <bt> ::= <request> | (Cons <wait-for> <bt>)
 # TODO do we want requestable-event-set?

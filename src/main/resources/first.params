@@ -4,11 +4,13 @@ parent.1 = @ec.Evolve gp/koza/koza.params
 
 gp.fs.size = 1
 gp.fs.0.name = f0
-gp.fs.0.size = 8
+gp.fs.0.size = 9
 
 # Cons
 gp.fs.0.func.0 = func.Cons
 gp.fs.0.func.0.nc = nc2
+gp.fs.0.func.8 = func.Cons3
+gp.fs.0.func.8.nc = nc3
 
 # BP constructs
 gp.fs.0.func.1 = func.RegisterBThread
@@ -37,6 +39,13 @@ eval.problem.problem = FirstProblem
 eval.problem.problem.data = func.StringData
 
 ge.species.file.0 = first.grammar
+
+# the default is 15, too small for us...
+pop.subpop.0.species.min-initial-size = 35
+pop.subpop.0.species.max-initial-size = 80
+
+# if the genome is still too small, wrap around 4 times before giving up
+pop.subpop.0.species.passes = 4
 
 #TODO increase... maybe 200 generations, 10 (or more?) individuals in subpop?
 generations	= 200
