@@ -4,6 +4,8 @@ TODO
 NEXT
 ----
 - print seed -> to screen, and to stats
+- bpjs verification?
+- elitism  
 - parallelize
 - coevolution of both sides
 - sensible initialization

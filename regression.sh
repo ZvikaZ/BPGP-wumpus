@@ -4,15 +4,21 @@
 # should be run only from its directory!
 
 orig_dir=$PWD
-regression_dir=target/regression/`date "+%F-%T"`
-rm -rf $regression_dir
+regression_dir=../regressions/`basename $PWD`/`date "+%F-%T"`
 mkdir -p $regression_dir
+./info.sh > $regression_dir/info.txt
+
 for i in {1..20}
 do
-    mkdir $regression_dir/$i
-    cd $regression_dir/$i
+    mkdir $regression_dir/run_$i
+    cd $regression_dir/run_$i
     pwd
-    sbatch $orig_dir/run.sh
+    if [ "$i" == "1" ]; then
+        # send only first one with mail at end, or problems
+        sbatch --mail-type=END,FAIL,REQUEU $orig_dir/run.sh
+    else
+        sbatch $orig_dir/run.sh
+    fi
     cd $orig_dir
 done
 

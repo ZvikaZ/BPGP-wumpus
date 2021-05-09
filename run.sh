@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name BpgpEvolve
 #SBATCH --mail-user=zvikah@post.bgu.ac.il
-#SBATCH --mail-type=END,FAIL,REQUEU
+##SBATCH --mail-type=END,FAIL,REQUEU
 
 ##SBATCH --cpus-per-task=6 # 6 cpus per task � use for multithreading, usually with --tasks=1
 ##SBATCH --tasks=4 # 4 processes � use for multiprocessing
