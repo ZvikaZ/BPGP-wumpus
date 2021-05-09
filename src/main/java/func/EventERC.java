@@ -17,7 +17,8 @@ public class EventERC extends ERC {
     static public String[] events = {
             "yellowCoinEs", "redCoinEs",
             "redColES ", "yellowColES",
-            "AnyPut", "col0ES", "col1ES", "col2ES", "col3ES", "col4ES", "col5ES", "col6ES",
+            "AnyPut", "PutInCol",
+            "col0ES", "col1ES", "col2ES", "col3ES", "col4ES", "col5ES", "col6ES",
     };
 
     public String name() {
