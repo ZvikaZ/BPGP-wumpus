@@ -10,8 +10,8 @@
  * possible position in the chosen column.
  * The goal of the game is to place 4 pieces in a row, column or diagonal. 
  * Strategies : 
- * 1. Of course, do not let the oponnet win. 
-   2. Play the centher column as much as possible.
+ * 1. Of course, do not let the opponent win.
+   2. Play the center column as much as possible.
    3. Create bottom 3 Trap.
  
  
