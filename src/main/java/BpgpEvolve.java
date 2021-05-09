@@ -2,7 +2,7 @@ import ec.*;
 
 public class BpgpEvolve {
     public static void main(String[] args) {
-        String[] evolveArgs = {"-file", getResourceFileName("first.params")};
+        String[] evolveArgs = {"-file", getResourceFileName("bpgp.params")};
         evolve(evolveArgs);
     }
 

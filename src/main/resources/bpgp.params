@@ -35,10 +35,10 @@ gp.fs.0.func.7 = func.PutInCol
 gp.fs.0.func.7.nc = nc2
 
 
-eval.problem.problem = FirstProblem
+eval.problem.problem = BpgpProblem
 eval.problem.problem.data = func.StringData
 
-ge.species.file.0 = first.grammar
+ge.species.file.0 = bpgp.grammar
 
 # the default is 15, too small for us...
 pop.subpop.0.species.min-initial-size = 35

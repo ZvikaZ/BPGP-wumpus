@@ -14,7 +14,7 @@ import org.apache.commons.io.IOUtils;
 
 import func.StringData;
 
-public class FirstProblem extends GPProblem implements SimpleProblemForm {
+public class BpgpProblem extends GPProblem implements SimpleProblemForm {
     static final String bpRunLog = "bpRun.log";
     static final int numOfRandomRuns = 40;
     static final boolean debug = false;
