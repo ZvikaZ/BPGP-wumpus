@@ -5,7 +5,6 @@ NEXT
 ----
 - improve grammar
 - bpjs verification?
-- elitism  
 - parallelize
 - coevolution of both sides
 - sensible initialization
