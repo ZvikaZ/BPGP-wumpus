@@ -1,18 +1,22 @@
-import ec.*;
-import ec.gp.*;
-import ec.simple.*;
+import ec.EvolutionState;
+import ec.Individual;
+import ec.gp.GPIndividual;
+import ec.gp.GPProblem;
+import ec.gp.GPTree;
 import ec.gp.koza.KozaFitness;
+import ec.simple.SimpleProblemForm;
+
+import func.StringData;
 
 import il.ac.bgu.cs.bp.bpjs.execution.BProgramRunner;
+import il.ac.bgu.cs.bp.bpjs.model.BEvent;
 import il.ac.bgu.cs.bp.bpjs.model.BProgram;
 import il.ac.bgu.cs.bp.bpjs.model.StringBProgram;
-import il.ac.bgu.cs.bp.bpjs.model.BEvent;
+import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.net.URL;
-import org.apache.commons.io.IOUtils;
 
-import func.StringData;
 
 public class BpgpProblem extends GPProblem implements SimpleProblemForm {
     static final String bpRunLog = "bpRun.log";
