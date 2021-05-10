@@ -5,7 +5,6 @@ NEXT
 ----
 - improve grammar (diagonal?, specific cell?, arrays?)
 - bpjs verification?
-- analyze script  
 - sensible initialization
 
 
