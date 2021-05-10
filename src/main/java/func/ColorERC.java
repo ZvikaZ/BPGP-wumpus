@@ -20,9 +20,9 @@ public class ColorERC extends ERC {
 
     public String toStringForHumans() {
         if (value)
-            return "Yellow";
+            return "\"Yellow\"";
         else
-            return "Red";
+            return "\"Red\"";
     }
 
     public String encode() {

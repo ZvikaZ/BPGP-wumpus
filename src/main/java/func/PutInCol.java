@@ -30,7 +30,7 @@ public class PutInCol extends GPNode { // implements EvalPrint {
             result += ", ";
 
             children[1].eval(state,thread,input,stack,individual,problem);
-            result += "\"" + rd.str + "\")";
+            result += rd.str + ")";
 
             rd.str = result;
             rd.popSeparator();

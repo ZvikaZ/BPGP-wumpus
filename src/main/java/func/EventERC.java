@@ -16,8 +16,8 @@ public class EventERC extends ERC {
     // TODO read from user-supplied file
     static public String[] events = {
             "yellowCoinEs", "redCoinEs",
-            "redColES ", "yellowColES",
-            "AnyPut", "PutInCol",
+            "redColES", "yellowColES",
+            "AnyPut",
             "col0ES", "col1ES", "col2ES", "col3ES", "col4ES", "col5ES", "col6ES",
     };
 

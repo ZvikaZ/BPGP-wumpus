@@ -7,10 +7,10 @@ import ec.gp.GPData;
 import ec.gp.GPIndividual;
 import ec.gp.GPNode;
 
-public class WaitFor extends GPNode { // implements EvalPrint {
-    public String toString() { return "WaitFor"; }
+public class ColorOfWait extends GPNode { // implements EvalPrint {
+    public String toString() { return "ColorOfWait"; }
 
-    public int expectedChildren() { return 1; }
+    public int expectedChildren() { return 0; }
 
     public void eval(final EvolutionState state,
                      final int thread,
@@ -19,18 +19,9 @@ public class WaitFor extends GPNode { // implements EvalPrint {
                      final GPIndividual individual,
                      final Problem problem)
         {
-            String result = "\t\tvar e = bp.sync({ waitFor:[ ";
 
             StringData rd = ((StringData)(input));
-            rd.pushSeperator(", ");
-
-            children[0].eval(state,thread,input,stack,individual,problem);
-            result += rd.str;
-
-            result += " ] });\n";
-
-            rd.str = result;
-            rd.popSeparator();
+            rd.str = "e.data.color";
 
         }
 }

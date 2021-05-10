@@ -2,16 +2,23 @@
 <start> ::= (Cons3 <statement> <statement> <statement>)
 <statement> ::= (Cons <statement> <register-bt>) | <register-bt>
 <register-bt> ::= (RegisterBThread <bt>)
-<bt> ::= <request> | (Cons <wait-for> <bt>)
+# regular <bt> might have a single <request>, thus, it can't use info from previous waits
+<bt> ::= <request> | (Cons <wait-for> <bt-long>)
+# <bt-long> can safely use info from previous waits, if it desires to
+<bt-long> ::= <request-after-wait> | (Cons <wait-for> <bt-long>)
 # TODO do we want requestable-event-set?
 <request> ::= (Request <requestable-event>)
+<request-after-wait> ::= (Request <requestable-event-after-wait>)
 <wait-for> ::= (WaitFor <event-set>)
 # TODO event-set might have same event duplicated. Is it bad?
 <event-set> ::= <event>  | (Cons <event> <event-set>)
 <event> ::= (EventERC)
 <requestable-event> ::= (PutInCol <col> <color>)
+<requestable-event-after-wait> ::= (PutInCol <col-after-wait> <color-after-wait>)
 <col> ::= (ColumnERC)
 <color> ::= (ColorERC)
+<col-after-wait> ::= (ColumnERC) | (ColumnOfWait)
+<color-after-wait> ::= (ColorERC) | (ColorOfWait)
 #
 # TODO use priorities?
 # TODO do want to have 'block's?

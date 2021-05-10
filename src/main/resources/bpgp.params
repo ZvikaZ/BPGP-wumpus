@@ -4,7 +4,7 @@ parent.1 = @ec.Evolve gp/koza/koza.params
 
 gp.fs.size = 1
 gp.fs.0.name = f0
-gp.fs.0.size = 9
+gp.fs.0.size = 11
 
 # Cons
 gp.fs.0.func.0 = func.Cons
@@ -33,6 +33,12 @@ gp.fs.0.func.6.nc = nc0
 # Specific events
 gp.fs.0.func.7 = func.PutInCol
 gp.fs.0.func.7.nc = nc2
+
+# Terminals
+gp.fs.0.func.9 = func.ColumnOfWait
+gp.fs.0.func.9.nc = nc0
+gp.fs.0.func.10 = func.ColorOfWait
+gp.fs.0.func.10.nc = nc0
 
 
 eval.problem.problem = BpgpProblem
