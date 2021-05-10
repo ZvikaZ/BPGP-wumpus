@@ -18,7 +18,6 @@ public class Request extends GPNode {
             String result = "\t\tbp.sync({ request:[ ";
 
             StringData rd = ((StringData)(input));
-            rd.pushSeperator(", ");
 
             children[0].eval(state,thread,input,stack,individual,problem);
             result += rd.str;
@@ -26,8 +25,6 @@ public class Request extends GPNode {
             result += " ] });\n";
 
             rd.str = result;
-            rd.popSeparator();
-
         }
 }
 

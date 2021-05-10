@@ -22,7 +22,6 @@ public class PutInCol extends GPNode {
             String result = "putInCol(";
 
             StringData rd = ((StringData)(input));
-            rd.pushSeperator(", ");
 
             children[0].eval(state,thread,input,stack,individual,problem);
             result += rd.str;
@@ -33,8 +32,6 @@ public class PutInCol extends GPNode {
             result += rd.str + ")";
 
             rd.str = result;
-            rd.popSeparator();
-
         }
 }
 

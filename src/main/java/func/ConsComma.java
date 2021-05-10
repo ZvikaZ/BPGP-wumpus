@@ -7,8 +7,8 @@ import ec.gp.GPData;
 import ec.gp.GPIndividual;
 import ec.gp.GPNode;
 
-public class Cons extends GPNode { 
-    public String toString() { return "Cons"; }
+public class ConsComma extends GPNode {
+    public String toString() { return "ConsComma"; }
 
     public int expectedChildren() { return 2; }
 
@@ -26,7 +26,7 @@ public class Cons extends GPNode {
             result += rd.str;
 
             children[1].eval(state,thread,input,stack,individual,problem);
-            result += rd.str;
+            result += ", " + rd.str;
 
             rd.str = result;
         }

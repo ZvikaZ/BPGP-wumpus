@@ -4,11 +4,13 @@ parent.1 = @ec.Evolve gp/koza/koza.params
 
 gp.fs.size = 1
 gp.fs.0.name = f0
-gp.fs.0.size = 11
+gp.fs.0.size = 12
 
 # Cons
 gp.fs.0.func.0 = func.Cons
 gp.fs.0.func.0.nc = nc2
+gp.fs.0.func.11 = func.ConsComma
+gp.fs.0.func.11.nc = nc2
 gp.fs.0.func.8 = func.Cons3
 gp.fs.0.func.8.nc = nc3
 
@@ -60,7 +62,9 @@ breed.elite.0 = 2
 generations	= 200
 pop.subpop.0.size	= 10
 
+# use all CPU cores available for threads ; set seeds to 'time'
+breedthreads = auto
+evalthreads = auto
+
 ## debug params:
 # print-params = true
-
-# seed.0 = 1

@@ -22,7 +22,6 @@ public class WaitFor extends GPNode {
             String result = "\t\tvar e = bp.sync({ waitFor:[ ";
 
             StringData rd = ((StringData)(input));
-            rd.pushSeperator(", ");
 
             children[0].eval(state,thread,input,stack,individual,problem);
             result += rd.str;
@@ -30,8 +29,6 @@ public class WaitFor extends GPNode {
             result += " ] });\n";
 
             rd.str = result;
-            rd.popSeparator();
-
         }
 }
 

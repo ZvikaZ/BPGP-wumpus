@@ -11,7 +11,7 @@
 <request-after-wait> ::= (Request <requestable-event-after-wait>)
 <wait-for> ::= (WaitFor <event-set>)
 # TODO event-set might have same event duplicated. Is it bad?
-<event-set> ::= <event>  | (Cons <event> <event-set>)
+<event-set> ::= <event>  | (ConsComma <event> <event-set>)
 <event> ::= (EventERC)
 <requestable-event> ::= (PutInCol <col> <color>)
 <requestable-event-after-wait> ::= (PutInCol <col-after-wait> <color-after-wait>)

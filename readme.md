@@ -5,7 +5,6 @@ NEXT
 ----
 - improve grammar (diagonal?, specific cell?, arrays?)
 - bpjs verification?
-- parallelize
 - analyze script  
 - sensible initialization
 
@@ -19,4 +18,5 @@ LATER
 - some explanations in this file...
 - clean ecj warnings
 - unit tests?
+- parallelize with ECJ ch. 6
 
