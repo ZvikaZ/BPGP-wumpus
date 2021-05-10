@@ -9,7 +9,6 @@ NEXT
 - analyze script  
 - sensible initialization
 - print seed -> to screen, and to stats
-- docs
 
 
 LATER

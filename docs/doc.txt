@@ -1,0 +1,10 @@
+initialized with ramped half and half (ec.gp.koza.HalfBuilder) from 2 to 6
+elitism of 2
+random seed according to time
+GA genome size from uniform distribute: [35,80]
+each gener is in [-128,127]
+reset mutation, p=0.01
+crossover-type = one  (but I'm not sure it's really used!)
+Tournament selection, k=7
+koze fitness (0 = best, infinity = worst)
+GA passes = 4
