@@ -7,7 +7,7 @@ import ec.gp.GPData;
 import ec.gp.GPIndividual;
 import ec.gp.GPNode;
 
-public class RegisterBThread extends GPNode { // implements EvalPrint {
+public class RegisterBThread extends GPNode { 
     public String toString() { return "RegisterBThread"; }
 
     public int expectedChildren() { return 1; }

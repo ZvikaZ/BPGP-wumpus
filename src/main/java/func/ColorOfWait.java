@@ -7,7 +7,7 @@ import ec.gp.GPData;
 import ec.gp.GPIndividual;
 import ec.gp.GPNode;
 
-public class ColorOfWait extends GPNode { // implements EvalPrint {
+public class ColorOfWait extends GPNode { 
     public String toString() { return "ColorOfWait"; }
 
     public int expectedChildren() { return 0; }

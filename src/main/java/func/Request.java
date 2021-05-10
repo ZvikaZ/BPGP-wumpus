@@ -3,7 +3,7 @@ package func;
 import ec.*;
 import ec.gp.*;
 
-public class Request extends GPNode { // implements EvalPrint {
+public class Request extends GPNode { 
     public String toString() { return "Request"; }
 
     public int expectedChildren() { return 1; }

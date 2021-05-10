@@ -7,7 +7,7 @@ import ec.gp.GPData;
 import ec.gp.GPIndividual;
 import ec.gp.GPNode;
 
-public class WaitFor extends GPNode { // implements EvalPrint {
+public class WaitFor extends GPNode { 
     public String toString() { return "WaitFor"; }
 
     public int expectedChildren() { return 1; }

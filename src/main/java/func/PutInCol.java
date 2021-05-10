@@ -7,7 +7,7 @@ import ec.gp.GPData;
 import ec.gp.GPIndividual;
 import ec.gp.GPNode;
 
-public class PutInCol extends GPNode { // implements EvalPrint {
+public class PutInCol extends GPNode { 
     public String toString() { return "PutInCol"; }
 
     public int expectedChildren() { return 2; }

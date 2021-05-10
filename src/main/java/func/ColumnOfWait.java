@@ -7,7 +7,7 @@ import ec.gp.GPData;
 import ec.gp.GPIndividual;
 import ec.gp.GPNode;
 
-public class ColumnOfWait extends GPNode { // implements EvalPrint {
+public class ColumnOfWait extends GPNode { 
     public String toString() { return "ColumnOfWait"; }
 
     public int expectedChildren() { return 0; }

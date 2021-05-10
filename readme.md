@@ -3,7 +3,6 @@ TODO
 
 NEXT
 ----
-- delete '// implements EvalPrint'
 - improve grammar (diagonal?, specific cell?, arrays?)
 - bpjs verification?
 - parallelize
