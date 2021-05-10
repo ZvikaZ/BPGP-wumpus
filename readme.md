@@ -8,7 +8,6 @@ NEXT
 - parallelize
 - analyze script  
 - sensible initialization
-- print seed -> to screen, and to stats
 
 
 LATER
