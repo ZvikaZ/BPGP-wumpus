@@ -3,6 +3,7 @@ TODO
 
 NEXT
 ----
+- single figure at end of interactive run
 - improve grammar (diagonal?, specific cell?, arrays?)
 - bpjs verification?
 - sensible initialization

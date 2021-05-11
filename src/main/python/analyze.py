@@ -9,7 +9,7 @@ def get_dirs(path):
     return [os.path.join(path, d) for d in os.listdir(path) if os.path.isdir(os.path.join(path, d))]
 
 
-def analyze_run(d):
+def get_run_result(d):
     with open(os.path.join(d, STAT_FILE)) as f:
         lines = f.readlines()
     with open(os.path.join(d, STAT_FILE)) as f:
@@ -28,21 +28,40 @@ def analyze_run(d):
     }
 
 
+def analyze_single_run(d):
+    run_result = get_run_result(d)
+    fig, ax = plt.subplots(1, 1)
+    plot_single_run(ax, run_result)
+    plt.show()
+
+
+def plot_single_run(ax, r):
+    out = ax.scatter(range(len(r['fitnesses'])), r['fitnesses'])
+    ax.plot(r['fitnesses'])
+    ax.set_xlabel("Generation")
+    ax.set_ylabel("Best fitness")
+    ax.set_title(r['run'])
+    return out
+
+
+def analyze(d, single_run):
+    if single_run:
+        analyze_single_run(d)
+    else:
+        analyze_regression(d)
+
+
 def analyze_regression(regression_dir):
     results = []
     for d in get_dirs(regression_dir):
-        results.append(analyze_run(d))
-    plt.figure()
+        results.append(get_run_result(d))
     results_to_plot = [r for r in results if r is not None]
     # TODO show more than 4?
     results_to_plot = results_to_plot[:4]
+
+    fig, ax = plt.subplots(len(results_to_plot), 1)
     for (index, r) in enumerate(results_to_plot):
-        fitnesses = r['fitnesses']
-        # TODO the label isn't shown
-        plt.subplot(len(results_to_plot), 1, index+1, label=r['run'])
-        plt.scatter(range(len(fitnesses)), fitnesses, s=2)
-        plt.xlabel("Generation")
-        plt.ylabel("Best fitness")
+        plot_single_run(ax, r)
     plt.show()
 
 
@@ -50,7 +69,8 @@ def analyze_regression(regression_dir):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter,
                                      description="Analyze regression results",)
-    parser.add_argument("regression_dir", help="directory containing regression")
-    args = parser.parse_args()
+    parser.add_argument("dir", help="directory containing regression, or run results")
+    parser.add_argument("--single_run", "-s",  action='store_true', help="'dir' points to single run, instead of regression")
 
-    analyze_regression(args.regression_dir)
+    args = parser.parse_args()
+    analyze(args.dir, args.single_run)
