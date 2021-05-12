@@ -5,6 +5,7 @@ NEXT
 ----
 - column +-1
 - graph:
+  - population size
   - mean and avarage fitnesses
   - subplots - with one heading for all X and Y axis
 - debug: generation of 1, no crossover, mutation prob 0, see fitness makes sense    
