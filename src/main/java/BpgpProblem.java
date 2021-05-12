@@ -85,6 +85,13 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
     {
         if (ind.evaluated) return;
 
+		//TODO remove this...
+        var p = state.population.subpops.get(0);
+        if (p.initialSize != p.individuals.size()) {
+            System.out.println("ZZZ someone got lost!!!");
+            System.exit(1);
+        }
+
         StringData input = (StringData)(this.input);
 
         if (!(ind instanceof GPIndividual))

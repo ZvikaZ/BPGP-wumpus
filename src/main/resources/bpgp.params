@@ -60,9 +60,14 @@ breed.elite.0 = 2
 generations	= 200
 pop.subpop.0.size	= 10
 
+## debug - turn off mutation
+#pop.subpop.0.species.mutation-prob = 0
+
+
 # use all CPU cores available for threads ; set seeds to 'time'
-breedthreads = auto
 evalthreads = auto
+# setting this to auto, causes few Exceptions, and individuals getting lost
+#breedthreads = auto
 
 ## debug params:
 # print-params = true
