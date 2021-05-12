@@ -3,7 +3,8 @@ TODO
 
 NEXT
 ----
-- self play ; play against other individuals
+- self play: make sure that it's working 
+- play against other individuals
 - graph:
   - mean and average fitnesses
   - subplots - with one heading for all X and Y axis
@@ -15,6 +16,7 @@ NEXT
 
 LATER
 -----
+- better thread printing
 - print genome, derivation
 - coevolution of both sides
 - play against preknown good program

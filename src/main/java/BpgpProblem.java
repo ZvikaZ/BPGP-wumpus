@@ -22,6 +22,12 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
     static final String bpRunLog = "bpRun.log";
     static final int numOfRandomRuns = 40;
     static final boolean debug = false;
+    enum Rival {
+        RANDOM,
+        SELF,
+        OTHERS
+    }
+    static Rival rival = Rival.SELF;
 
     private int bpRun(String generatedCode) {
         // This will load the program file from <Project>/src/main/resources/
@@ -104,16 +110,38 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
             state.output.fatal("Whoa!  It's not a GPIndividual!!!",null);
 
         ((GPIndividual)ind).trees[0].child.eval(state, threadnum, input, stack, (GPIndividual)ind, this);
+        var indCode = input.str;
         System.out.println("==============");
         System.out.println("Generation: " + state.generation);
-        System.out.println("---------\n" + input.str + "---------");
+        System.out.println("---------\n" + indCode + "---------");
 
         String niceTree = treeToString(((GPIndividual) ind).trees[0], state);
         System.out.println("grammar: " + niceTree + "---------");
 
         int totalRunResults = 0;
         for (int i=0; i < numOfRandomRuns; i++) {
-            int runResult = bpRun(input.str);
+            switch (rival) {
+                case RANDOM:
+                    input.str = null;
+                    break;
+                case SELF:
+                    input.playerColor = swapColor(input.playerColor);
+                    input.str = null;
+                    ((GPIndividual)ind).trees[0].child.eval(state, threadnum, input, stack, (GPIndividual)ind, this);
+                    input.playerColor = swapColor(input.playerColor);
+                    break;
+                case OTHERS:
+                    var inds = state.population.subpops.get(subpopulation).individuals;
+                    var rivalInd = inds.get(state.random[threadnum].nextInt(inds.size()));
+                    input.playerColor = swapColor(input.playerColor);
+                    input.str = null;
+                    //TODO fix
+                    ((GPIndividual)rivalInd).trees[0].child.eval(state, threadnum, input, stack, (GPIndividual)rivalInd, this);
+                    input.playerColor = swapColor(input.playerColor);
+                    break;
+            }
+            System.out.println("---------PLAYING AGAINST\n" + input.str + "---------");
+            int runResult = bpRun(indCode + "\n" + input.str);
             if (debug)
                 System.out.println("runResult:" + runResult);
             totalRunResults += runResult;
@@ -125,6 +153,14 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
         f.setStandardizedFitness(state, totalRunResults);
         f.printFitnessForHumans(state, 0);
         ind.evaluated = true;
+    }
+
+    private String swapColor(String playerColor) {
+        if (playerColor.equals("Yellow"))
+            return "Red";
+        else if (playerColor.equals("Red"))
+            return "Yellow";
+        else throw new RuntimeException();
     }
 
     private String treeToString(GPTree tree, EvolutionState state) {
