@@ -3,6 +3,13 @@ TODO
 
 NEXT
 ----
+- dont play random color!!
+- column +-1
+- graph:
+  - mean and avarage fitnesses
+  - subplots - with one heading for all X and Y axis
+- debug: generation of 1, no crossover, mutation prob 0, see fitness makes sense    
+- self play ; play against other individuals
 - single figure at end of interactive run
 - improve grammar (diagonal?, specific cell?, arrays?)
 - bpjs verification?
