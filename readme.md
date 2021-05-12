@@ -19,6 +19,7 @@ LATER
 - coevolution of both sides
 - play against preknown good program
 - maven standalone on clean copy 
+  - report breedthreads bug
 - some explanations in this file...
 - clean ecj warnings
 - unit tests?

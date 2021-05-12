@@ -94,6 +94,12 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
 
         StringData input = (StringData)(this.input);
 
+        // make sure that we start empty
+        input.str = null;
+
+        //TODO move this to better place?
+        input.playerColor = "Yellow";
+
         if (!(ind instanceof GPIndividual))
             state.output.fatal("Whoa!  It's not a GPIndividual!!!",null);
 
@@ -113,7 +119,8 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
             totalRunResults += runResult;
         }
 
-        System.out.println("totalRunResults: " + totalRunResults);
+        if (debug)
+            System.out.println("totalRunResults: " + totalRunResults);
         KozaFitness f = ((KozaFitness)ind.fitness);
         f.setStandardizedFitness(state, totalRunResults);
         f.printFitnessForHumans(state, 0);

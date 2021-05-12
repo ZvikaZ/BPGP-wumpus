@@ -21,7 +21,6 @@ public class MyColor extends GPNode {
     {
 
         StringData rd = ((StringData)(input));
-        //TODO support playing the other side, and return "\"Red\""
-        rd.str = "\"Yellow\"";
+        rd.str = "\"" + rd.playerColor + "\"";
     }
 }
