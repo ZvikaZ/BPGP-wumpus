@@ -3,7 +3,6 @@ TODO
 
 NEXT
 ----
-- dont play random color!!
 - column +-1
 - graph:
   - mean and avarage fitnesses

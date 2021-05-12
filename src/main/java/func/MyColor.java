@@ -10,12 +10,12 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class ColorERC extends ERC {
+public class MyColor extends ERC {
     // true -> Yellow
     public Boolean value;
 
     public String name() {
-        return "ColorERC";
+        return "MyColor";
     }
 
     public String toStringForHumans() {
@@ -44,7 +44,7 @@ public class ColorERC extends ERC {
     }
 
     public boolean nodeEquals(GPNode node) {
-        return (node.getClass() == this.getClass() && ((ColorERC)node).value == value);
+        return (node.getClass() == this.getClass() && ((MyColor)node).value == value);
     }
 
     public void readNode(EvolutionState state, DataInput dataInput) throws IOException {
@@ -56,7 +56,8 @@ public class ColorERC extends ERC {
     }
 
     public void resetNode(EvolutionState state, int thread) {
-        value = state.random[thread].nextBoolean();
+        //TODO support playing both colors ; currently always plays Yellow
+        value = true;
     }
 
     public void mutateNode(EvolutionState state, int thread) {

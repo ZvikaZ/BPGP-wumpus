@@ -14,11 +14,10 @@
 <event-set> ::= <event>  | (ConsComma <event> <event-set>)
 <event> ::= (EventERC)
 <requestable-event> ::= (PutInCol <col> <color>)
-<requestable-event-after-wait> ::= (PutInCol <col-after-wait> <color-after-wait>)
+<requestable-event-after-wait> ::= (PutInCol <col-after-wait> <color>)
 <col> ::= (ColumnERC)
-<color> ::= (ColorERC)
+<color> ::= (MyColor)
 <col-after-wait> ::= (ColumnERC) | (ColumnOfWait)
-<color-after-wait> ::= (ColorERC) | (ColorOfWait)
 #
 # TODO use priorities?
 # TODO do want to have 'block's?
