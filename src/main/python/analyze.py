@@ -38,6 +38,7 @@ def analyze_single_run(d):
 def plot_single_run(ax, r):
     out = ax.scatter(range(len(r['fitnesses'])), r['fitnesses'])
     ax.plot(r['fitnesses'])
+    ax.set_ylim(bottom=0)
     ax.set_xlabel("Generation")
     ax.set_ylabel("Best fitness")
     ax.set_title(r['run'])
