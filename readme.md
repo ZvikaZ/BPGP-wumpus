@@ -4,7 +4,6 @@ TODO
 NEXT
 ----
 - use logging, and 'fatal' instead of exit 
-- play against other individuals - fix
 - graph:
   - mean and average fitnesses
   - subplots - with one heading for all X and Y axis
