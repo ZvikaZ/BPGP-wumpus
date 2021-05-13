@@ -4,7 +4,7 @@
 # should be run only from its directory!
 
 orig_dir=$PWD
-regression_dir=../regressions/`basename $PWD`/`date "+%F-%T"`
+regression_dir=../regressions/`basename $PWD`/`date "+%F_%H-%M-%S"`
 mkdir -p $regression_dir
 ./info.sh > $regression_dir/info.txt
 

@@ -3,11 +3,11 @@ import ec.Individual;
 import ec.gp.GPIndividual;
 import ec.gp.GPProblem;
 import ec.gp.GPTree;
+import ec.gp.ge.GEIndividual;
+import ec.gp.ge.GESpecies;
 import ec.gp.koza.KozaFitness;
 import ec.simple.SimpleProblemForm;
-
 import func.StringData;
-
 import il.ac.bgu.cs.bp.bpjs.execution.BProgramRunner;
 import il.ac.bgu.cs.bp.bpjs.model.BEvent;
 import il.ac.bgu.cs.bp.bpjs.model.BProgram;
@@ -27,7 +27,7 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
         SELF,
         OTHERS
     }
-    static Rival rival = Rival.SELF;
+    static Rival rival = Rival.RANDOM;
 
     private int bpRun(String generatedCode) {
         // This will load the program file from <Project>/src/main/resources/
@@ -122,7 +122,7 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
         for (int i=0; i < numOfRandomRuns; i++) {
             switch (rival) {
                 case RANDOM:
-                    input.str = null;
+                    input.str = "";
                     break;
                 case SELF:
                     input.playerColor = swapColor(input.playerColor);
@@ -132,15 +132,24 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
                     break;
                 case OTHERS:
                     var inds = state.population.subpops.get(subpopulation).individuals;
-                    var rivalInd = inds.get(state.random[threadnum].nextInt(inds.size()));
+                    GEIndividual rivalInd = (GEIndividual)inds.get(state.random[threadnum].nextInt(inds.size()));
                     input.playerColor = swapColor(input.playerColor);
                     input.str = null;
                     //TODO fix
-                    ((GPIndividual)rivalInd).trees[0].child.eval(state, threadnum, input, stack, (GPIndividual)rivalInd, this);
+//                    GPTree tree = null;
+                    GESpecies species = (GESpecies)(rivalInd.species);
+                    GPIndividual gpRivalInd = species.map(state, rivalInd, threadnum, species.ERCBank);
+                    ((GPIndividual)ind).trees[0].child.eval(state, threadnum, input, stack, (GPIndividual)ind, this);
+//                    species.makeTree(state, rivalInd.genome, tree, 0, 0, threadnum, species.ERCBank);
+//                    tree.child.eval(state, threadnum, input, stack, (GEIndividual)rivalInd, this);
+//                    ((GEIndividual)rivalInd).eval(state, threadnum, input, stack, (GEIndividual)rivalInd, this);
                     input.playerColor = swapColor(input.playerColor);
                     break;
             }
-            System.out.println("---------PLAYING AGAINST\n" + input.str + "---------");
+            if (input.str == null)
+                throw new RuntimeException();
+            if (debug)
+                System.out.println("---------PLAYING AGAINST\n" + input.str + "---------");
             int runResult = bpRun(indCode + "\n" + input.str);
             if (debug)
                 System.out.println("runResult:" + runResult);
