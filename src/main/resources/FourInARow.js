@@ -36,7 +36,7 @@ bp.registerBThread("EndOfGame", function() {
 
 bp.registerBThread("DetectDraw", function() {
 	for (var i=0; i< 42; i++) { bp.sync({ waitFor:[ yellowCoinEs, redCoinEs ] }); }
-	bp.sync({ request:[ StaticEvents.Draw ] });
+	bp.sync({ request:[ StaticEvents.Draw ] },90);
 });
 
 
@@ -200,7 +200,7 @@ for ( var i=0; i<len; i++ ) {
                   bp.sync({waitFor:fourEventArr});
             }
             
-            bp.sync({request:StaticEvents.YellowWin, block: moves });
+            bp.sync({request:StaticEvents.YellowWin, block: moves }, 100);
         });
     })(i);
 };
@@ -223,7 +223,7 @@ for ( var i=0; i<len; i++ ) {
                   bp.sync({waitFor:fourEventArr});
             }
             
-            bp.sync({request:StaticEvents.RedWin, block: moves });
+            bp.sync({request:StaticEvents.RedWin, block: moves }, 100);
         });
     })(i);
 };
@@ -231,8 +231,9 @@ for ( var i=0; i<len; i++ ) {
 
 
 
- 
+//From here: strategies
 
+/*
 bp.registerBThread("CenterCol", function() {
 	while (true) {
 		bp.sync({ request:[ putInCol(3, "Yellow"), 
@@ -253,8 +254,9 @@ bp.registerBThread("sideCol", function() {
 							putInCol(0, "Red"),putInCol(6, "Red")     ] });
 	}
 });
+*/
 
-bp.registerBThread("boardUpdate", function() {
+bp.registerBThread("boardPrinter", function() {
 	var board = [
 	  ['*', '*','*', '*','*', '*','*'],
 	  

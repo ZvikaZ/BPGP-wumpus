@@ -21,3 +21,23 @@
 #
 # TODO use priorities?
 # TODO do want to have 'block's?
+#
+# Achiya:
+#
+#bp.register(name,function() {
+#  sync (1->3) 3w,r | w,w,r | w,r | r
+#}
+#
+#bp.register(name,function() {
+#  while(true) {
+#      sync WB
+#      sync BW
+#  }
+#}
+#
+#bp.register(name,function() {
+#  for(1->4) {
+#      sync
+#  }
+#  sync R | sync W
+#}
