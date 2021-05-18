@@ -36,7 +36,7 @@ bp.registerBThread("EndOfGame", function() {
 
 bp.registerBThread("DetectDraw", function() {
 	for (var i=0; i< 42; i++) { bp.sync({ waitFor:[ yellowCoinEs, redCoinEs ] }); }
-	bp.sync({ request:[ StaticEvents.Draw ] },90);
+	bp.sync({ request:[ StaticEvents.Draw ] }, 90);
 });
 
 
@@ -255,6 +255,21 @@ bp.registerBThread("sideCol", function() {
 	}
 });
 */
+
+bp.registerBThread('random yellow player', function() {
+	const possiblePuts = Array.from(Array(7).keys()).map(j => putInCol(j, 'Yellow'))
+	while(true) {
+		bp.sync({request: possiblePuts}, 10)
+	}
+})
+
+bp.registerBThread('random red player', function() {
+	const possiblePuts = Array.from(Array(7).keys()).map(j => putInCol(j, 'Red'))
+	while(true) {
+		bp.sync({request: possiblePuts}, 10)
+	}
+})
+
 
 bp.registerBThread("boardPrinter", function() {
 	var board = [

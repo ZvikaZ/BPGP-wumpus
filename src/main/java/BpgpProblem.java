@@ -12,6 +12,7 @@ import il.ac.bgu.cs.bp.bpjs.execution.BProgramRunner;
 import il.ac.bgu.cs.bp.bpjs.model.BEvent;
 import il.ac.bgu.cs.bp.bpjs.model.BProgram;
 import il.ac.bgu.cs.bp.bpjs.model.StringBProgram;
+import il.ac.bgu.cs.bp.bpjs.model.eventselection.PrioritizedBSyncEventSelectionStrategy;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
@@ -40,6 +41,10 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
         code += "\n\n" + generatedCode;
 
         final BProgram bprog = new StringBProgram(code);
+        
+        var prio = new PrioritizedBSyncEventSelectionStrategy();
+        prio.setDefaultPriority(0);
+        bprog.setEventSelectionStrategy(prio);
 
         BProgramRunner rnr = new BProgramRunner(bprog);
         BpgpListener listener = null;
