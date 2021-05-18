@@ -299,9 +299,11 @@ bp.registerBThread("boardPrinter", function() {
 			let col = e.data.col;
 			board[row][col] = 'Y'
 		}
-		
+
+		bp.log.info("--------------------")
 		for(var i = 0; i < 6; i++) {
 			bp.log.info(board[i][0] + "  " + board[i][1] + "  " + board[i][2] + "  " + board[i][3] + "  " + board[i][4] + "  " + board[i][5] + "  " + board[i][6]);
 		}
+		bp.log.info("--------------------")
 	}
 });
