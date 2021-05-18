@@ -4,18 +4,15 @@ TODO
 NEXT
 ----
 - improve grammar
-- use logging, and 'fatal' instead of exit 
-- graph:
-  - mean and average fitnesses
-  - subplots - with one heading for all X and Y axis 
 - geInd.printIndividualForHumans: print also generated code
 - stats: print for ind - whose parents, what operators were taken  
-- bpjs verification?
 - sensible initialization
+- use logging, and 'fatal' instead of exit
 
 
 LATER
 -----
+- bpjs verification?
 - better thread printing
 - coevolution of both sides
 - play against preknown good program

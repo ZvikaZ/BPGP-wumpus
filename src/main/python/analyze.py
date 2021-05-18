@@ -5,7 +5,7 @@ import os
 import re
 from matplotlib import pyplot as plt
 
-STAT_FILE = 'out.stat'
+STAT_FILE = 'bpgp.stat'
 
 def get_dirs(path):
     return [os.path.join(path, d) for d in os.listdir(path) if os.path.isdir(os.path.join(path, d))]
@@ -14,19 +14,17 @@ def get_dirs(path):
 def get_run_result(d):
     with open(os.path.join(d, STAT_FILE)) as f:
         lines = f.readlines()
-    with open(os.path.join(d, STAT_FILE)) as f:
-        data = f.read()
-    if "Best Individual's code" not in data:
-        # not finished
-        return
-    fitness_lines = [l for l in lines if "Fitness" in l]
-    r = re.compile(r'Fitness: Standardized=(\d+\.\d+) Adjusted=\d+\.\d+ Hits=0')
-    fitnesses = [float(r.match(l).group(1)) for l in fitness_lines]
-    assert len(fitnesses) == len(fitness_lines)
+    r = re.compile(r'Generation (\d+), best: (\d+\.\d+), mean: (\d+\.\d+), median: (\d+\.\d+)')
+    generations = [int(r.match(l).group(1)) for l in lines]
+    bests = [float(r.match(l).group(2)) for l in lines]
+    means = [float(r.match(l).group(3)) for l in lines]
+    medians = [float(r.match(l).group(4)) for l in lines]
+    assert len(lines) == len(generations) == len(bests) == len(means) == len(medians)
     return {
         'run': d,
-        'fitnesses': fitnesses[:-1],
-        'best': fitnesses[-1]
+        'bests': bests,
+        'means': means,
+        'medians': medians,
     }
 
 
@@ -34,15 +32,17 @@ def analyze_single_run(d):
     run_result = get_run_result(d)
     fig, ax = plt.subplots(1, 1)
     plot_single_run(ax, run_result)
+    ax.legend()
     plt.show()
 
 
 def plot_single_run(ax, r):
-    out = ax.scatter(range(len(r['fitnesses'])), r['fitnesses'])
-    ax.plot(r['fitnesses'])
+    out = ax.plot(r['bests'], 'o-', label='best')
+    ax.plot(r['means'], 'o-', label='mean')
+    ax.plot(r['medians'], 'o-', label='median')
     ax.set_ylim(bottom=0)
     ax.set_xlabel("Generation")
-    ax.set_ylabel("Best fitness")
+    ax.set_ylabel("Fitness")
     ax.set_title(r['run'])
     return out
 
@@ -65,6 +65,7 @@ def analyze_regression(regression_dir):
     fig, ax = plt.subplots(len(results_to_plot), 1, figsize=(10, 10))
     for (index, axes) in enumerate(ax):
         plot_single_run(axes, results_to_plot[index])
+    axes.legend(loc='lower left')
     fig.tight_layout()
     plt.show()
 
