@@ -41,7 +41,7 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
         code += "\n\n" + generatedCode;
 
         final BProgram bprog = new StringBProgram(code);
-        
+
         var prio = new PrioritizedBSyncEventSelectionStrategy();
         prio.setDefaultPriority(0);
         bprog.setEventSelectionStrategy(prio);
@@ -188,6 +188,9 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
         final int threadnum,
         final int log)
     {
+        StringData input = (StringData)(this.input);
+        //TODO make sure that it gets the same value as above
+        input.playerColor = "Yellow";
         ((GPIndividual)ind).trees[0].child.eval(state, threadnum, input, stack, (GPIndividual)ind, this);
         state.output.println("\n\nBest Individual's code\n======================", log);
         state.output.println(((StringData) input).str, log);
