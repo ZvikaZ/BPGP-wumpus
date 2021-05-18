@@ -28,7 +28,7 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
         SELF,
         OTHERS
     }
-    static Rival rival = Rival.OTHERS;
+    static Rival rival = Rival.RANDOM;
 
     private int bpRun(String generatedCode) {
         // This will load the program file from <Project>/src/main/resources/
@@ -142,6 +142,8 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
                     input.str = null;
                     GESpecies species = (GESpecies)(rivalInd.species);
                     GPIndividual gpRivalInd = species.map(state, rivalInd, threadnum, null);
+                    if (gpRivalInd == null)
+                        throw new RuntimeException();
                     gpRivalInd.trees[0].child.eval(state, threadnum, input, stack, gpRivalInd, this);
                     input.playerColor = swapColor(input.playerColor);
                     break;

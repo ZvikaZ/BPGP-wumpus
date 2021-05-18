@@ -3,12 +3,13 @@ TODO
 
 NEXT
 ----
+- improve grammar
 - use logging, and 'fatal' instead of exit 
 - graph:
   - mean and average fitnesses
-  - subplots - with one heading for all X and Y axis
-- column +-1 (in 'column_with_delta' branch)
-- improve grammar (diagonal?, specific cell?, arrays?)
+  - subplots - with one heading for all X and Y axis 
+- geInd.printIndividualForHumans: print also generated code
+- stats: print for ind - whose parents, what operators were taken  
 - bpjs verification?
 - sensible initialization
 
@@ -16,7 +17,6 @@ NEXT
 LATER
 -----
 - better thread printing
-- print genome, derivation
 - coevolution of both sides
 - play against preknown good program
 - maven standalone on clean copy 

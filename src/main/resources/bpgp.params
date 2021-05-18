@@ -71,3 +71,10 @@ evalthreads = auto
 
 ## debug params:
 # print-params = true
+
+stat.num-children = 2
+stat.child.0 = ec.simple.SimpleShortStatistics
+stat.child.0.file = $out.tab.stat
+stat.child.0.do-size = true
+stat.child.0.do-time = true
+stat.child.1 = BpgpStatistics
