@@ -19,8 +19,6 @@
 <color> ::= (MyColor)
 <col-after-wait> ::= (ColumnERC) | (ColumnOfWait)
 #
-# TODO use priorities?
-# TODO do want to have 'block's?
 #
 # Achiya:
 #

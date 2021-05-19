@@ -2,11 +2,13 @@ import ec.EvolutionState;
 import ec.Statistics;
 import ec.gp.ge.GEIndividual;
 import ec.gp.koza.KozaFitness;
+import ec.util.IntBag;
 import ec.util.Parameter;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class BpgpStatistics extends Statistics {
     public int bpgpLog;
@@ -26,6 +28,8 @@ public class BpgpStatistics extends Statistics {
         }
     }
 
+//    public void postBreedingStatistics(EvolutionState state) {
+//        super.postBreedingStatistics(state);
     public void postEvaluationStatistics(EvolutionState state) {
         super.postEvaluationStatistics(state);
         int log = openLogFile(state, String.format("generation_%d.stat", state.generation), false);
@@ -51,5 +55,29 @@ public class BpgpStatistics extends Statistics {
         state.output.println(
                 String.format("Generation %d, best: %f, mean: %f, median: %f",
                         state.generation, bestFitness, mean, median), bpgpLog);
+
+        for (var map : ((BpgpSpecies)state.population.subpops.get(0).species).miscMaps) {
+            printParents(state, map, log);
+        }
     }
+
+    private void printParents(EvolutionState state, HashMap<String, Object> map, int log) {
+        IntBag[] bag = (IntBag[])map.get("parents");
+        if (bag.length == 2) {
+            if (bag[0].objs.length != 2)
+                throw new RuntimeException();
+            if (bag[1].objs.length != 1)
+                throw new RuntimeException();
+            if (bag[0].objs[1] != bag[1].objs[0])
+                throw new RuntimeException();
+
+            state.output.println("parents: " + bag[0].objs[0] + " , " + bag[0].objs[1], log);
+        } else {
+            if (bag[0].objs.length != 1)
+                throw new RuntimeException();
+
+            state.output.println("parent: " + bag[0].objs[0], log);
+        }
+    }
+
 }
