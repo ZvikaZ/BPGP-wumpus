@@ -307,3 +307,12 @@ bp.registerBThread("boardPrinter", function() {
 		bp.log.info("--------------------")
 	}
 });
+
+// let fifths=[]
+// foreach 5 in fifths:
+// 	bthread("do something", function() {
+// 		let nonempty5=[red or white in each of the cells in 5]
+// 		interrupt(nonempty5,function() {
+//
+// 		})
+// 	})
