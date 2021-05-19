@@ -53,8 +53,8 @@ pop.subpop.0.species.max-initial-size = 100
 # if the genome is still too small, wrap around 4 times before giving up
 pop.subpop.0.species.passes = 4
 
-# elitism  #TODO return
-#breed.elite.0 = 2
+# elitism
+breed.elite.0 = 2
 
 #TODO increase... maybe 200 generations, 10 (or more?) individuals in subpop?
 generations	= 200

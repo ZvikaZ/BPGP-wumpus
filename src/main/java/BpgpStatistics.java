@@ -2,6 +2,7 @@ import ec.EvolutionState;
 import ec.Statistics;
 import ec.gp.ge.GEIndividual;
 import ec.gp.koza.KozaFitness;
+import ec.simple.SimpleBreeder;
 import ec.util.IntBag;
 import ec.util.Parameter;
 
@@ -12,6 +13,8 @@ import java.util.HashMap;
 
 public class BpgpStatistics extends Statistics {
     public int bpgpLog;
+
+    final int SUBPOP = 0;
 
     public void setup(final EvolutionState state, final Parameter base) {
         super.setup(state, base);
@@ -31,8 +34,7 @@ public class BpgpStatistics extends Statistics {
     public void postEvaluationStatistics(EvolutionState state) {
         super.postEvaluationStatistics(state);
         int log = openLogFile(state, String.format("generation_%d.stat", state.generation), false);
-        var individuals = state.population.subpops.get(0).individuals;
-        var maps = ((BpgpSpecies)state.population.subpops.get(0).species).miscMaps;
+        var individuals = state.population.subpops.get(SUBPOP).individuals;
         double[] fitnesses = new double[individuals.size()];
         double sumFitnesses = 0;
         double bestFitness = 0;
@@ -42,7 +44,7 @@ public class BpgpStatistics extends Statistics {
             GEIndividual geInd = (GEIndividual)(individuals.get(index));
             geInd.printIndividualForHumans(state, log);
             if (state.generation > 0)
-                printParents(state, maps.get(index), log);
+                printParents(state, index, log);
             state.output.println("-----------------", log);
 
             fitnesses[index] = ((KozaFitness) geInd.fitness).standardizedFitness();
@@ -57,6 +59,16 @@ public class BpgpStatistics extends Statistics {
                 String.format("Generation %d, best: %f, mean: %f, median: %f",
                         state.generation, bestFitness, mean, median), bpgpLog);
 
+    }
+
+    private void printParents(EvolutionState state, int index, int log) {
+        int numElites = ((SimpleBreeder)state.breeder).numElites(state, SUBPOP);
+        if (index < numElites) {
+            state.output.println("parent: elitism", log);
+        } else {
+            var maps = ((BpgpSpecies)state.population.subpops.get(SUBPOP).species).miscMaps;
+            printParents(state, maps.get(index - numElites), log);
+        }
     }
 
     private void printParents(EvolutionState state, HashMap<String, Object> map, int log) {
