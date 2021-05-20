@@ -31,6 +31,7 @@
 
 	<repositories>
 		<repository>
+		<!-- TODO: remove this, and the dir, when https://github.com/GMUEClab/ecj/issues/74 is fixed -->
 			<id>local-maven-repo</id>
 			<url>file:///${project.basedir}/local-maven-repo</url>
 		</repository>
@@ -38,8 +39,9 @@
 
 
     <properties>
-        <maven.compiler.source>16</maven.compiler.source>
-        <maven.compiler.target>16</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>15</maven.compiler.source>
+        <maven.compiler.target>15</maven.compiler.target>
     </properties>
 
 </project>
