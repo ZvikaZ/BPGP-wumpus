@@ -1,3 +1,9 @@
+RUNNING
+=======
+$ mvn clean package
+and now, either run.sh, or run.bat
+
+
 TODO
 ====
 
@@ -16,8 +22,7 @@ LATER
 - bpjs verification?
 - coevolution of both sides
 - play against preknown good program
-- maven standalone on clean copy 
-  - report breedthreads bug
+- report breedthreads bug
 - some explanations in this file...
 - clean ecj warnings
 - unit tests?

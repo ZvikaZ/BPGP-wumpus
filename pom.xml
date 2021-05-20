@@ -31,7 +31,7 @@
 
 	<repositories>
 		<repository>
-		<!-- TODO: remove this, and the dir, when https://github.com/GMUEClab/ecj/issues/74 is fixed -->
+		<!-- TODO: remove this, and the dir, (and fix run.*) when https://github.com/GMUEClab/ecj/issues/74 is fixed -->
 			<id>local-maven-repo</id>
 			<url>file:///${project.basedir}/local-maven-repo</url>
 		</repository>
