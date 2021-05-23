@@ -1,7 +1,7 @@
 RUNNING
 =======
-$ mvn clean package
-and now, either run.sh, or run.bat
+- `mvn clean package`
+- and now, either `run.sh`, or `run.bat`, according to OS
 
 
 TODO
