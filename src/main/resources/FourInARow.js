@@ -270,21 +270,21 @@ bp.registerBThread('random red player', function() {
 	}
 })
 
+var board = [
+	['*', '*','*', '*','*', '*','*'],
+
+	['*', '*','*', '*','*', '*','*'],
+
+	['*', '*','*', '*','*', '*','*'],
+
+	['*', '*','*', '*','*', '*','*'],
+
+	['*', '*','*', '*','*', '*','*'],
+
+	['*', '*','*', '*','*', '*','*'],
+];
 
 bp.registerBThread("boardPrinter", function() {
-	var board = [
-	  ['*', '*','*', '*','*', '*','*'],
-	  
-	  ['*', '*','*', '*','*', '*','*'],
-	  
-	  ['*', '*','*', '*','*', '*','*'],
-	  
-	  ['*', '*','*', '*','*', '*','*'],
-	  
-	  ['*', '*','*', '*','*', '*','*'],
-	  
-	  ['*', '*','*', '*','*', '*','*'],
-	];
 	for(var i=0; i < 42; i++) {
 		var e = bp.sync({ waitFor:[ redCoinEs, yellowCoinEs ]});
 		if(e.data.color.equals("Red")) 
@@ -304,9 +304,11 @@ bp.registerBThread("boardPrinter", function() {
 		for(var i = 0; i < 6; i++) {
 			bp.log.info(board[i][0] + "  " + board[i][1] + "  " + board[i][2] + "  " + board[i][3] + "  " + board[i][4] + "  " + board[i][5] + "  " + board[i][6]);
 		}
+		bp.log.info(e.data)
 		bp.log.info("--------------------")
 	}
 });
+
 
 // let fifths=[]
 // foreach 5 in fifths:
@@ -316,3 +318,50 @@ bp.registerBThread("boardPrinter", function() {
 //
 // 		})
 // 	})
+
+function frontierEv(row, col) {
+	return bp.Event("Frontier", {row:row, col:col});
+}
+
+var frontierES = bp.EventSet("Frontier ES", function(e) {
+	return e.name == "Frontier";
+});
+
+
+
+var frontier = []
+
+bp.registerBThread("initFrontier", function() {
+	let evs = []
+	for (var i = 0; i < 7; i++) {
+		let row = 5;
+		frontier.push({row: row, col: i})
+		evs.push(frontierEv(row, i))
+	}
+	bp.log.info("initFrontier requesting: " + evs)
+	bp.sync({request: evs})
+	bp.log.info("initFrontier requested: " + evs)
+})
+
+bp.registerBThread("updateFrontier", function() {
+	while (true) {
+		var e = bp.sync({waitFor: [redCoinEs, yellowCoinEs]});
+		frontier = frontier.filter(function (cell) {
+			return cell.col != e.data.col || cell.row != e.data.row
+		})
+		if (e.data.row > 0) {
+			let row = e.data.row - 1
+			frontier.push({row: row, col: e.data.col})
+			bp.sync({request: frontierEv(row, e.data.col)})
+			bp.log.info("updateFrontier requested frontierEv: " + row + ", " + e.data.col);
+		}
+		// bp.log.info(frontier);
+	}
+})
+
+bp.registerBThread("frontierListener", function() {
+	while (true) {
+		var e = bp.sync({waitFor: frontierES});
+		bp.log.info("frontierListener got: " + e)
+	}
+})
