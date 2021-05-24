@@ -257,9 +257,13 @@ bp.registerBThread("sideCol", function() {
 */
 
 bp.registerBThread('random yellow player', function() {
+	//TODO is it OK?
+	bp.sync({waitFor: frontierES});
+
 	const possiblePuts = Array.from(Array(7).keys()).map(j => putInCol(j, 'Yellow'))
 	while(true) {
-		bp.sync({request: possiblePuts}, 10)
+		let e = bp.sync({request: possiblePuts}, 10)
+		bp.log.info("random yellow requested: " + e)
 	}
 })
 
@@ -327,8 +331,6 @@ var frontierES = bp.EventSet("Frontier ES", function(e) {
 	return e.name == "Frontier";
 });
 
-
-
 var frontier = []
 
 bp.registerBThread("initFrontier", function() {
@@ -338,8 +340,12 @@ bp.registerBThread("initFrontier", function() {
 		frontier.push({row: row, col: i})
 		evs.push(frontierEv(row, i))
 	}
+	//TODO do we want to request all evs? currently only one is actually selected , and ther other are ignored...
+	//let's bypass this for now, and request only the central cell
+	evs = [frontierEv(5,3)]
 	bp.log.info("initFrontier requesting: " + evs)
-	bp.sync({request: evs})
+	bp.sync({request: evs,
+	  		 block: [ redCoinEs, yellowCoinEs ]})
 	bp.log.info("initFrontier requested: " + evs)
 })
 
@@ -360,9 +366,40 @@ bp.registerBThread("updateFrontier", function() {
 	}
 })
 
-bp.registerBThread("frontierListener", function() {
-	while (true) {
-		var e = bp.sync({waitFor: frontierES});
-		bp.log.info("frontierListener got: " + e)
+// bp.registerBThread("frontierListener", function() {
+// 	while (true) {
+// 		var e = bp.sync({waitFor: frontierES});
+// 		bp.log.info("frontierListener got: " + e)
+// 	}
+// })
+
+//TODO
+var series = [{row: 5, col: 2}, {row: 5, col: 3}, {row: 5, col: 4}]
+
+bp.registerBThread("seriesHandler", function() {
+	let evs = []
+	for (var i = 0; i < series.length; i++) {
+		evs.push(frontierEv(series[i].row, series[i].col))
 	}
+	bp.sync({waitFor: evs});
+	bp.log.info("seriesHandler caught")
+
+	let requesting = []
+	let ok = true
+	for (var i = 0; i < series.length && ok; i++) {
+		let cell = board[series[i].row][series[i].col]
+		if (cell == 'R')
+			ok = false
+		else if (cell ='*')
+			requesting.push(putInCol(series[i].col, "Yellow"))
+	}
+
+	//TODO loop
+	if (ok) {
+		bp.log.info("seriesHandler requesting " + requesting)
+		var e = bp.sync({request: requesting}, 50)
+		bp.log.info("seriesHandler requested " + e)
+	}
+
 })
+
