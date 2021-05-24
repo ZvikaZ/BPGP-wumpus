@@ -352,7 +352,8 @@ bp.registerBThread("updateFrontier", function() {
 		if (e.data.row > 0) {
 			let row = e.data.row - 1
 			frontier.push({row: row, col: e.data.col})
-			bp.sync({request: frontierEv(row, e.data.col)})
+			bp.sync({request: frontierEv(row, e.data.col),
+					 block: [ redCoinEs, yellowCoinEs ]})
 			bp.log.info("updateFrontier requested frontierEv: " + row + ", " + e.data.col);
 		}
 		// bp.log.info(frontier);
