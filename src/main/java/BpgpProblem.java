@@ -21,7 +21,7 @@ import java.net.URL;
 
 public class BpgpProblem extends GPProblem implements SimpleProblemForm {
     static final String bpRunLog = "bpRun.log";
-    static final int numOfRandomRuns = 40;
+    static final int numOfRandomRuns = 1;   //TODO increase
     static final boolean debug = false;
     enum Rival {
         RANDOM,

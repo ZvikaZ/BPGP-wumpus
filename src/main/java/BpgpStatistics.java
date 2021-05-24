@@ -74,14 +74,17 @@ public class BpgpStatistics extends Statistics {
     private void printParents(EvolutionState state, HashMap<String, Object> map, int log) {
         IntBag[] bag = (IntBag[])map.get("parents");
         if (bag.length == 2 && bag[0] != null && bag[1] != null) {
-            if (bag[0].objs.length != 2)
+            if (bag[0].objs.length == 2) {
+                if (bag[1].objs.length != 1)
+                    throw new RuntimeException("BpgpStatistics.printParents: Unexpected length");
+                if (bag[0].objs[1] != bag[1].objs[0])
+                    throw new RuntimeException("BpgpStatistics.printParents: objs value mismatch");
+                state.output.println("parents: " + bag[0].objs[0] + " , " + bag[0].objs[1], log);
+            } else if (bag[0].objs.length == 1) {
+                state.output.println(String.format("parent: %d (failed to use: %d)", bag[0].objs[0], bag[1].objs[0]), log);
+            } else {
                 throw new RuntimeException("BpgpStatistics.printParents: Unexpected length");
-            if (bag[1].objs.length != 1)
-                throw new RuntimeException("BpgpStatistics.printParents: Unexpected length");
-            if (bag[0].objs[1] != bag[1].objs[0])
-                throw new RuntimeException("BpgpStatistics.printParents: objs value mismatch");
-
-            state.output.println("parents: " + bag[0].objs[0] + " , " + bag[0].objs[1], log);
+            }
         } else if (bag.length == 1 || (bag.length == 2 && bag[1] == null)) {
             if (bag[0].objs.length != 1)
                 throw new RuntimeException("BpgpStatistics.printParents: Unexpected length");

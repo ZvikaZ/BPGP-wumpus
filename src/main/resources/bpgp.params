@@ -53,11 +53,16 @@ pop.subpop.0.species.max-initial-size = 100
 # if the genome is still too small, wrap around 4 times before giving up
 pop.subpop.0.species.passes = 4
 
+
+# don't give up if the first crossover attempt fails, try more
+pop.subpop.0.species.pipe.source.0.source.0.tries = 4
+
+
 # elitism
 breed.elite.0 = 2
 
 #TODO increase... maybe 200 generations, 10 (or more?) individuals in subpop?
-generations	= 200
+generations	= 20
 pop.subpop.0.size	= 10
 
 ## debug - turn off mutation
@@ -81,5 +86,5 @@ stat.child.1 = BpgpStatistics
 
 pop.subpop.0.species = BpgpSpecies
 
-# until https://github.com/GMUEClab/ecj/issues/75 will be fixed
-pop.subpop.0.species.pipe.source.0.source.0.crossover-type = one
+
+
