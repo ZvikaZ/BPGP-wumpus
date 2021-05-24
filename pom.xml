@@ -12,7 +12,8 @@
         <dependency>
             <groupId>edu.gmu.cs</groupId>
             <artifactId>ecj</artifactId>
-            <version>27</version>
+<!--            using my compiled version, until https://github.com/GMUEClab/ecj/issues/75 and https://github.com/GMUEClab/ecj/issues/77 will be fixed-->
+            <version>27.1-zvika-3</version>
         </dependency>
         <dependency>
             <groupId>com.github.bthink-bgu</groupId>

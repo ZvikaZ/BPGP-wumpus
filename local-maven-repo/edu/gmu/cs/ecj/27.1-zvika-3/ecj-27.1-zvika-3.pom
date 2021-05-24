@@ -4,5 +4,5 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>edu.gmu.cs</groupId>
   <artifactId>ecj</artifactId>
-  <version>27</version>
+  <version>27.1-zvika-3</version>
 </project>
