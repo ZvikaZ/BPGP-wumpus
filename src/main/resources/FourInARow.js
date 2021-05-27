@@ -102,6 +102,7 @@ const col6ES =  bp.EventSet("Any Put 6", function(evt) {
 // req1: Represents alternating turns as mentioned in the game rules 
 bp.registerBThread("EnforceTurns", function() {
 	while (true) {
+		//TODO boardUpdatedES should be first...
 		bp.sync({ waitFor:yellowColES, block: [yellowCoinEs, redColES, redCoinEs, boardUpdatedES]});
 		bp.sync({ waitFor:yellowCoinEs, block: [redColES, redCoinEs, yellowColES, boardUpdatedES]});
 		bp.sync({ waitFor:boardUpdatedES, block: [redColES, redCoinEs, yellowColES, yellowCoinEs]});
@@ -320,43 +321,74 @@ var boardUpdatedES = bp.EventSet("BoardUpdated ES", function(e) {
 });
 
 
-bp.registerBThread("temp", function () {
-	while (true) {
-		let e = bp.sync({waitFor: boardUpdatedES})
-		bp.log.info(e.data)
-		// bp.log.info(e.data.board)
-	}
-})
-
+const ST_TOO_HIGH = 0
+const ST_READY = 1
+const ST_MY = 2
+const ST_BAD = 3
 
 //TODO
-let series = [{row: 5, col: 2}, {row: 5, col: 3}, {row: 5, col: 4}]
+let series = [
+	{row: 5, col: 2},
+	{row: 5, col: 3},
+	{row: 5, col: 4}
+]
 
-/*
 bp.registerBThread("seriesHandler", function() {
-	let evs = []
+
+	// first row is already available
 	for (let i = 0; i < series.length; i++) {
-		evs.push(frontierEv(series[i].row, series[i].col))
-	}
-	bp.sync({waitFor: evs});
-	bp.log.info("seriesHandler caught")
-
-	let requesting = []
-	let ok = true
-	for (var i = 0; i < series.length && ok; i++) {
-		let cell = board[series[i].row][series[i].col]
-		if (cell == 'R')
-			ok = false
-		else if (cell ='*')
-			requesting.push(putInCol(series[i].col, "Yellow"))
+		if (series[i].row == 5)
+			series[i].status = ST_READY
+		else
+			series[i].status = ST_TOO_HIGH
 	}
 
-	//TODO loop
-	if (ok) {
-		bp.log.info("seriesHandler requesting " + requesting)
-		var e = bp.sync({request: requesting}, 50)
-		bp.log.info("seriesHandler requested " + e)
-	}
+	// start the main loop
+	while (true) {
+		let requesting = []
+		let ok = true
+		for (let players = 0; players < 2; players++) {
+			//TODO do we even need boardUpdatedES?
+			let e = bp.sync({waitFor: boardUpdatedES})
+			ev = e.data.ev
+			bp.log.info("seriesHandler: got boardUpdatedES: " + ev.data.row + ", " + ev.data.col + " : " + ev.data.color)
+			for (let i = 0; i < series.length; i++) {
+				cell = series[i]
+				// bp.log.info("DEBUG: ev:")
+				// bp.log.info(ev)
+				// bp.log.info("DEBUG: cell:")
+				// bp.log.info(cell)
+				// bp.log.info("DEBUG: first-if: " + (ev.data.row == cell.row && ev.data.col == cell.col))
+				// bp.log.info("DEBUG: second-if: " + (ev.data.color == "Yellow"))
+				if (ev.data.row == cell.row && ev.data.col == cell.col) {
+					if (ev.data.color == "Yellow")
+						cell.status = ST_MY
+					else {
+						//TODO break
+						bp.log.info("BAD BOY!")
+						cell.status = ST_BAD
+						ok = false
+					}
+				} else if (ev.data.row == cell.row + 1 && ev.data.col == cell.col) {
+					cell.status = ST_READY
+				}
+			}
+		}
 
+		for (let i = 0; i < series.length; i++) {
+			if (series[i].status == ST_READY)
+				requesting.push(putInCol(series[i].col, "Yellow"))
+		}
+
+		bp.log.info("seriesHandler series: ")
+		bp.log.info(series)
+		// bp.log.info("seriesHandler ok: " + ok)
+		// bp.log.info("seriesHandler requesting: ")
+		// bp.log.info(requesting)
+		if (ok && requesting.length > 0) {
+			bp.log.info("seriesHandler requesting " + requesting)
+			let e = bp.sync({request: requesting}, 50)
+			bp.log.info("seriesHandler requested " + e)
+		}
+	}
 })
-*/
