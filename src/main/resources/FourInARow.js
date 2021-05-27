@@ -30,7 +30,8 @@ StaticEvents = {
 
 // Game ends when : 1. Either of the players has won ( Red or Yellow ) 2. It's a draw
 bp.registerBThread("EndOfGame", function() {
-	bp.sync({ waitFor:[ StaticEvents.RedWin, StaticEvents.YellowWin, StaticEvents.Draw ] });
+	let e = bp.sync({ waitFor:[ StaticEvents.RedWin, StaticEvents.YellowWin, StaticEvents.Draw ] });
+	bp.log.info("End of game: " + e)
 	bp.sync({ block:[ moves ] });
 });
 
@@ -202,7 +203,7 @@ for ( var i=0; i<len; i++ ) {
             for ( var i=0; i<4; i++ ) {
                   bp.sync({waitFor:fourEventArr});
             }
-            
+
             bp.sync({request:StaticEvents.YellowWin, block: moves }, 100);
         });
     })(i);
@@ -345,7 +346,6 @@ function registerSeriesHandler(series) {
 
 		// start the main loop
 		while (true) {
-			let ok = true
 			for (let players = 0; players < 2; players++) {
 				//TODO do we even need boardUpdatedES?
 				let e = bp.sync({waitFor: boardUpdatedES})
@@ -359,7 +359,6 @@ function registerSeriesHandler(series) {
 						else {
 							bp.log.info("BAD BOY!")
 							cell.status = ST_BAD
-							ok = false
 						}
 					} else if (ev.data.row == cell.row + 1 && ev.data.col == cell.col) {
 						cell.status = ST_READY
@@ -367,24 +366,26 @@ function registerSeriesHandler(series) {
 				}
 			}
 
-			if (ok) {
+			let priority = 40
+			let ok = true
 
-				let priority = 40
-
-				// we prefer to use 'requesting' first. only if it's empty, that means that all of it is ours, then we request edge, and should win
-				let requesting = []
-				let requesting_edge = []
-				for (let i = 0; i < series.length; i++) {
-					if (series[i].status == ST_READY) {
-						if (series[i].edge)
-							requesting_edge.push(putInCol(series[i].col, "Yellow"))
-						else
-							requesting.push(putInCol(series[i].col, "Yellow"))
-					} else if (series[i].status == ST_MY) {
-						priority += 5
-					}
+			// we prefer to use 'requesting' first. only if it's empty, that means that all of it is ours, then we request edge, and should win
+			let requesting = []
+			let requesting_edge = []
+			for (let i = 0; i < series.length; i++) {
+				if (series[i].status == ST_READY) {
+					if (series[i].edge)
+						requesting_edge.push(putInCol(series[i].col, "Yellow"))
+					else
+						requesting.push(putInCol(series[i].col, "Yellow"))
+				} else if (series[i].status == ST_MY) {
+					priority += 5
+				} else if (series[i].status == ST_BAD) {
+					ok = false
 				}
+			}
 
+			if (ok) {
 				bp.log.info("seriesHandler series: ")
 				bp.log.info(series)
 				if (requesting.length > 0) {
