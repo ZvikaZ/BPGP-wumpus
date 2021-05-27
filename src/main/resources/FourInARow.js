@@ -102,10 +102,12 @@ const col6ES =  bp.EventSet("Any Put 6", function(evt) {
 // req1: Represents alternating turns as mentioned in the game rules 
 bp.registerBThread("EnforceTurns", function() {
 	while (true) {
-		bp.sync({ waitFor:yellowColES, block: [yellowCoinEs, redColES, redCoinEs]});
-		bp.sync({ waitFor:yellowCoinEs, block: [redColES, redCoinEs, yellowColES]});
-		bp.sync({ waitFor:redColES, block: [yellowColES, yellowCoinEs, redCoinEs]});	
-		bp.sync({ waitFor:redCoinEs, block: [redColES, yellowCoinEs, yellowColES]});	
+		bp.sync({ waitFor:yellowColES, block: [yellowCoinEs, redColES, redCoinEs, boardUpdatedES]});
+		bp.sync({ waitFor:yellowCoinEs, block: [redColES, redCoinEs, yellowColES, boardUpdatedES]});
+		bp.sync({ waitFor:boardUpdatedES, block: [redColES, redCoinEs, yellowColES, yellowCoinEs]});
+		bp.sync({ waitFor:redColES, block: [yellowColES, yellowCoinEs, redCoinEs, boardUpdatedES]});
+		bp.sync({ waitFor:redCoinEs, block: [redColES, yellowCoinEs, yellowColES, boardUpdatedES]});
+		bp.sync({ waitFor:boardUpdatedES, block: [redColES, redCoinEs, yellowColES, redCoinEs]});
 	}
 });
 
@@ -257,13 +259,10 @@ bp.registerBThread("sideCol", function() {
 */
 
 bp.registerBThread('random yellow player', function() {
-	//TODO is it OK?
-	bp.sync({waitFor: frontierES});
-
 	const possiblePuts = Array.from(Array(7).keys()).map(j => putInCol(j, 'Yellow'))
 	while(true) {
 		let e = bp.sync({request: possiblePuts}, 10)
-		bp.log.info("random yellow requested: " + e)
+		// bp.log.info("random yellow requested: " + e)
 	}
 })
 
@@ -274,21 +273,22 @@ bp.registerBThread('random red player', function() {
 	}
 })
 
-var board = [
-	['*', '*','*', '*','*', '*','*'],
 
-	['*', '*','*', '*','*', '*','*'],
+bp.registerBThread("boardUpdater", function() {
+	var board = [
+		['*', '*','*', '*','*', '*','*'],
 
-	['*', '*','*', '*','*', '*','*'],
+		['*', '*','*', '*','*', '*','*'],
 
-	['*', '*','*', '*','*', '*','*'],
+		['*', '*','*', '*','*', '*','*'],
 
-	['*', '*','*', '*','*', '*','*'],
+		['*', '*','*', '*','*', '*','*'],
 
-	['*', '*','*', '*','*', '*','*'],
-];
+		['*', '*','*', '*','*', '*','*'],
 
-bp.registerBThread("boardPrinter", function() {
+		['*', '*','*', '*','*', '*','*'],
+	];
+
 	for(var i=0; i < 42; i++) {
 		var e = bp.sync({ waitFor:[ redCoinEs, yellowCoinEs ]});
 		if(e.data.color.equals("Red")) 
@@ -310,75 +310,32 @@ bp.registerBThread("boardPrinter", function() {
 		}
 		bp.log.info(e.data)
 		bp.log.info("--------------------")
+		bp.sync({request: bp.Event("BoardUpdated", {board: board, ev: e})})
 	}
 });
 
 
-// let fifths=[]
-// foreach 5 in fifths:
-// 	bthread("do something", function() {
-// 		let nonempty5=[red or white in each of the cells in 5]
-// 		interrupt(nonempty5,function() {
-//
-// 		})
-// 	})
-
-function frontierEv(row, col) {
-	return bp.Event("Frontier", {row:row, col:col});
-}
-
-var frontierES = bp.EventSet("Frontier ES", function(e) {
-	return e.name == "Frontier";
+var boardUpdatedES = bp.EventSet("BoardUpdated ES", function(e) {
+	return e.name == "BoardUpdated";
 });
 
-var frontier = []
 
-bp.registerBThread("initFrontier", function() {
-	let evs = []
-	for (var i = 0; i < 7; i++) {
-		let row = 5;
-		frontier.push({row: row, col: i})
-		evs.push(frontierEv(row, i))
-	}
-	//TODO do we want to request all evs? currently only one is actually selected , and ther other are ignored...
-	//let's bypass this for now, and request only the central cell
-	evs = [frontierEv(5,3)]
-	bp.log.info("initFrontier requesting: " + evs)
-	bp.sync({request: evs,
-	  		 block: [ redCoinEs, yellowCoinEs ]})
-	bp.log.info("initFrontier requested: " + evs)
-})
-
-bp.registerBThread("updateFrontier", function() {
+bp.registerBThread("temp", function () {
 	while (true) {
-		var e = bp.sync({waitFor: [redCoinEs, yellowCoinEs]});
-		frontier = frontier.filter(function (cell) {
-			return cell.col != e.data.col || cell.row != e.data.row
-		})
-		if (e.data.row > 0) {
-			let row = e.data.row - 1
-			frontier.push({row: row, col: e.data.col})
-			bp.sync({request: frontierEv(row, e.data.col),
-					 block: [ redCoinEs, yellowCoinEs ]})
-			bp.log.info("updateFrontier requested frontierEv: " + row + ", " + e.data.col);
-		}
-		// bp.log.info(frontier);
+		let e = bp.sync({waitFor: boardUpdatedES})
+		bp.log.info(e.data)
+		// bp.log.info(e.data.board)
 	}
 })
 
-// bp.registerBThread("frontierListener", function() {
-// 	while (true) {
-// 		var e = bp.sync({waitFor: frontierES});
-// 		bp.log.info("frontierListener got: " + e)
-// 	}
-// })
 
 //TODO
-var series = [{row: 5, col: 2}, {row: 5, col: 3}, {row: 5, col: 4}]
+let series = [{row: 5, col: 2}, {row: 5, col: 3}, {row: 5, col: 4}]
 
+/*
 bp.registerBThread("seriesHandler", function() {
 	let evs = []
-	for (var i = 0; i < series.length; i++) {
+	for (let i = 0; i < series.length; i++) {
 		evs.push(frontierEv(series[i].row, series[i].col))
 	}
 	bp.sync({waitFor: evs});
@@ -402,4 +359,4 @@ bp.registerBThread("seriesHandler", function() {
 	}
 
 })
-
+*/
