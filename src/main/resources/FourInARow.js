@@ -328,10 +328,21 @@ const ST_BAD = 3
 
 //TODO
 let series = [
+	{row: 5, col: 1, edge: true},
 	{row: 5, col: 2},
 	{row: 5, col: 3},
-	{row: 5, col: 4}
+	{row: 5, col: 4},
+	{row: 5, col: 5, edge: true},
 ]
+
+// let series2 = [
+// 	{row: 4, col: 1, edge: true},
+// 	{row: 4, col: 2},
+// 	{row: 4, col: 3},
+// 	{row: 4, col: 4},
+// 	{row: 4, col: 5, edge: true},
+// ]
+
 
 bp.registerBThread("seriesHandler", function() {
 
@@ -345,7 +356,6 @@ bp.registerBThread("seriesHandler", function() {
 
 	// start the main loop
 	while (true) {
-		let requesting = []
 		let ok = true
 		for (let players = 0; players < 2; players++) {
 			//TODO do we even need boardUpdatedES?
@@ -354,17 +364,10 @@ bp.registerBThread("seriesHandler", function() {
 			bp.log.info("seriesHandler: got boardUpdatedES: " + ev.data.row + ", " + ev.data.col + " : " + ev.data.color)
 			for (let i = 0; i < series.length; i++) {
 				cell = series[i]
-				// bp.log.info("DEBUG: ev:")
-				// bp.log.info(ev)
-				// bp.log.info("DEBUG: cell:")
-				// bp.log.info(cell)
-				// bp.log.info("DEBUG: first-if: " + (ev.data.row == cell.row && ev.data.col == cell.col))
-				// bp.log.info("DEBUG: second-if: " + (ev.data.color == "Yellow"))
 				if (ev.data.row == cell.row && ev.data.col == cell.col) {
 					if (ev.data.color == "Yellow")
 						cell.status = ST_MY
 					else {
-						//TODO break
 						bp.log.info("BAD BOY!")
 						cell.status = ST_BAD
 						ok = false
@@ -375,20 +378,36 @@ bp.registerBThread("seriesHandler", function() {
 			}
 		}
 
+		if (!ok) {
+			return
+		}
+
+		let priority = 40
+
+		// we prefer to use 'requesting' first. only if it's empty, that means that all of it is ours, then we request edge, and should win
+		let requesting = []
+		let requesting_edge = []
 		for (let i = 0; i < series.length; i++) {
-			if (series[i].status == ST_READY)
-				requesting.push(putInCol(series[i].col, "Yellow"))
+			if (series[i].status == ST_READY) {
+				if (series[i].edge)
+					requesting_edge.push(putInCol(series[i].col, "Yellow"))
+				else
+					requesting.push(putInCol(series[i].col, "Yellow"))
+			} else if (series[i].status == ST_MY) {
+				priority += 5
+			}
 		}
 
 		bp.log.info("seriesHandler series: ")
 		bp.log.info(series)
-		// bp.log.info("seriesHandler ok: " + ok)
-		// bp.log.info("seriesHandler requesting: ")
-		// bp.log.info(requesting)
-		if (ok && requesting.length > 0) {
+		if (requesting.length > 0) {
 			bp.log.info("seriesHandler requesting " + requesting)
-			let e = bp.sync({request: requesting}, 50)
+			let e = bp.sync({request: requesting}, priority)
 			bp.log.info("seriesHandler requested " + e)
+		} else if (requesting_edge.length > 0) {
+			bp.log.info("seriesHandler requesting_edge " + requesting_edge)
+			let e = bp.sync({request: requesting_edge}, 90)
+			bp.log.info("seriesHandler requested_edge " + e)
 		}
 	}
 })
