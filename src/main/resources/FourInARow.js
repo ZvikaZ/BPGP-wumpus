@@ -327,87 +327,80 @@ const ST_MY = 2
 const ST_BAD = 3
 
 //TODO
-let series = [
-	{row: 5, col: 1, edge: true},
-	{row: 5, col: 2},
-	{row: 5, col: 3},
-	{row: 5, col: 4},
-	{row: 5, col: 5, edge: true},
+let serieses = [
+	[{row: 5, col: 1, edge: true}, {row: 5, col: 2}, {row: 5, col: 3}, {row: 5, col: 4}, {row: 5, col: 5, edge: true}],
+	[{row: 4, col: 1, edge: true}, {row: 4, col: 2}, {row: 4, col: 3}, {row: 4, col: 4}, {row: 4, col: 5, edge: true}],
 ]
 
-// let series2 = [
-// 	{row: 4, col: 1, edge: true},
-// 	{row: 4, col: 2},
-// 	{row: 4, col: 3},
-// 	{row: 4, col: 4},
-// 	{row: 4, col: 5, edge: true},
-// ]
+function registerSeriesHandler(series) {
+	bp.registerBThread("seriesHandler", function () {
 
+		// first row is already available
+		for (let i = 0; i < series.length; i++) {
+			if (series[i].row == 5)
+				series[i].status = ST_READY
+			else
+				series[i].status = ST_TOO_HIGH
+		}
 
-bp.registerBThread("seriesHandler", function() {
-
-	// first row is already available
-	for (let i = 0; i < series.length; i++) {
-		if (series[i].row == 5)
-			series[i].status = ST_READY
-		else
-			series[i].status = ST_TOO_HIGH
-	}
-
-	// start the main loop
-	while (true) {
-		let ok = true
-		for (let players = 0; players < 2; players++) {
-			//TODO do we even need boardUpdatedES?
-			let e = bp.sync({waitFor: boardUpdatedES})
-			ev = e.data.ev
-			bp.log.info("seriesHandler: got boardUpdatedES: " + ev.data.row + ", " + ev.data.col + " : " + ev.data.color)
-			for (let i = 0; i < series.length; i++) {
-				cell = series[i]
-				if (ev.data.row == cell.row && ev.data.col == cell.col) {
-					if (ev.data.color == "Yellow")
-						cell.status = ST_MY
-					else {
-						bp.log.info("BAD BOY!")
-						cell.status = ST_BAD
-						ok = false
+		// start the main loop
+		while (true) {
+			let ok = true
+			for (let players = 0; players < 2; players++) {
+				//TODO do we even need boardUpdatedES?
+				let e = bp.sync({waitFor: boardUpdatedES})
+				ev = e.data.ev
+				bp.log.info("seriesHandler: got boardUpdatedES: " + ev.data.row + ", " + ev.data.col + " : " + ev.data.color)
+				for (let i = 0; i < series.length; i++) {
+					cell = series[i]
+					if (ev.data.row == cell.row && ev.data.col == cell.col) {
+						if (ev.data.color == "Yellow")
+							cell.status = ST_MY
+						else {
+							bp.log.info("BAD BOY!")
+							cell.status = ST_BAD
+							ok = false
+						}
+					} else if (ev.data.row == cell.row + 1 && ev.data.col == cell.col) {
+						cell.status = ST_READY
 					}
-				} else if (ev.data.row == cell.row + 1 && ev.data.col == cell.col) {
-					cell.status = ST_READY
+				}
+			}
+
+			if (ok) {
+
+				let priority = 40
+
+				// we prefer to use 'requesting' first. only if it's empty, that means that all of it is ours, then we request edge, and should win
+				let requesting = []
+				let requesting_edge = []
+				for (let i = 0; i < series.length; i++) {
+					if (series[i].status == ST_READY) {
+						if (series[i].edge)
+							requesting_edge.push(putInCol(series[i].col, "Yellow"))
+						else
+							requesting.push(putInCol(series[i].col, "Yellow"))
+					} else if (series[i].status == ST_MY) {
+						priority += 5
+					}
+				}
+
+				bp.log.info("seriesHandler series: ")
+				bp.log.info(series)
+				if (requesting.length > 0) {
+					bp.log.info("seriesHandler requesting (priority " + priority + "): " + requesting)
+					let e = bp.sync({request: requesting}, priority)
+					bp.log.info("seriesHandler requested " + e)
+				} else if (requesting_edge.length > 0) {
+					bp.log.info("seriesHandler requesting_edge (priority 90): " + requesting_edge)
+					let e = bp.sync({request: requesting_edge}, 90)
+					bp.log.info("seriesHandler requested_edge " + e)
 				}
 			}
 		}
+	})
+}
 
-		if (!ok) {
-			return
-		}
-
-		let priority = 40
-
-		// we prefer to use 'requesting' first. only if it's empty, that means that all of it is ours, then we request edge, and should win
-		let requesting = []
-		let requesting_edge = []
-		for (let i = 0; i < series.length; i++) {
-			if (series[i].status == ST_READY) {
-				if (series[i].edge)
-					requesting_edge.push(putInCol(series[i].col, "Yellow"))
-				else
-					requesting.push(putInCol(series[i].col, "Yellow"))
-			} else if (series[i].status == ST_MY) {
-				priority += 5
-			}
-		}
-
-		bp.log.info("seriesHandler series: ")
-		bp.log.info(series)
-		if (requesting.length > 0) {
-			bp.log.info("seriesHandler requesting " + requesting)
-			let e = bp.sync({request: requesting}, priority)
-			bp.log.info("seriesHandler requested " + e)
-		} else if (requesting_edge.length > 0) {
-			bp.log.info("seriesHandler requesting_edge " + requesting_edge)
-			let e = bp.sync({request: requesting_edge}, 90)
-			bp.log.info("seriesHandler requested_edge " + e)
-		}
-	}
-})
+for (let i = 0; i < serieses.length; i++) {
+	registerSeriesHandler(serieses[i])
+}
