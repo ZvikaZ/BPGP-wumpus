@@ -30,19 +30,22 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
     }
     static Rival rival = Rival.RANDOM;
 
+    static int seed = 2;    //TODO randomize it? remove it altogether?
+
     private int bpRun(String generatedCode) {
         // This will load the program file from <Project>/src/main/resources/
         // TODO take file name from user (param file, or cli flag)
         String code = resourceToString("FourInARow.js");
 
         // TODO redirect these to some file, waiting for https://github.com/bThink-BGU/BPjs/issues/163
-        code = "bp.log.setLevel(\"Warn\");\n" + code;
+//        code = "bp.log.setLevel(\"Warn\");\n" + code;
 
         code += "\n\n" + generatedCode;
 
         final BProgram bprog = new StringBProgram(code);
 
-        var prio = new PrioritizedBSyncEventSelectionStrategy();
+        //TODO the seed seems to only partially keep random stability
+        var prio = new PrioritizedBSyncEventSelectionStrategy(seed);
         prio.setDefaultPriority(0);
         bprog.setEventSelectionStrategy(prio);
 

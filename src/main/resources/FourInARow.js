@@ -199,10 +199,16 @@ for ( var i=0; i<len; i++ ) {
             {
                 fourEventArr.push(putCoin(currentFour[i].row, currentFour[i].col, "Yellow"));
             }
-    
-            for ( var i=0; i<4; i++ ) {
-                  bp.sync({waitFor:fourEventArr});
-            }
+            bp.info.log(j)
+            bp.info.log(fourEventArr)
+
+			for ( var i=0; i<4; i++ ) {
+				let e = bp.sync({waitFor:fourEventArr});
+				if (i>=0) {
+					bp.log.info("Detect YellowWin #" + i + " : " + e)
+					bp.log.info(currentFour)
+				}
+			}
 
             bp.sync({request:StaticEvents.YellowWin, block: moves }, 100);
         });

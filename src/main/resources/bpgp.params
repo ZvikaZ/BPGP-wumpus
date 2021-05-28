@@ -62,8 +62,8 @@ pop.subpop.0.species.pipe.source.0.source.0.tries = 4
 breed.elite.0 = 2
 
 #TODO increase... maybe 200 generations, 10 (or more?) individuals in subpop?
-generations	= 20
-pop.subpop.0.size	= 10
+generations	= 1
+pop.subpop.0.size	= 1
 
 ## debug - turn off mutation
 #pop.subpop.0.species.mutation-prob = 0
