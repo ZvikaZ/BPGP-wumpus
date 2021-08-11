@@ -4,7 +4,25 @@ RUNNING
 - and now, either `run.sh`, or `run.bat`, according to OS
 
 
-TODO
+GRAMMAR
+=======
+```
+<start> ::= <bt> <bt> <bt>
+
+<bt> ::= ctx.bthread(<name>, "<query>", function (entity) {
+    while(true) {
+        <request_plan>
+    }
+})
+
+<name> ::= "arbitrary string"
+<query> ::= Cell.NearVisited_NoGold | Cell.NearUnvisitedNoDanger_NoGold | Cell.NearVisited_NoGold
+<request_plan> ::= sync({request: Event("Plan", {plan: <planner>}), waitFor: AnyPlan}, <prio>)
+<planner> ::= planToNear(entity) | createReversedPlan
+<prio> ::= 50 | 51 | ... | 69 | 70
+```
+
+OLD TODOS
 ====
 
 NEXT

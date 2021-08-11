@@ -1,28 +1,30 @@
 package func;
 
-import ec.gp.*;
-import ec.util.*;
-
 import ec.EvolutionState;
 import ec.Problem;
-import ec.gp.ADFStack;
-import ec.gp.GPData;
-import ec.gp.GPIndividual;
-import ec.gp.GPNode;
+import ec.gp.*;
+import ec.util.Code;
+import ec.util.DecodeReturn;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
-import java.io.*;
+public class PlannerERC extends ERC {
+    public int value;
 
-public class ColumnERC extends ERC {
-    public long value;
-    static public long MAX = 7;     //TODO have it more generic?
+    // TODO read from user-supplied file
+    static public String[] planners = {
+            "planToNear(entity)",
+            "createReversedPlan"
+    };
 
     public String name() {
-        return "ColumnERC";
+        return "PlannerERC";
     }
 
     public String toStringForHumans() {
-        return "" + value;
+        return planners[value];
     }
 
     public String encode() {
@@ -33,30 +35,30 @@ public class ColumnERC extends ERC {
         int pos = dret.pos;
         String data = dret.data;
         Code.decode(dret);
-        if (dret.type != DecodeReturn.T_LONG) {
+        if (dret.type != DecodeReturn.T_DOUBLE) {
             // uh oh! Restore and signal error.
             dret.data = data;
             dret.pos = pos;
             return false;
         }
-        value = dret.l;
+        value = (int)dret.l;
         return true;
     }
 
     public boolean nodeEquals(GPNode node) {
-        return (node.getClass() == this.getClass() && ((ColumnERC)node).value == value);
+        return (node.getClass() == this.getClass() && ((PlannerERC)node).value == value);
     }
 
     public void readNode(EvolutionState state, DataInput dataInput) throws IOException {
-        value = dataInput.readLong();
+        value = dataInput.readInt();
     }
 
     public void writeNode(EvolutionState state, DataOutput dataOutput) throws IOException {
-        dataOutput.writeLong(value);
+        dataOutput.writeInt(value);
     }
 
     public void resetNode(EvolutionState state, int thread) {
-        value = state.random[thread].nextLong(this.MAX);
+        value = state.random[thread].nextInt(planners.length);
     }
 
     public void mutateNode(EvolutionState state, int thread) {
@@ -66,7 +68,7 @@ public class ColumnERC extends ERC {
     public void eval(EvolutionState state, int thread, GPData input, ADFStack stack,
                      GPIndividual individual, Problem Problem) {
         StringData rd = ((StringData)(input));
-        rd.str = "" + value;
+        rd.str = toStringForHumans();
     }
 }
 

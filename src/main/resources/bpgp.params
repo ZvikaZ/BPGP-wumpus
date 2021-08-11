@@ -4,41 +4,25 @@ parent.1 = @ec.Evolve gp/koza/koza.params
 
 gp.fs.size = 1
 gp.fs.0.name = f0
-gp.fs.0.size = 11
+gp.fs.0.size = 6
 
 # Cons
-gp.fs.0.func.0 = func.Cons
-gp.fs.0.func.0.nc = nc2
-gp.fs.0.func.10 = func.ConsComma
-gp.fs.0.func.10.nc = nc2
-gp.fs.0.func.8 = func.Cons3
-gp.fs.0.func.8.nc = nc3
+gp.fs.0.func.0 = func.Cons3
+gp.fs.0.func.0.nc = nc3
 
 # BP constructs
-gp.fs.0.func.1 = func.RegisterBThread
-gp.fs.0.func.1.nc = nc1
-gp.fs.0.func.2 = func.WaitFor
-gp.fs.0.func.2.nc = nc1
-gp.fs.0.func.3 = func.Request
-gp.fs.0.func.3.nc = nc1
+gp.fs.0.func.1 = func.CtxBthread
+gp.fs.0.func.1.nc = nc2
+gp.fs.0.func.2 = func.RequestPlan
+gp.fs.0.func.2.nc = nc2
 
 # ERCs
-gp.fs.0.func.4 = func.EventERC
+gp.fs.0.func.3 = func.PlannerERC
+gp.fs.0.func.3.nc = nc0
+gp.fs.0.func.4 = func.QueryERC
 gp.fs.0.func.4.nc = nc0
-
-# Specific ERCs
-gp.fs.0.func.5 = func.ColumnERC
+gp.fs.0.func.5 = func.PrioERC
 gp.fs.0.func.5.nc = nc0
-
-# Specific events
-gp.fs.0.func.7 = func.PutInCol
-gp.fs.0.func.7.nc = nc2
-
-# Terminals
-gp.fs.0.func.9 = func.ColumnOfWait
-gp.fs.0.func.9.nc = nc0
-gp.fs.0.func.6 = func.MyColor
-gp.fs.0.func.6.nc = nc0
 
 
 eval.problem.problem = BpgpProblem

@@ -1,14 +1,10 @@
 package func;
 
-import ec.EvolutionState;
-import ec.Problem;
-import ec.gp.ADFStack;
-import ec.gp.GPData;
-import ec.gp.GPIndividual;
-import ec.gp.GPNode;
+import ec.*;
+import ec.gp.*;
 
-public class PutInCol extends GPNode { 
-    public String toString() { return "PutInCol"; }
+public class RequestPlan extends GPNode {
+    public String toString() { return "RequestPlan"; }
 
     public int expectedChildren() { return 2; }
 
@@ -19,17 +15,19 @@ public class PutInCol extends GPNode {
                      final GPIndividual individual,
                      final Problem problem)
         {
-            String result = "putInCol(";
+            String result = "\t\tsync({request: Event(\"Plan\", {plan: ";
 
             StringData rd = ((StringData)(input));
 
             children[0].eval(state,thread,input,stack,individual,problem);
             result += rd.str;
 
-            result += ", ";
+            result += "}), waitFor: AnyPlan}, ";
 
             children[1].eval(state,thread,input,stack,individual,problem);
-            result += rd.str + ")";
+            result += rd.str;
+
+            result += ")\n";
 
             rd.str = result;
         }

@@ -7,8 +7,8 @@ import ec.gp.GPData;
 import ec.gp.GPIndividual;
 import ec.gp.GPNode;
 
-public class Cons extends GPNode { 
-    public String toString() { return "Cons"; }
+public class CtxBthread extends GPNode {
+    public String toString() { return "CtxBthread"; }
 
     public int expectedChildren() { return 2; }
 
@@ -19,16 +19,23 @@ public class Cons extends GPNode {
                      final GPIndividual individual,
                      final Problem problem)
         {
-            String result = "";
+
             StringData rd = ((StringData)(input));
 
             children[0].eval(state,thread,input,stack,individual,problem);
-            result += rd.str;
+            String query = rd.str;
 
             children[1].eval(state,thread,input,stack,individual,problem);
-            result += rd.str;
+            String requestPlan = rd.str;
 
-            rd.str = result;
+            rd.str =
+                //TODO have different names?
+                "ctx.bthread(\"GeneratedBT\", \"" + query + "\", function (entity) {\n" +
+                "    while(true) {\n" +
+                "        " + requestPlan + "\n" +
+                "    }\n" +
+                "})\n";
+
         }
 }
 

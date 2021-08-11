@@ -1,3 +1,6 @@
+import BP.CobpRunner;
+import func.StringData;
+
 import ec.EvolutionState;
 import ec.Individual;
 import ec.gp.GPIndividual;
@@ -7,15 +10,17 @@ import ec.gp.ge.GEIndividual;
 import ec.gp.ge.GESpecies;
 import ec.gp.koza.KozaFitness;
 import ec.simple.SimpleProblemForm;
-import func.StringData;
+
 import il.ac.bgu.cs.bp.bpjs.execution.BProgramRunner;
 import il.ac.bgu.cs.bp.bpjs.model.BEvent;
 import il.ac.bgu.cs.bp.bpjs.model.BProgram;
 import il.ac.bgu.cs.bp.bpjs.model.StringBProgram;
 import il.ac.bgu.cs.bp.bpjs.model.eventselection.PrioritizedBSyncEventSelectionStrategy;
+
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 
@@ -33,14 +38,52 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
     static int seed = 2;    //TODO randomize it? remove it altogether?
 
     private int bpRun(String generatedCode) {
+//        generatedCode = "bp.log.setLevel(\"Warn\");\n" + generatedCode;   //TODO return
+        String tempFile = null;
+        try {
+            tempFile = writeToTempFile(generatedCode);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        CobpRunner runner = new CobpRunner("wumpus/dal.js", "wumpus/bl.js", tempFile);
+        return 0;
+    }
+
+    private String writeToTempFile(String generatedCode) throws IOException {
+        File tempFile = File.createTempFile("BPGP-", ".tmp", getResourcesPath());
+
+        //        tempFile.deleteOnExit();      //TODO uncomment
+        System.out.println(tempFile.getAbsolutePath()); //TODO del
+
+        FileWriter fileWriter = new FileWriter(tempFile, false);
+        BufferedWriter bw = new BufferedWriter(fileWriter);
+        bw.write(generatedCode.toString());
+        bw.close();
+        return tempFile.getName();
+    }
+
+    private File getResourcesPath() {
+        URL url = this.getClass().getResource(".");
+        File path = null;
+        try {
+            path = new File(url.toURI());
+        } catch (URISyntaxException e) {
+            path = new File(url.getPath());
+        } finally {
+            return path;
+        }
+    }
+
+    private int bpRunOLD_DELME(String generatedCode) {
         // This will load the program file from <Project>/src/main/resources/
         // TODO take file name from user (param file, or cli flag)
-        String code = resourceToString("FourInARow.js");
+        String code = resourceToString("wumpus/dal.js") +
+                resourceToString("wumpus/bl.js");
 
         // TODO redirect these to some file, waiting for https://github.com/bThink-BGU/BPjs/issues/163
 //        code = "bp.log.setLevel(\"Warn\");\n" + code;
 
-        code += "\n\n" + generatedCode;
+//        code += "\n\n" + generatedCode;
 
         final BProgram bprog = new StringBProgram(code);
 
