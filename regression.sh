@@ -15,9 +15,9 @@ do
     pwd
     if [ "$i" == "1" ]; then
         # send only first one with mail at end, or problems
-        sbatch --mail-type=END,FAIL,REQUEU $orig_dir/run.sh
+        sbatch --mail-type=END,FAIL,REQUEU $orig_dir/run.sh $orig_dir
     else
-        sbatch $orig_dir/run.sh
+        sbatch $orig_dir/run.sh $orig_dir
     fi
     cd $orig_dir
 done
