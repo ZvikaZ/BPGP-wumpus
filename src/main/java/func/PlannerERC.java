@@ -15,8 +15,7 @@ public class PlannerERC extends ERC {
 
     // TODO read from user-supplied file
     static public String[] planners = {
-            "planToNear(entity)",
-            "createReversedPlan"
+            "planToNear(entity)"
     };
 
     public String name() {

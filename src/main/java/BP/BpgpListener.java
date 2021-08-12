@@ -1,3 +1,5 @@
+package BP;
+
 import il.ac.bgu.cs.bp.bpjs.execution.listeners.PrintBProgramRunnerListener;
 import il.ac.bgu.cs.bp.bpjs.model.BEvent;
 import il.ac.bgu.cs.bp.bpjs.model.BProgram;
@@ -13,7 +15,7 @@ public class BpgpListener extends PrintBProgramRunnerListener {
 
     public void eventSelected(BProgram bp, BEvent theEvent) {
         super.eventSelected(bp, theEvent);
-        if (theEvent.name.contains("Win") || theEvent.name.contains("Draw"))
+        if (theEvent.name.contains("Game over"))
             runResult = theEvent;
     }
 
