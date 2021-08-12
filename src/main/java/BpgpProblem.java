@@ -18,10 +18,11 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
     static final boolean debug = false;
 
     private double bpRun(String generatedCode) {
-        generatedCode = "bp.log.setLevel(\"Warn\");\n" + generatedCode;   //TODO return
+        generatedCode = "bp.log.setLevel(\"Warn\");\n" + generatedCode;
         String tempFile = null;
         tempFile = BpgpUtils.writeToTempFile(generatedCode);
-        CobpRunner runner = new CobpRunner("wumpus/dal.js", "wumpus/bl.js", tempFile);
+//        CobpRunner runner = new CobpRunner("wumpus/dal.js", "wumpus/bl.js", tempFile);    //TODO uncomment
+        CobpRunner runner = new CobpRunner("wumpus/thin-dal.js");               //TODO del
         return getRunFitness(runner.runResult);
     }
 
@@ -57,6 +58,7 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
 
         ((GPIndividual)ind).trees[0].child.eval(state, threadnum, input, stack, (GPIndividual)ind, this);
         var indCode = input.str;
+        indCode = ""; //TODO del
         System.out.println("==============");
         System.out.println("Generation: " + state.generation);
         System.out.println("---------\n" + indCode + "---------");

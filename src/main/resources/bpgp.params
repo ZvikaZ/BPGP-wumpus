@@ -55,8 +55,7 @@ pop.subpop.0.size	= 2
 
 # use all CPU cores available for threads ; set seeds to 'time'
 evalthreads = auto
-# setting this to auto, causes few Exceptions, and individuals getting lost
-#breedthreads = auto
+breedthreads = auto
 
 ## debug params:
 # print-params = true
