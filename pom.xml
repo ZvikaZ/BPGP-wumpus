@@ -12,7 +12,7 @@
         <dependency>
             <groupId>com.github.ZvikaZ</groupId>
             <artifactId>ecj</artifactId>
-            <version>27.1-zvika-3</version>
+            <version>27.1-zvika-4</version>
         </dependency>
         <dependency>
             <groupId>com.github.bThink-BGU</groupId>
