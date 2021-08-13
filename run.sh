@@ -14,6 +14,6 @@ else
     TARGET_CLASSES_BASE=$1
 fi
 
-time $JAVA_HOME/bin/java -Dfile.encoding=UTF-8 -classpath $TARGET_CLASSES_BASE/target/classes:$HOME/.m2/repository/com/github/ZvikaZ/ecj/27.1-zvika-3/ecj-27.1-zvika-3.jar:$HOME/.m2/repository/com/github/bThink-BGU/BPjs-Context/0.2.5/BPjs-Context-0.2.5.jar:/home/zvikah/.m2/repository/com/github/bthink-bgu/BPjs/0.12.1-modified-quals/BPjs-0.12.1-modified-quals.jar:/home/zvikah/.m2/repository/commons-io/commons-io/2.5/commons-io-2.5.jar BpgpEvolve
+time $JAVA_HOME/bin/java -Dfile.encoding=UTF-8 -classpath $TARGET_CLASSES_BASE/target/classes:$HOME/.m2/repository/com/github/ZvikaZ/ecj/27.1-zvika-4/ecj-27.1-zvika-4.jar:$HOME/.m2/repository/com/github/bThink-BGU/BPjs-Context/0.2.5/BPjs-Context-0.2.5.jar:$HOME/.m2/repository/com/github/bthink-bgu/BPjs/0.12.1-modified-quals/BPjs-0.12.1-modified-quals.jar:$HOME/.m2/repository/commons-io/commons-io/2.5/commons-io-2.5.jar BpgpEvolve
 
 
