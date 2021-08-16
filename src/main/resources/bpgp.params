@@ -4,9 +4,11 @@ parent.1 = @ec.Evolve gp/koza/koza.params
 
 gp.fs.size = 1
 gp.fs.0.name = f0
-gp.fs.0.size = 6
+gp.fs.0.size = 7
 
 # Cons
+gp.fs.0.func.6 = func.Cons
+gp.fs.0.func.6.nc = nc2
 gp.fs.0.func.0 = func.Cons3
 gp.fs.0.func.0.nc = nc3
 
