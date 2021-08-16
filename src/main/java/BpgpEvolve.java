@@ -4,9 +4,9 @@ import java.io.IOException;
 
 public class BpgpEvolve {
     public static void main(String[] args) {
-        String[] evolveArgs = {"-file", getResourceFileName("bpgp.params")};
+        String[] evolveArgs = {"-file", BpgpUtils.getResourceFileName("bpgp.params")};
         evolve(evolveArgs);
-        if (!isSlurm()) {
+        if (!BpgpUtils.isSlurm()) {
             plotGraph();
         }
 
@@ -26,15 +26,6 @@ public class BpgpEvolve {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private static boolean isSlurm() {
-        return System.getenv("SLURM_JOB_ID") != null;
-    }
-
-    private static String getResourceFileName(String resource) {
-        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-        return classLoader.getResource(resource).getPath();
     }
 
 

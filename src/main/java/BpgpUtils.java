@@ -12,8 +12,9 @@ public class BpgpUtils {
         File tempFile = null;
         try {
             tempFile = File.createTempFile("BPGP-", ".tmp.js", getResourcesPath());
-            //        tempFile.deleteOnExit();      //TODO uncomment
-            System.out.println(tempFile.getAbsolutePath()); //TODO del
+
+            tempFile.deleteOnExit();
+//            System.out.println(tempFile.getAbsolutePath());
 
             FileWriter fileWriter = new FileWriter(tempFile, false);
             BufferedWriter bw = new BufferedWriter(fileWriter);
@@ -37,6 +38,15 @@ public class BpgpUtils {
         } finally {
             return path;
         }
+    }
+
+    static boolean isSlurm() {
+        return System.getenv("SLURM_JOB_ID") != null;
+    }
+
+    static String getResourceFileName(String resource) {
+        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        return classLoader.getResource(resource).getPath();
     }
 
     private String resourceToString(String resourceName) {
