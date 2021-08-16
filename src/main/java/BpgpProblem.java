@@ -21,18 +21,20 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
         generatedCode = "bp.log.setLevel(\"Warn\");\n" + generatedCode;   //TODO return
         String tempFile = BpgpUtils.writeToTempFile(generatedCode);
         CobpRunner runner = new CobpRunner("wumpus/dal.js", "wumpus/bl.js", tempFile);
-        return getRunFitness(runner.runResult);
+        return getRunFitness(runner.runResult, runner.numOfEvents);
     }
 
     // return a Koza fitness: 0 is best, infinity is worst
     // Wumpus score: -inf is worse, 1000 is best
-    private double getRunFitness(BEvent runResult) {
-        double score = -1000000000;
+    private double getRunFitness(BEvent runResult, int numOfEvents) {
         if (runResult != null && runResult.getName().equals("Game over")) {
-            score = (double) ((NativeObject) runResult.getData()).get("score");
+            double score = (double) ((NativeObject) runResult.getData()).get("score");
+            System.out.println("getRunFitness. score: " + score + ". result: " + (1000 - score));
+            return 1000 - score;
+        } else {
+            System.out.println("getRunFitness. not finished! numOfEvents: " + numOfEvents + ". result: " + (2000 - numOfEvents));
+            return 2000 - numOfEvents;
         }
-        System.out.println("getRunFitness. score: " + score + ". result: " + (1000 - score));
-        return 1000 - score;
     }
 
     public void evaluate(final EvolutionState state,

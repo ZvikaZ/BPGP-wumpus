@@ -29,6 +29,7 @@ public class CobpRunner {
 //    private static final Level logLevel = Level.ALL;
 
     public BEvent runResult;
+    public int numOfEvents;
 
     static int seed = 2;    //TODO randomize it? remove it altogether?
     static final String bpRunLog = "bpRun.log";
@@ -57,6 +58,7 @@ public class CobpRunner {
         rnr.run();
 
         runResult = listener.runResult;
+        numOfEvents = listener.counter;
     }
 }
 
