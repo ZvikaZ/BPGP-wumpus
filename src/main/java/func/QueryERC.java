@@ -15,7 +15,7 @@ public class QueryERC extends ERC {
 
     // TODO read from user-supplied file?
     static public String[] queries = {
-            "Cell.NearVisited_NoGold",
+            "Cell.NearWithoutKnownDanger_NoGold",
             "Cell.NearUnvisitedNoDanger_NoGold",
             "Cell.NearVisited_NoGold"
     };

@@ -19,8 +19,11 @@ function direction(a, b) {
 // return plan from player to b, assuming near(player,b)
 function planToNear(b) {
     let player = ctx.getEntityById("player")
-    if (!near(player, b))
-        return null
+    if (!near(player, b)) {
+        bp.log.info(player)
+        bp.log.info(b)
+        throw new Error("planToNear: player is not near " + b.row + "," + b.col + "! he is at: " + player.row + "," + player.col)
+    }
 
     let delta = direction(player, b) - player.facing
     if (delta < 0)
@@ -36,7 +39,7 @@ function planToNear(b) {
     } else if (delta == 270) {
         result.push('turn-left')
     } else {
-        error()
+        throw new Error('unknown delta')
     }
     result.push('forward')
     return result
@@ -58,14 +61,9 @@ function createReversedPlan() {
     return plan
 }
 
-const AnyPlay = bp.EventSet("Play", function (evt) {
-    return evt.name.equals("Play")
-})
-
-const AnyPlan = bp.EventSet("Plan", function (evt) {
-    return evt.name.equals("Plan")
-})
-
+const AnyPlay = Any('Play')
+const AnyPlan = Any('Plan')
+const grab = Event("Play", {id: 'grab'})
 
 ///////////////////////////////////////////////////////////
 ///////////            rules                 //////////////
@@ -82,6 +80,7 @@ ctx.bthread("Game over", "Game over", function (entity) {
     bp.log.info("Game over: " + entity.reason + ", score: " + entity.score)
     let ev = Event("Game over", {score: entity.score})
     sync({request: ev, block: ev.negate()})
+    sync({block: bp.all})
 })
 
 
@@ -129,33 +128,34 @@ bthread("boardPrinter", function() {
 // the following 3 are before player has taken gold:
 
 //these are commented, and should be replaced by evolution:
+/*
+// go to cells that are near the player, and the player isn't aware of any danger in them
+ctx.bthread("player - go to unvisited cell with no known danger", "Cells.NearWithoutKnownDanger_NoGold", function (cell) {
+    while(true) {
+        let plan = planToNear(cell)
+        // bp.log.info(player.row + ":" + player.col + "," + player.facing + " no known danger nearby: " + cell.row + ":" + cell.col + ". direction: " + direction(player, cell) + ". plan: " + plan)
+        sync({request: Event("Plan", {plan: plan}), waitFor: bp.all}, 60)
+    }
+})
 
-// // go to cells that are near the player, and the player isn't aware of any danger in them
-// ctx.bthread("player - go to unvisited cell with no known danger", "Cells.NearWithoutKnownDanger_NoGold", function (cell) {
-//     while(true) {
-//         let plan = planToNear(cell)
-//         // bp.log.info(player.row + ":" + player.col + "," + player.facing + " no known danger nearby: " + cell.row + ":" + cell.col + ". direction: " + direction(player, cell) + ". plan: " + plan)
-//         sync({request: Event("Plan", {plan: plan}), waitFor: AnyPlan}, 60)
-//     }
-// })
-//
-// // go to cells that are near the player, we haven't visited before, and we are sure that aren't dangerous - be an explorer, but safely
-// ctx.bthread("player - go to unvisited cell without danger", "Cell.NearUnvisitedNoDanger_NoGold", function (cell) {
-//     while(true) {
-//         let plan = planToNear(cell)
-//         // bp.log.info(player.row + ":" + player.col + "," + player.facing + " clean nearby: " + cell.row + ":" + cell.col + ". direction: " + direction(player, cell) + ". plan: " + plan)
-//         sync({request: Event("Plan", {plan: plan}), waitFor: AnyPlan}, 70)
-//     }
-// })
-//
-// // go to cells that are near the player, we have already visited (and therefore, are safe) - boring, but might prove useful to open new frontiers from there
-// ctx.bthread("player - return to visited cell", "Cell.NearVisited_NoGold", function (cell) {
-//     while(true) {
-//         let plan = planToNear(cell)
-//         // bp.log.info(player.row + ":" + player.col + "," + player.facing + " visited nearby: " + cell.row + ":" + cell.col + ". direction: " + direction(player, cell) + ". plan: " + plan)
-//         sync({request: Event("Plan", {plan: plan}), waitFor: AnyPlan}, 50)
-//     }
-// })
+// go to cells that are near the player, we haven't visited before, and we are sure that aren't dangerous - be an explorer, but safely
+ctx.bthread("player - go to unvisited cell without danger", "Cell.NearUnvisitedNoDanger_NoGold", function (cell) {
+    while(true) {
+        let plan = planToNear(cell)
+        // bp.log.info(player.row + ":" + player.col + "," + player.facing + " clean nearby: " + cell.row + ":" + cell.col + ". direction: " + direction(player, cell) + ". plan: " + plan)
+        sync({request: Event("Plan", {plan: plan}), waitFor: bp.all}, 70)
+    }
+})
+
+// go to cells that are near the player, we have already visited (and therefore, are safe) - boring, but might prove useful to open new frontiers from there
+ctx.bthread("player - return to visited cell", "Cell.NearVisited_NoGold", function (cell) {
+    while(true) {
+        let plan = planToNear(cell)
+        // bp.log.info(player.row + ":" + player.col + "," + player.facing + " visited nearby: " + cell.row + ":" + cell.col + ". direction: " + direction(player, cell) + ". plan: " + plan)
+        sync({request: Event("Plan", {plan: plan}), waitFor: bp.all}, 50)
+    }
+})
+*/
 
 // note the different priorities of the last 3 BTs:
 // player - go to unvisited cell without danger: 70
@@ -168,7 +168,7 @@ ctx.bthread("Grab gold", "PlayerInCellWithGold", function (entity) {
     // the loop is required, because maybe the some other action was selected, and the gold wasn't grabbed
     while (true) {
         //TODO remove prio
-        sync({request: Event("Play", {id: 'grab'})}, 110)
+        sync({request: grab}, 110)  //Z removing 'block: grab' fixed the infinite loop ; also added back prio
     }
 })
 
@@ -177,8 +177,8 @@ ctx.bthread("Escape from cave with gold", "PlayerHasGold", function (kb) {
     //TODO take shortest path, instead of return as we came...
     let plan = createReversedPlan()
     plan.push('climb')
-    //TODO remove prio
-    sync({request: Event("Plan", {plan: plan}), waitFor: AnyPlan}, 100)
+    let p = Event("Plan", {plan: plan})
+    sync({request: p, block: p.negate()}, 100)  //Z returned prio
 })
 
 
@@ -191,11 +191,11 @@ ctx.bthread("Execute plan", "Active plan", function (entity) {
     let plan = entity.val
     bp.log.info("execute plan, got: " + plan)
     for (var i = 0; i < plan.length; i++) {
-        sync({request: Event("Play", {id: plan[i]})}, 140)
+        sync({request: Event("Play", {id: plan[i]}), block: AnyPlan}, 140) //Z returned prio
         bp.log.info("Executed step #" + i + " of plan: " + plan)
     }
-    sync({request: Event("Finished plan")}, 240)
+    sync({request: Event("Finished plan")}, 240)  // uncommented this
 
-    player = ctx.getEntityById("player")
+    let player = ctx.getEntityById("player")
     bp.log.info("Finished executing plan: " + plan + ". Now player in: " + player.row + ":" + player.col)
 })
