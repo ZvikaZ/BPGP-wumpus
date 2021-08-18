@@ -5,6 +5,7 @@ import os
 import re
 from matplotlib import pyplot as plt
 
+
 STAT_FILE = 'bpgp.stat'
 
 def get_dirs(path):
@@ -42,7 +43,9 @@ def analyze_single_run(d):
 def plot_single_run(ax, r):
     out = ax.plot(r['bests'], 'o-', label='best')
     ax.plot(r['means'], 'o-', label='mean')
-    ax.plot(r['medians'], 'o-', label='median')
+    ax.plot(r['medians'], 'o-', alpha=0.6, label='median')
+    # plot nothing, just add to our legend
+    ax.plot([], [], '.-', label = 'unique_ratios', color='tab:pink')
     ax.set_ylim(bottom=0)
     ax.set_xlabel("Generation")
     ax.set_ylabel("Fitness")
@@ -52,7 +55,8 @@ def plot_single_run(ax, r):
     ax2.set_ylabel("Unique fitness val ratio")
     ax2.set_ylim([0,1])
     ax2.plot(r['unique_ratios'], '.-', label='unique_ratios', color='tab:pink')
-    ax2.legend(loc=2)
+    # create a separate legend
+    # ax2.legend(loc=2)
 
     return out
 
