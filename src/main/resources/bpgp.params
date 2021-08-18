@@ -60,8 +60,12 @@ pop.subpop.0.size	= 40
 
 ## commented, because of bug in CoBP - mail to Achiya from 12.8.21
 # use all CPU cores available for threads ; set seeds to 'time'
-#evalthreads = auto
+evalthreads = auto
+
+# disabled because of missing a miscMaps for stats ; TODO fix, or report issue to ecj
 #breedthreads = auto
+
+
 
 ## debug params:
 # print-params = true

@@ -40,6 +40,10 @@ public class BpgpStatistics extends Statistics {
         double bestFitness = Double.POSITIVE_INFINITY;
 
         state.output.println(String.format("Generation %d has %d individuals\n", state.generation, individuals.size()), log);
+		//TODO remove after fixing 'breedthreads = auto' issue
+//        state.output.println(String.format("Generation %d has %d individuals, %d miscMaps\n",
+//                state.generation, individuals.size(), ((ArrayList) ((BpgpSpecies)state.population.subpops.get(SUBPOP).species).miscMaps).size()),
+//                log);
         for (int index = 0; index < individuals.size(); index++) {
             GEIndividual geInd = (GEIndividual)(individuals.get(index));
             geInd.printIndividualForHumans(state, log);
@@ -68,6 +72,14 @@ public class BpgpStatistics extends Statistics {
         } else {
             var maps = ((BpgpSpecies)state.population.subpops.get(SUBPOP).species).miscMaps;
             printParents(state, maps.get(index - numElites), log);
+//            try {
+//                printParents(state, maps.get(index - numElites), log);
+//            } catch (IndexOutOfBoundsException e) {
+//                //TODO why is this happening? it occurs only with threads
+//                e.printStackTrace();
+//                state.output.println("missing miscMaps, cannot print parent for " + index, log);
+//                state.output.warning("missing miscMaps, cannot print parent for " + index);
+//            }
         }
     }
 
