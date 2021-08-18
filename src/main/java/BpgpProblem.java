@@ -32,7 +32,7 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
             System.out.println("getRunFitness. score: " + score + ". result: " + (1000 - score));
             if (score < -300) { //TODO
                 System.out.println("negative score!");
-                exit(1);
+                System.exit(1);
             }
             return 1000 - score;
         } else { //TODO
