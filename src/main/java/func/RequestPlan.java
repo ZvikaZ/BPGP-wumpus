@@ -22,7 +22,7 @@ public class RequestPlan extends GPNode {
             children[0].eval(state,thread,input,stack,individual,problem);
             result += rd.str;
 
-            result += "}), waitFor: AnyPlan}, ";
+            result += "}), waitFor: ContextChanged}, ";
 
             children[1].eval(state,thread,input,stack,individual,problem);
             result += rd.str;

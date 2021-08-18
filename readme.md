@@ -18,8 +18,8 @@ GRAMMAR
 
 <name> ::= "arbitrary string"
 <query> ::= Cell.NearVisited_NoGold | Cell.NearUnvisitedNoDanger_NoGold | Cell.NearVisited_NoGold
-<request_plan> ::= sync({request: Event("Plan", {plan: <planner>}), waitFor: AnyPlan}, <prio>)
-<planner> ::= planToNear(entity) | createReversedPlan
+<request_plan> ::= sync({request: Event("Plan", {plan: <planner>}), waitFor: ContextChanged}, <prio>)
+<planner> ::= planToNear(entity) 
 <prio> ::= 50 | 51 | ... | 69 | 70
 ```
 

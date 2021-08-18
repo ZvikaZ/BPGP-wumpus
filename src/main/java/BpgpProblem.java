@@ -30,9 +30,14 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
         if (runResult != null && runResult.getName().equals("Game over")) {
             double score = (double) ((NativeObject) runResult.getData()).get("score");
             System.out.println("getRunFitness. score: " + score + ". result: " + (1000 - score));
+            if (score < -300) { //TODO
+                System.out.println("negative score!");
+                exit(1);
+            }
             return 1000 - score;
-        } else {
+        } else { //TODO
             System.out.println("getRunFitness. not finished! numOfEvents: " + numOfEvents + ". result: " + (2000 - numOfEvents));
+            System.exit(1);
             return 2000 - numOfEvents;
         }
     }

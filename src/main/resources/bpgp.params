@@ -34,10 +34,10 @@ ge.species.file.0 = bpgp.grammar
 
 # the default is 15, too small for us...
 pop.subpop.0.species.min-initial-size = 60
-pop.subpop.0.species.max-initial-size = 100
+pop.subpop.0.species.max-initial-size = 200
 
-# if the genome is still too small, wrap around 4 times before giving up
-pop.subpop.0.species.passes = 4
+# if the genome is still too small, wrap around 10 times before giving up
+pop.subpop.0.species.passes = 10
 
 
 # don't give up if the first crossover attempt fails, try more
@@ -45,11 +45,14 @@ pop.subpop.0.species.pipe.source.0.source.0.tries = 4
 
 
 # elitism
-breed.elite.0 = 2
+# TODO during development, it distracts, will be returned in later phases
+#breed.elite.0 = 2
 
-#TODO increase... maybe 200 generations, 10 (or more?) individuals in subpop?
-generations	= 4
-pop.subpop.0.size	= 20
+#TODO increase... maybe 200 generations
+#generations	= 50
+#pop.subpop.0.size	= 40
+generations	= 20
+pop.subpop.0.size	= 40
 
 ## debug - turn off mutation
 #pop.subpop.0.species.mutation-prob = 0

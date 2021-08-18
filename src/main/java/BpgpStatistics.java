@@ -37,7 +37,7 @@ public class BpgpStatistics extends Statistics {
         var individuals = state.population.subpops.get(SUBPOP).individuals;
         double[] fitnesses = new double[individuals.size()];
         double sumFitnesses = 0;
-        double bestFitness = 0;
+        double bestFitness = Double.POSITIVE_INFINITY;
 
         state.output.println(String.format("Generation %d has %d individuals\n", state.generation, individuals.size()), log);
         for (int index = 0; index < individuals.size(); index++) {
@@ -49,7 +49,7 @@ public class BpgpStatistics extends Statistics {
 
             fitnesses[index] = ((KozaFitness) geInd.fitness).standardizedFitness();
             sumFitnesses += fitnesses[index];
-            if (fitnesses[index] > bestFitness)
+            if (fitnesses[index] < bestFitness)
                 bestFitness = fitnesses[index];
         }
         Arrays.sort(fitnesses);

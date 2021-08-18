@@ -15,32 +15,35 @@
 // add prio to gold
 
 
-
-
 // return all cell entities that are near 'cell'
-function getNearCells(cell) {
+function getNearCellsEntities(cell) {
+    return getNearCells(cell, getCellFromCtx)
+}
+
+function getNearCells(cell, func) {
     let result = []
     if (cell.row > 1)
-        result.push(getCellFromCtx(cell.row - 1, cell.col))
+        result.push(func(cell.row - 1, cell.col))
     if (cell.row < ROWS)
-        result.push(getCellFromCtx(cell.row + 1, cell.col))
+        result.push(func(cell.row + 1, cell.col))
     if (cell.col > 1)
-        result.push(getCellFromCtx(cell.row, cell.col - 1))
+        result.push(func(cell.row, cell.col - 1))
     if (cell.col < COLS)
-        result.push(getCellFromCtx(cell.row, cell.col + 1))
+        result.push(func(cell.row, cell.col + 1))
     return result
 }
+
 
 // return cell entity at row,col
 function getCellFromCtx(row, col) {
     return ctx.getEntityById("cell:" + row + "," + col)
 }
 
+
 ///////////////////////////////////////////////////////////////////
 
 const ROWS = 4
 const COLS = 4
-const MAX_ACTIONS = (ROWS * COLS) * (ROWS * COLS)
 
 function init(){
     let gameStatus = ctx.Entity("game status", "", {val: "ongoing"})
@@ -144,7 +147,7 @@ function gameOver(reason) {
 function updateCellStatus(action) {
     let player = ctx.getEntityById("player")
     let cell = getCellFromCtx(player.row, player.col)
-    // bp.ASSERT(cell.hasPlayer, "ERROR: updateCellStatus: cell.hasPlayer is false!")   //TODO return
+    bp.ASSERT(cell.hasPlayer, "ERROR: updateCellStatus: cell.hasPlayer is false!")   //TODO return
 
     // update things that are in this cell
     if (cell.hasPit) {
@@ -158,7 +161,7 @@ function updateCellStatus(action) {
     }
 
     // update things that are in near cells
-    let nearCells = getNearCells(cell)
+    let nearCells = getNearCellsEntities(cell)
     for (let i = 0; i < nearCells.length; i++) {
         let nearCell = nearCells[i]
         if (nearCell.hasPit) {
@@ -264,6 +267,11 @@ ctx.registerEffect("Finished plan", function (event) {
     ctx.updateEntity(plan)
 })
 
+ctx.registerEffect("Wandering", function (effect) {
+    gameOver("wandering")
+})
+
+
 ///////////////////////////////////////////////////////////
 ///////////            strategies            //////////////
 ///////////////////////////////////////////////////////////
@@ -301,6 +309,16 @@ ctx.registerQuery("Cell.NearVisited_NoGold", function (entity) {
         cellNearPlayer(entity) && !ctx.getEntityById("kb").player_has_gold
 })
 
+///
+
+// return all cells that are near the player, and are (possibly...) dangerous - before player has taken gold
+//TODO replace 'possible' with certainty!
+ctx.registerQuery("Cell.Near_Possible_Danger_NoGold", function (entity) {
+    return entity.type.equals("cell") &&
+        (entity.Pit == "possible" || entity.Wumpus == "possible") &&
+        cellNearPlayer(entity)
+})
+
 
 ////////////////////////////////////
 
@@ -327,10 +345,6 @@ function updateKb(id) {
 
     // check if we can clean near cells because of absent indications
     updateNoIndications(kb)
-
-    if (kb.actions_history.length > MAX_ACTIONS) {
-        throw new Error("stuck in infinite loop, exiting")
-    }
 }
 
 // if there isn't specific indication in player's location, mark near cells as clean from the corresponding danger
