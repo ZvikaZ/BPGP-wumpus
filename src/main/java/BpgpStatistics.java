@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class BpgpStatistics extends Statistics {
     public int bpgpLog;
@@ -36,6 +37,7 @@ public class BpgpStatistics extends Statistics {
         int log = openLogFile(state, String.format("generation_%d.stat", state.generation), false);
         var individuals = state.population.subpops.get(SUBPOP).individuals;
         double[] fitnesses = new double[individuals.size()];
+        HashSet<Double> fitnessesSet = new HashSet<Double>();
         double sumFitnesses = 0;
         double bestFitness = Double.POSITIVE_INFINITY;
 
@@ -52,6 +54,7 @@ public class BpgpStatistics extends Statistics {
             state.output.println("-----------------", log);
 
             fitnesses[index] = ((KozaFitness) geInd.fitness).standardizedFitness();
+            fitnessesSet.add(fitnesses[index]);
             sumFitnesses += fitnesses[index];
             if (fitnesses[index] < bestFitness)
                 bestFitness = fitnesses[index];
@@ -59,9 +62,10 @@ public class BpgpStatistics extends Statistics {
         Arrays.sort(fitnesses);
         var median = fitnesses[individuals.size() / 2];
         var mean = sumFitnesses / individuals.size();
+        double unique_ratio = (double)fitnessesSet.size() / individuals.size();
         state.output.println(
-                String.format("Generation %d, best: %f, mean: %f, median: %f",
-                        state.generation, bestFitness, mean, median), bpgpLog);
+                String.format("Generation %d, best: %f, mean: %f, median: %f, num_of_inds: %d, unique_values: %d, unique_ratio: %f",
+                        state.generation, bestFitness, mean, median, individuals.size(), fitnessesSet.size(), unique_ratio), bpgpLog);
 
     }
 
