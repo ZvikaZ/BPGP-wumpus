@@ -16,11 +16,12 @@ import org.mozilla.javascript.NativeObject;
 public class BpgpProblem extends GPProblem implements SimpleProblemForm {
     static final String bpRunLog = "bpRun.log";
     static final boolean debug = false;
+    static final int numOfBoards = 10;
 
-    private double bpRun(String generatedCode) {
+    private double bpRun(String generatedCode, int boardNum) {
         generatedCode = "bp.log.setLevel(\"Warn\");\n" + generatedCode;   //TODO return
         String tempFile = BpgpUtils.writeToTempFile(generatedCode);
-        CobpRunner runner = new CobpRunner("wumpus/dal.js", "wumpus/bl.js", tempFile);
+        CobpRunner runner = new CobpRunner("wumpus/board"+boardNum+".js", "wumpus/dal.js", "wumpus/bl.js", tempFile);
         return getRunFitness(runner.runResult, runner.numOfEvents);
     }
 
@@ -30,10 +31,10 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
         if (runResult != null && runResult.getName().equals("Game over")) {
             double score = (double) ((NativeObject) runResult.getData()).get("score");
             System.out.println("getRunFitness. score: " + score + ". result: " + (1000 - score));
-            if (score < -300) { //TODO
-                System.out.println("negative score!");
-                System.exit(1);
-            }
+//            if (score < -300) { //TODO
+//                System.out.println("negative score!");
+//                System.exit(1);
+//            }
             return 1000 - score;
         } else { //TODO
             System.out.println("getRunFitness. not finished! numOfEvents: " + numOfEvents + ". result: " + (2000 - numOfEvents));
@@ -72,8 +73,8 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
 
         double totalRunResults = 0;
 
-        for (int i=0; i < 1; i++) {     //TODO replace with running over all boards
-            double runResult = bpRun(indCode);
+        for (int i=1; i <= numOfBoards; i++) {
+            double runResult = bpRun(indCode, i);
             if (debug)
                 System.out.println("runResult:" + runResult);
             totalRunResults += runResult;
@@ -82,7 +83,7 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
         if (debug)
             System.out.println("totalRunResults: " + totalRunResults);
         KozaFitness f = ((KozaFitness)ind.fitness);
-        f.setStandardizedFitness(state, totalRunResults);
+        f.setStandardizedFitness(state, totalRunResults / numOfBoards);
         f.printFitnessForHumans(state, 0);
         ind.evaluated = true;
     }

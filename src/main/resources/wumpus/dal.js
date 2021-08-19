@@ -42,8 +42,22 @@ function getCellFromCtx(row, col) {
 
 ///////////////////////////////////////////////////////////////////
 
-const ROWS = 4
-const COLS = 4
+
+function gameBoardHasGold(row, col) {
+    return (gameBoard[ROWS-row][col-1] & 1) != 0
+}
+
+function gameBoardHasWumpus(row, col) {
+    return (gameBoard[ROWS-row][col-1] & 2) != 0
+}
+
+function gameBoardHasPit(row, col) {
+    return (gameBoard[ROWS-row][col-1] & 4) != 0
+}
+
+
+const ROWS = gameBoard.length
+const COLS = gameBoard[0].length
 
 function init(){
     let gameStatus = ctx.Entity("game status", "", {val: "ongoing"})
@@ -79,9 +93,9 @@ function init(){
                 // has* mean that there are actually there, regardless of player's knowledge
                 hasPlayer: i == 1 && j == 1,
                 //TODO: randomize these
-                hasPit: (i == 1 && j == 3) || (i == 3 & j == 3) || (i == 4 && j == 4),
-                hasGold: i == 3 && j == 2,
-                hasWumpus: i == 3 && j == 1,
+                hasPit: gameBoardHasPit(i, j),
+                hasGold: gameBoardHasGold(i, j),
+                hasWumpus: gameBoardHasWumpus(i, j),
 
                 // player has observed these indications in the cell
                 ObservedBreeze: false,

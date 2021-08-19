@@ -33,7 +33,7 @@ eval.problem.problem.data = func.StringData
 ge.species.file.0 = bpgp.grammar
 
 # the default is 15, too small for us...
-pop.subpop.0.species.min-initial-size = 60
+pop.subpop.0.species.min-initial-size = 80
 pop.subpop.0.species.max-initial-size = 200
 
 # if the genome is still too small, wrap around 10 times before giving up
