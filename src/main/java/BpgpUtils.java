@@ -6,8 +6,22 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class BpgpUtils {
+
+    // return how many times does word appear in s
+    public static int countInString(String s, String word) {
+        int i = 0;
+        Pattern p = Pattern.compile(word);
+        Matcher m = p.matcher(s);
+        while (m.find()) {
+            i++;
+        }
+        return i;
+    }
+
     public static String writeToTempFile(String generatedCode) {
         File tempFile = null;
         try {

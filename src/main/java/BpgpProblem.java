@@ -22,20 +22,22 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
         generatedCode = "bp.log.setLevel(\"Warn\");\n" + generatedCode;   //TODO return
         String tempFile = BpgpUtils.writeToTempFile(generatedCode);
         CobpRunner runner = new CobpRunner("wumpus/board"+boardNum+".js", "wumpus/dal.js", "wumpus/bl.js", tempFile);
-        return getRunFitness(runner.runResult, runner.numOfEvents);
+        return getRunFitness(runner.runResult, runner.numOfEvents, generatedCode);
     }
 
     // return a Koza fitness: 0 is best, infinity is worst
     // Wumpus score: -inf is worse, 1000 is best
-    private double getRunFitness(BEvent runResult, int numOfEvents) {
+    private double getRunFitness(BEvent runResult, int numOfEvents, String generatedCode) {
         if (runResult != null && runResult.getName().equals("Game over")) {
             double score = (double) ((NativeObject) runResult.getData()).get("score");
-            System.out.println("getRunFitness. score: " + score + ". result: " + (1000 - score));
+            int numOfBts = BpgpUtils.countInString(generatedCode, "bthread");
+            double result = (1000 - score) + (numOfBts * 4) + (numOfEvents / 10);
+            System.out.println("getRunFitness. score: " + score + ", numOfBts: " + numOfBts + ", numOfEvents: " + numOfEvents + ". result: " + result);
 //            if (score < -300) { //TODO
 //                System.out.println("negative score!");
 //                System.exit(1);
 //            }
-            return 1000 - score;
+            return result;
         } else { //TODO
             System.out.println("getRunFitness. not finished! numOfEvents: " + numOfEvents + ". result: " + (2000 - numOfEvents));
             System.exit(1);

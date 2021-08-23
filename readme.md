@@ -7,7 +7,7 @@ RUNNING
 GRAMMAR
 =======
 ```
-<start> ::= <bt> <bt> <more-bts>
+<start> ::= <bt> <more-bts>
 <more-bts> ::= <bt> <more-bts> | <bt>
 
 <bt> ::= ctx.bthread(<name>, "<query>", function (entity) {

@@ -1,4 +1,4 @@
-<start> ::= (Cons3 <bt> <bt> <more-bts>)
+<start> ::= (Cons <bt> <more-bts>)
 <more-bts> ::= (Cons <bt> <more-bts>) | <bt>
 <bt> ::= (CtxBthread <query> <request_plan>)
 <request_plan> ::= (RequestPlan <planner> <prio>)
