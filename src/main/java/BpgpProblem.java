@@ -18,7 +18,7 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
     static final boolean debug = false;
     static final int numOfBoards = 6;       //TODO increase
 
-    private double bpRun(String generatedCode, int boardNum) {
+    protected double bpRun(String generatedCode, int boardNum) {
         generatedCode = "bp.log.setLevel(\"Warn\");\n" + generatedCode;   //TODO return
         String tempFile = BpgpUtils.writeToTempFile(generatedCode);
         CobpRunner runner = new CobpRunner("wumpus/board"+boardNum+".js", "wumpus/dal.js", "wumpus/bl.js", tempFile);
