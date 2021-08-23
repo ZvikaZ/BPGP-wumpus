@@ -31,7 +31,7 @@ public class CobpRunner {
     public BEvent runResult;
     public int numOfEvents;
 
-    static int seed = 2;    //TODO randomize it? remove it altogether?
+    static long seed = System.currentTimeMillis();
     static final String bpRunLog = "bpRun.log";
 
     public CobpRunner(String... resourceNames) {

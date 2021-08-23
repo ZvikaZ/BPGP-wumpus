@@ -236,7 +236,7 @@ ctx.bthread("Avoid (possible) danger", "Cell.Near_Possible_Danger_NoGold", funct
 })
 
 bthread("stop wandering around",  function () {
-    let max_actions = (ROWS * COLS) * (ROWS * COLS)
+    let max_actions = (ROWS * COLS) * ROWS
     for (let i = 1; i <= max_actions; i++)
         sync({waitFor: AnyPlay})
     sync({request: Event("Wandering")}, 200)
