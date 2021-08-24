@@ -80,4 +80,6 @@ stat.child.1 = BpgpStatistics
 pop.subpop.0.species = BpgpSpecies
 
 
-
+# for each ind, calc fitness 6 times, and return the average
+eval.num-tests = 6
+eval.merge = mean

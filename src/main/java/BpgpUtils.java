@@ -1,3 +1,4 @@
+import ec.EvolutionState;
 import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedWriter;
@@ -10,6 +11,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class BpgpUtils {
+
+    // return an int ECJ param
+    public static int getEcjIntParam(EvolutionState state, String name) {
+        ec.util.Parameter param = new ec.util.Parameter(name);
+        return state.parameters.getInt(param, null);
+    }
 
     // return how many times does word appear in s
     public static int countInString(String s, String word) {

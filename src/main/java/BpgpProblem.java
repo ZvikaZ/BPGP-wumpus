@@ -54,7 +54,7 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
 
 		//TODO remove this...
         var p = state.population.subpops.get(0);
-        if (p.initialSize != p.individuals.size()) {
+        if (p.individuals.size() != p.initialSize * BpgpUtils.getEcjIntParam(state, "eval.num-tests")) {
             System.out.println("ZZZ someone got lost!!!");
             System.exit(1);
         }

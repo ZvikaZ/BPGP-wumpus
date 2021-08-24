@@ -16,6 +16,7 @@ public class BpgpStatistics extends Statistics {
     public int bpgpLog;
 
     final int SUBPOP = 0;
+    private long startTime = System.currentTimeMillis();
 
     public void setup(final EvolutionState state, final Parameter base) {
         super.setup(state, base);
@@ -41,6 +42,10 @@ public class BpgpStatistics extends Statistics {
         double sumFitnesses = 0;
         double bestFitness = Double.POSITIVE_INFINITY;
 
+        long stopTime = System.currentTimeMillis();
+        double elapsedSeconds = (stopTime - startTime) / 1000.0;
+        startTime = stopTime;
+
         state.output.println(String.format("Generation %d has %d individuals\n", state.generation, individuals.size()), log);
 		//TODO remove after fixing 'breedthreads = auto' issue
 //        state.output.println(String.format("Generation %d has %d individuals, %d miscMaps\n",
@@ -64,8 +69,9 @@ public class BpgpStatistics extends Statistics {
         var mean = sumFitnesses / individuals.size();
         double unique_ratio = (double)fitnessesSet.size() / individuals.size();
         state.output.println(
-                String.format("Generation %d, best: %f, mean: %f, median: %f, num_of_inds: %d, unique_values: %d, unique_ratio: %f",
-                        state.generation, bestFitness, mean, median, individuals.size(), fitnessesSet.size(), unique_ratio), bpgpLog);
+                String.format("Generation %d, best: %f, mean: %f, median: %f, num_of_inds: %d, unique_values: %d, unique_ratio: %f, time(s): %f",
+                        state.generation, bestFitness, mean, median, individuals.size(), fitnessesSet.size(),
+                        unique_ratio, elapsedSeconds), bpgpLog);
 
     }
 
