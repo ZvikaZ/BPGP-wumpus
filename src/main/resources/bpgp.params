@@ -36,8 +36,8 @@ ge.species.file.0 = bpgp.grammar
 pop.subpop.0.species.min-initial-size = 80
 pop.subpop.0.species.max-initial-size = 200
 
-# if the genome is still too small, wrap around 10 times before giving up
-pop.subpop.0.species.passes = 10
+# if the genome is still too small, wrap around 16 times before giving up
+pop.subpop.0.species.passes = 16
 
 
 # don't give up if the first crossover attempt fails, try more
@@ -51,16 +51,16 @@ pop.subpop.0.species.pipe.source.0.source.0.tries = 4
 #TODO increase... maybe 200 generations
 #generations	= 50
 #pop.subpop.0.size	= 40
-generations	= 20
-pop.subpop.0.size	= 40
+generations	= 3
+pop.subpop.0.size	= 4
 
 ## debug - turn off mutation
 #pop.subpop.0.species.mutation-prob = 0
 
 
-## commented, because of bug in CoBP - mail to Achiya from 12.8.21
+## commented, because master/slave model
 # use all CPU cores available for threads ; set seeds to 'time'
-evalthreads = auto
+# evalthreads = auto
 
 # disabled because of missing a miscMaps for stats ; TODO fix, or report issue to ecj
 #breedthreads = auto
@@ -83,3 +83,12 @@ pop.subpop.0.species = BpgpSpecies
 # for each ind, calc fitness 6 times, and return the average
 eval.num-tests = 6
 eval.merge = mean
+
+# parallel eval processing (master/slave)
+eval.masterproblem = ec.eval.MasterProblem
+eval.master.port = 15000
+# these two need to be 1, because num-tests>1
+eval.masterproblem.job-size = 1
+eval.masterproblem.max-jobs-per-slave = 1
+# eval.compression = true  #TODO add later
+evalthreads = 1

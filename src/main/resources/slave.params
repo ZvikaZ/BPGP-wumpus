@@ -1,0 +1,4 @@
+parent.0 = bpgp.params
+eval.master.host = 132.72.65.199
+eval.return-inds = false
+evalthreads = auto
