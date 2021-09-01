@@ -83,3 +83,12 @@ pop.subpop.0.species = BpgpSpecies
 # for each ind, calc fitness 6 times, and return the average
 eval.num-tests = 6
 eval.merge = mean
+
+## parallel eval processing (master/slave)
+#eval.masterproblem = ec.eval.MasterProblem
+#eval.master.port = 15000
+## these two need to be 1, because num-tests>1
+#eval.masterproblem.job-size = 1
+#eval.masterproblem.max-jobs-per-slave = 1
+## eval.compression = true  #TODO add later
+#evalthreads = 1

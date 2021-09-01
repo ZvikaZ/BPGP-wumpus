@@ -62,6 +62,9 @@ function createPlanTo(dest) {
     // this function uses a lot of -1 because generally we start row (and col) from 1, while here the
     // array index starts from 0
 
+    if (!isCellSafe(dest))
+        return []
+
     let cells = []
     for (let i = 1; i <= ROWS; i++) {
         cells[i-1] = []
@@ -76,15 +79,16 @@ function createPlanTo(dest) {
     // initialize the route from the dest cell to itself to empty
     cells[dest.row-1][dest.col-1].route = []
 
-    let fringe = [cells[1-1][1-1]]
+    let fringe = [cells[dest.row-1][dest.col-1]]
     while (fringe.length > 0) {
         let current = fringe.pop()
+        bp.log.fine(current)
         let nearCells = getNearCells(current, function (row, col) {
             return cells[row-1][col-1]
         })
         for (let i = 0; i < nearCells.length; i++) {
             let cell = nearCells[i] //.slice()     // '.slice()' makes a copy
-            if (isCellSafe(cell)) {
+            if (isCellSafe(cell) && current.route != null) {
                 let route = current.route.concat([{row: current.row, col: current.col}])
                 if (cell.route == null || route.length < cell.route.length) {
                     cell.route = route
@@ -111,31 +115,17 @@ function createPlanTo(dest) {
     // now route contains an array of cells - the first is the dest, the last is near player's current location
 
     let result = []
-    for (let i = route.length - 1; i >= 0; i--) {
-        let shortPlan = planFromAnyToNear(player, route[i])
-        result = result.concat(shortPlan.plan)
-        player = route[i]
-        player.facing = shortPlan.direction
-    }
+    if (route != null && route.length > 0)
+        for (let i = route.length - 1; i >= 0; i--) {
+            let shortPlan = planFromAnyToNear(player, route[i])
+            result = result.concat(shortPlan.plan)
+            player = route[i]
+            player.facing = shortPlan.direction
+        }
     return result
 }
 
-// unused, will be deleted later probably
-// // creates a plan to return to beginning, if we've taken so far actions_historty
-// function createReversedPlan() {
-//     let actions_history = ctx.getEntityById("kb").actions_history
-//     let plan = ['turn-left', 'turn-left']
-//     for (let i = actions_history.length; i >= 0; i--) {
-//         let action = actions_history[i]
-//         if (action == 'turn-right')
-//             plan.push('turn-left')
-//         else if (action == 'turn-left')
-//             plan.push('turn-right')
-//         else if (action == 'forward')
-//             plan.push('forward')
-//     }
-//     return plan
-// }
+
 
 const AnyPlay = Any('Play')
 const AnyPlan = Any('Plan')
@@ -216,7 +206,7 @@ bthread("player - random walker", function () {
 })
 
 //TODO: not 'possible' but certain!
-ctx.bthread("Avoid (possible) danger", "Cell.Near_Possible_Danger_NoGold", function (entity) {
+ctx.bthread("Avoid (possible) danger", "Cell.NearPossibleDanger_NoGold_SafeCellExist", function (entity) {
     while(true) {
         let player = ctx.getEntityById("player")
         if (!near(player, entity))
@@ -236,7 +226,7 @@ ctx.bthread("Avoid (possible) danger", "Cell.Near_Possible_Danger_NoGold", funct
 })
 
 bthread("stop wandering around",  function () {
-    let max_actions = (ROWS * COLS) * ROWS
+    let max_actions = (ROWS * COLS) * ROWS * 3  // estimation
     for (let i = 1; i <= max_actions; i++)
         sync({waitFor: AnyPlay})
     sync({request: Event("Wandering")}, 200)

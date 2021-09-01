@@ -36,7 +36,7 @@ public class CobpRunner {
 
     public CobpRunner(String... resourceNames) {
 
-        BProgram bprog = new ContextBProgram(resourceNames); //"wumpus/dal.js", "wumpus/bl.js");
+        BProgram bprog = new ContextBProgram(resourceNames);
         final BProgramRunner rnr = new BProgramRunner(bprog);
 //        rnr.addListener(new PrintCOBProgramRunnerListener(logLevel, new PrintBProgramRunnerListener()));
 
