@@ -78,7 +78,7 @@ function init(){
     let kb = ctx.Entity("kb", "", {
         wumpus: 'alive',
         player_has_gold: false,
-        actions_history: []
+        safe_new_cells: [],     // cells that we have safe route to, and haven't been visited yet
     })
 
     let plan = ctx.Entity("plan", "", {val: []})
@@ -325,12 +325,13 @@ ctx.registerQuery("Cell.NearVisited_NoGold", function (entity) {
 
 ///
 
-// return all cells that are near the player, and are (possibly...) dangerous - before player has taken gold
+// return all cells that are near the player, and are (possibly...) dangerous - before player has taken gold,
+// and we have some safe cell to visit
 //TODO replace 'possible' with certainty!
-ctx.registerQuery("Cell.Near_Possible_Danger_NoGold", function (entity) {
+ctx.registerQuery("Cell.NearPossibleDanger_NoGold_SafeCellExist", function (entity) {
     return entity.type.equals("cell") &&
         (entity.Pit == "possible" || entity.Wumpus == "possible") &&
-        cellNearPlayer(entity)
+        cellNearPlayer(entity) && ctx.getEntityById("kb").safe_new_cells.length > 0
 })
 
 
@@ -349,16 +350,17 @@ function updateIndication(ind) {
 function updateKb(id) {
     let kb = ctx.getEntityById("kb")
 
-    // save the action - to be able to return back to start after taking gold - in same way, and for debugging
-    kb.actions_history.push(id)
-    ctx.updateEntity(kb)
-
     // mark the cell as 'visited', therefore it doesn't have "Pit" or "Wumpus"
     updateVisited("Pit")
     updateVisited("Wumpus")
 
     // check if we can clean near cells because of absent indications
     updateNoIndications(kb)
+
+    updateSafeNewCells(kb)
+
+    ctx.updateEntity(kb)
+
 }
 
 // if there isn't specific indication in player's location, mark near cells as clean from the corresponding danger
@@ -381,6 +383,19 @@ function updateNoIndications(kb) {
         cleanDanger("Wumpus", player.row, player.col + 1)
         cleanDanger("Wumpus", player.row, player.col - 1)
     }
+}
+
+function updateSafeNewCells(kb) {
+    kb.safe_new_cells = []
+    for (let i = 1; i <= ROWS; i++)
+        for (let j = 1; j <= COLS; j++) {
+            let cell = getCellFromCtx(i, j)
+            let plan = createPlanTo(cell)
+            if (plan != null && plan.length > 0 && cell["Pit"] != "visited") {
+                kb.safe_new_cells.push(cell)
+            }
+        }
+    // bp.log.info(kb.safe_new_cells)
 }
 
 

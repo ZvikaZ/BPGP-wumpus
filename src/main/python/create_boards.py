@@ -1,8 +1,10 @@
 import random
 
-LENGTH = 6
-FIRST_BOARD = 2
-LAST_BOARD = 10
+LENGTH = 20
+FIRST_BOARD = 1
+LAST_BOARD = 5
+PIT_RATIO = 0.2
+MAX_PITS = LENGTH * LENGTH * PIT_RATIO
 
 def is_first_cell(row, col):
     return row == LENGTH - 1 and col == 0
@@ -22,10 +24,12 @@ def create_board():
     for i in range(LENGTH):
         board.append([0] * LENGTH)
 
+    num_of_pits = 0
     for row, _ in enumerate(board):
         for col, _ in enumerate(board[row]):
-            if random.random() < 0.2 and not is_first_cell(row, col):
+            if random.random() < PIT_RATIO and not is_first_cell(row, col) and num_of_pits <= MAX_PITS:
                 board[row][col] += 4
+                num_of_pits += 1
 
     row, col = get_cell_not_first()
     board[row][col] += 1
