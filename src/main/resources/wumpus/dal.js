@@ -201,7 +201,7 @@ ctx.registerEffect("Play", function (action) {
     // each turn costs 1 point
     updateScore(-1)
 
-    // bp.log.info("registerEffect start: Play: " + action.id + ". player on " + player.row + ":" + player.col + ", facing: " + player.facing)
+    // bp.log.fine("registerEffect start: Play: " + action.id + ". player on " + player.row + ":" + player.col + ", facing: " + player.facing)
 
     if (action.id.equals("forward")) {
         let cell = getCellFromCtx(player.row, player.col)
@@ -368,16 +368,16 @@ function updateNoIndications(kb) {
     let player = ctx.getEntityById("player")
     let cell = getCellFromCtx(player.row, player.col)
     if (!cell.ObservedBreeze) {
-        // bp.log.info("No Breeze indication in cell " + player.row + "," + player.col + ", cleaning its neighbors")
-        // bp.log.info(cell)
+        // bp.log.fine("No Breeze indication in cell " + player.row + "," + player.col + ", cleaning its neighbors")
+        // bp.log.fine(cell)
         cleanDanger("Pit", player.row + 1, player.col)
         cleanDanger("Pit", player.row - 1, player.col)
         cleanDanger("Pit", player.row, player.col + 1)
         cleanDanger("Pit", player.row, player.col - 1)
     }
     if (!cell.ObservedStench) {
-        // bp.log.info("No Stench indication in cell " + player.row + "," + player.col + ", cleaning its neighbors")
-        // bp.log.info(cell)
+        // bp.log.fine("No Stench indication in cell " + player.row + "," + player.col + ", cleaning its neighbors")
+        // bp.log.fine(cell)
         cleanDanger("Wumpus", player.row + 1, player.col)
         cleanDanger("Wumpus", player.row - 1, player.col)
         cleanDanger("Wumpus", player.row, player.col + 1)
@@ -422,7 +422,7 @@ function updateDanger(danger, row, col) {
         } else {
             throw new Error("unhandled danger: " + cell[danger])
         }
-        // bp.log.info("updateDanger: " + danger + " at " + row + "," + col + " to " + cell[danger])
+        // bp.log.fine("updateDanger: " + danger + " at " + row + "," + col + " to " + cell[danger])
         ctx.updateEntity(cell)
     }
 }
@@ -440,7 +440,7 @@ function cleanDanger(danger, row, col) {
         } else {
             throw new Error("unhandled danger: " + cell[danger])
         }
-        // bp.log.info(cell)
+        // bp.log.fine(cell)
         ctx.updateEntity(cell)
     }
 }
@@ -452,7 +452,7 @@ function updateVisited(danger) {
     let player = ctx.getEntityById("player")
     let cell = getCellFromCtx(player.row, player.col)
     cell[danger] = "visited"
-    // bp.log.info("updateVisited: " + danger + " at " + player.row + "," + player.col + " to " + cell[danger])
+    // bp.log.fine("updateVisited: " + danger + " at " + player.row + "," + player.col + " to " + cell[danger])
     ctx.updateEntity(cell)
 }
 
