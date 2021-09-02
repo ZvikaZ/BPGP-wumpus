@@ -25,8 +25,8 @@ function planToNear(dest) {
 // return plan from src to dest, assuming near(src,dest) - regardless of player's current location
 function planFromAnyToNear(src, dest) {
     if (!near(src, dest)) {
-        bp.log.fine(src)
-        bp.log.fine(dest)
+        bp.log.info(src)
+        bp.log.info(dest)
         throw new Error("planToNear: src is not near " + dest.row + "," + dest.col + "! src is at: " + src.row + "," + src.col)
     }
 
@@ -100,13 +100,13 @@ function createPlanTo(dest) {
         }
     }
 
-    // bp.log.fine("CELLS")
+    // bp.log.info("CELLS")
     // for (let i = 0; i < 4; i++)
     //     for (let j = 0; j < 4; j++) {
     //         let cell = cells[i][j]
     //         if (cell) {
-    //             bp.log.fine(cell.row + "," + cell.col + ": ")
-    //             bp.log.fine(cell.route)
+    //             bp.log.info(cell.row + "," + cell.col + ": ")
+    //             bp.log.info(cell.route)
     //         }
     //     }
 
@@ -226,9 +226,11 @@ ctx.bthread("Avoid (possible) danger", "Cell.NearPossibleDanger_NoGold_SafeCellE
 })
 
 bthread("stop wandering around",  function () {
-    let max_actions = (ROWS * COLS) * ROWS * 3  // estimation
-    for (let i = 1; i <= max_actions; i++)
-        sync({waitFor: AnyPlay})
+    let max_actions = (ROWS * COLS)  * 3  // estimation
+    for (let i = 1; i <= max_actions; i++) {
+        sync({waitFor: Event("Play", {id: 'forward'})})
+        // bp.log.info("event " + i + " out of " + max_actions)
+    }
     sync({request: Event("Wandering")}, 200)
 })
 

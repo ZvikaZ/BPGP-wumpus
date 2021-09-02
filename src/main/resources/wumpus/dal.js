@@ -331,7 +331,7 @@ ctx.registerQuery("Cell.NearVisited_NoGold", function (entity) {
 ctx.registerQuery("Cell.NearPossibleDanger_NoGold_SafeCellExist", function (entity) {
     return entity.type.equals("cell") &&
         (entity.Pit == "possible" || entity.Wumpus == "possible") &&
-        cellNearPlayer(entity) && ctx.getEntityById("kb").safe_new_cells.length > 0
+        cellNearPlayer(entity) //&& ctx.getEntityById("kb").safe_new_cells.length > 0
 })
 
 
@@ -357,7 +357,7 @@ function updateKb(id) {
     // check if we can clean near cells because of absent indications
     updateNoIndications(kb)
 
-    updateSafeNewCells(kb)
+    // updateSafeNewCells(kb)
 
     ctx.updateEntity(kb)
 
