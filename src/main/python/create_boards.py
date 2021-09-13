@@ -1,6 +1,6 @@
 import random
 
-LENGTH = 20
+LENGTH = 10
 FIRST_BOARD = 1
 LAST_BOARD = 5
 PIT_RATIO = 0.2
