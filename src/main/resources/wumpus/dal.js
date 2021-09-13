@@ -14,10 +14,11 @@
 // clean = 0
 // add prio to gold
 
+importClass(java.util.HashSet);
 
 // return all cell entities that are near 'cell'
 function getNearCellsEntities(cell) {
-    return getNearCells(cell, getCellFromCtx)
+    return getNearCells(cell, getCellEntity)
 }
 
 function getNearCells(cell, func) {
@@ -35,10 +36,23 @@ function getNearCells(cell, func) {
 
 
 // return cell entity at row,col
-function getCellFromCtx(row, col) {
+function getCellEntity(row, col) {
     return ctx.getEntityById("cell:" + row + "," + col)
 }
 
+// return cell entity at cell.row,cell.col
+function getCellEntityFromSimpleCell(cell) {
+    return ctx.getEntityById("cell:" + cell.row + "," + cell.col)
+}
+
+// return cell entity at "row,col"
+function getCellEntityFromCords(str) {
+    return ctx.getEntityById("cell:" + str)
+}
+
+function getCellCords(cell) {
+    return cell.row + "," + cell.col
+}
 
 ///////////////////////////////////////////////////////////////////
 
@@ -78,7 +92,8 @@ function init(){
     let kb = ctx.Entity("kb", "", {
         wumpus: 'alive',
         player_has_gold: false,
-        safe_new_cells: [],     // cells that we have safe route to, and haven't been visited yet
+        safe_unvisited_cells: new HashSet(),         // cells that we have safe route to, and haven't been visited yet
+        potential_unvisited_cells: new HashSet(),    // unvisited cells that are near visited cells, we don't know if the route is safe
     })
 
     let plan = ctx.Entity("plan", "", {val: []})
@@ -159,8 +174,11 @@ function gameOver(reason) {
 
 // update cell with required changes after player's action (or at game's start)
 function updateCellStatus(action) {
+    if (action.id && (action.id.equals("turn-right") || action.id.equals("turn-left")))
+        return
+
     let player = ctx.getEntityById("player")
-    let cell = getCellFromCtx(player.row, player.col)
+    let cell = getCellEntity(player.row, player.col)
     bp.ASSERT(cell.hasPlayer, "ERROR: updateCellStatus: cell.hasPlayer is false!")   //TODO return
 
     // update things that are in this cell
@@ -204,7 +222,7 @@ ctx.registerEffect("Play", function (action) {
     // bp.log.fine("registerEffect start: Play: " + action.id + ". player on " + player.row + ":" + player.col + ", facing: " + player.facing)
 
     if (action.id.equals("forward")) {
-        let cell = getCellFromCtx(player.row, player.col)
+        let cell = getCellEntity(player.row, player.col)
         cell.hasPlayer = false
         ctx.updateEntity(cell)
 
@@ -219,7 +237,7 @@ ctx.registerEffect("Play", function (action) {
         // if needed, we can add an 'else ... trigger bump'
         ctx.updateEntity(player)
 
-        cell = getCellFromCtx(player.row, player.col)
+        cell = getCellEntity(player.row, player.col)
         cell.hasPlayer = true
         ctx.updateEntity(cell)
     } else if (action.id.equals("turn-right")) {
@@ -233,7 +251,7 @@ ctx.registerEffect("Play", function (action) {
             player.facing += 360
         ctx.updateEntity(player)
     } else if (action.id.equals("grab")) {
-        let cell = getCellFromCtx(player.row, player.col)
+        let cell = getCellEntity(player.row, player.col)
         if (cell.hasGold) {
             cell.hasGold = false
             ctx.updateEntity(cell)
@@ -323,6 +341,13 @@ ctx.registerQuery("Cell.NearVisited_NoGold", function (entity) {
         cellNearPlayer(entity) && !ctx.getEntityById("kb").player_has_gold
 })
 
+ctx.registerQuery("Cell.UnVisitedSafeToVisit_NoGold_NoActivePlan", function (entity) {
+    return entity.type.equals("cell") && ctx.getEntityById("kb").safe_unvisited_cells.contains(getCellCords(entity))
+        cellNearPlayer(entity) && !ctx.getEntityById("kb").player_has_gold &&
+        !ctx.getEntityById("plan").val.length > 0
+})
+
+
 ///
 
 // return all cells that are near the player, and are (possibly...) dangerous - before player has taken gold,
@@ -331,7 +356,7 @@ ctx.registerQuery("Cell.NearVisited_NoGold", function (entity) {
 ctx.registerQuery("Cell.NearPossibleDanger_NoGold_SafeCellExist", function (entity) {
     return entity.type.equals("cell") &&
         (entity.Pit == "possible" || entity.Wumpus == "possible") &&
-        cellNearPlayer(entity) //&& ctx.getEntityById("kb").safe_new_cells.length > 0
+        cellNearPlayer(entity) && ctx.getEntityById("kb").safe_unvisited_cells.size() > 0
 })
 
 
@@ -341,7 +366,7 @@ ctx.registerQuery("Cell.NearPossibleDanger_NoGold_SafeCellExist", function (enti
 // ind is either "ObservedBreeze" or "ObservedStench"
 function updateIndication(ind) {
     let player = ctx.getEntityById("player")
-    let cell = getCellFromCtx(player.row, player.col)
+    let cell = getCellEntity(player.row, player.col)
     cell[ind] = true
     ctx.updateEntity(cell)
 }
@@ -357,7 +382,7 @@ function updateKb(id) {
     // check if we can clean near cells because of absent indications
     updateNoIndications(kb)
 
-    // updateSafeNewCells(kb)
+    updateSafeNewCells(kb)
 
     ctx.updateEntity(kb)
 
@@ -366,7 +391,7 @@ function updateKb(id) {
 // if there isn't specific indication in player's location, mark near cells as clean from the corresponding danger
 function updateNoIndications(kb) {
     let player = ctx.getEntityById("player")
-    let cell = getCellFromCtx(player.row, player.col)
+    let cell = getCellEntity(player.row, player.col)
     if (!cell.ObservedBreeze) {
         // bp.log.fine("No Breeze indication in cell " + player.row + "," + player.col + ", cleaning its neighbors")
         // bp.log.fine(cell)
@@ -386,16 +411,33 @@ function updateNoIndications(kb) {
 }
 
 function updateSafeNewCells(kb) {
-    kb.safe_new_cells = []
-    for (let i = 1; i <= ROWS; i++)
-        for (let j = 1; j <= COLS; j++) {
-            let cell = getCellFromCtx(i, j)
-            let plan = createPlanTo(cell)
-            if (plan != null && plan.length > 0 && cell["Pit"] != "visited") {
-                kb.safe_new_cells.push(cell)
-            }
+    let player = ctx.getEntityById("player")
+    let nearCells = getNearCellsEntities(player)
+    for (let i = 0; i < nearCells.length; i++) {
+        let cell = getCellEntityFromSimpleCell(nearCells[i])
+        if (cell.Pit != "visited") {
+            kb.potential_unvisited_cells.add(getCellCords(cell))
+            // bp.log.info("Adding to potential " + getCellCords(cell))
         }
-    // bp.log.info(kb.safe_new_cells)
+    }
+    for (let it = kb.potential_unvisited_cells.iterator(); it.hasNext(); ) {
+        let cell = getCellEntityFromCords(it.next())
+        if (cell.Pit == "clean" && cell.Wumpus == "clean") {
+            it.remove()
+            kb.safe_unvisited_cells.add(getCellCords(cell))
+            // bp.log.info("Moving from potential to safe " + getCellCords(cell))
+        }
+
+    }
+    for (let it = kb.safe_unvisited_cells.iterator(); it.hasNext(); ) {
+        let cell = getCellEntityFromCords(it.next())
+        if (cell.Pit == "visited") {
+            it.remove()
+            // bp.log.info("Removing visited " + getCellCords(cell))
+        }
+    }
+    // bp.log.info(player)
+    // bp.log.info(kb)
 }
 
 
@@ -414,7 +456,7 @@ function updateDangers(danger) {
 // reminder: see the danger states comment at the beginning of the file
 function updateDanger(danger, row, col) {
     if (row >= 1 && row <= ROWS && col >= 1 && col <= COLS) {
-        let cell = getCellFromCtx(row, col)
+        let cell = getCellEntity(row, col)
         if (cell[danger] == "unknown") {
             cell[danger] = "possible"
         } else if (cell[danger] == "visited" || cell[danger] == "possible" || cell[danger] == "clean") {
@@ -432,7 +474,7 @@ function updateDanger(danger, row, col) {
 // reminder: see the danger states comment at the beginning of the file
 function cleanDanger(danger, row, col) {
     if (row >= 1 && row <= ROWS && col >= 1 && col <= COLS) {
-        let cell = getCellFromCtx(row, col)
+        let cell = getCellEntity(row, col)
         if (cell[danger] == "unknown" || cell[danger] == "possible") {
             cell[danger] = "clean"
         } else if (cell[danger] == "visited" || cell[danger] == "clean") {
@@ -450,7 +492,7 @@ function cleanDanger(danger, row, col) {
 // reminder: see the danger states comment at the beginning of the file
 function updateVisited(danger) {
     let player = ctx.getEntityById("player")
-    let cell = getCellFromCtx(player.row, player.col)
+    let cell = getCellEntity(player.row, player.col)
     cell[danger] = "visited"
     // bp.log.fine("updateVisited: " + danger + " at " + player.row + "," + player.col + " to " + cell[danger])
     ctx.updateEntity(cell)

@@ -52,7 +52,7 @@ function planFromAnyToNear(src, dest) {
 }
 
 function isCellSafe(cell) {
-    let cellEntity = getCellFromCtx(cell.row, cell.col)
+    let cellEntity = getCellEntity(cell.row, cell.col)
     return (cellEntity.Pit == "clean" || cellEntity.Pit == "visited") &&
            (cellEntity.Wumpus == "clean" || cellEntity.Wumpus == "visited")
 }
