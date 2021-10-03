@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# sends 20 sbatch runs
+# sends 10 sbatch runs
 # should be run only from its directory!
 
 orig_dir=$PWD
@@ -8,7 +8,7 @@ regression_dir=../regressions/`basename $PWD`/`date "+%F_%H-%M-%S"`
 mkdir -p $regression_dir
 ./info.sh > $regression_dir/info.txt
 
-for i in {1..20}
+for i in {1..10}
 do
     mkdir $regression_dir/run_$i
     cd $regression_dir/run_$i
