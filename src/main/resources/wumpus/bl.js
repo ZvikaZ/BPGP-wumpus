@@ -154,38 +154,38 @@ ctx.bthread("Game over", "Game over", function (entity) {
 ///////////            printing              //////////////
 ///////////////////////////////////////////////////////////
 
-bthread("boardPrinter", function() {
-    let board = []
-    for (var i = 0; i < ROWS; i++) {
-        let row = []
-        for (var j = 0; j < COLS; j++) {
-            row.push('_')
-        }
-        board.push(row)
-    }
-
-    while (true) {
-        let player = ctx.getEntityById("player")
-        let x = player.row - 1
-        let y = player.col - 1
-        let facing = player.facing
-        if (facing == 0)
-            board[x][y] = '^'
-        else if (facing == 90)
-            board[x][y] = '>'
-        else if (facing == 180)
-            board[x][y] = 'V'
-        else if (facing == 270)
-            board[x][y] = '<'
-
-        bp.log.fine("--------------------")
-        for (var i = ROWS - 1; i >= 0; i--) {
-            bp.log.fine(board[i].join(''))
-        }
-        bp.log.fine("--------------------")
-        sync({waitFor: AnyPlay});
-    }
-})
+// bthread("boardPrinter", function() {
+//     let board = []
+//     for (var i = 0; i < ROWS; i++) {
+//         let row = []
+//         for (var j = 0; j < COLS; j++) {
+//             row.push('_')
+//         }
+//         board.push(row)
+//     }
+//
+//     while (true) {
+//         let player = ctx.getEntityById("player")
+//         let x = player.row - 1
+//         let y = player.col - 1
+//         let facing = player.facing
+//         if (facing == 0)
+//             board[x][y] = '^'
+//         else if (facing == 90)
+//             board[x][y] = '>'
+//         else if (facing == 180)
+//             board[x][y] = 'V'
+//         else if (facing == 270)
+//             board[x][y] = '<'
+//
+//         bp.log.fine("--------------------")
+//         for (var i = ROWS - 1; i >= 0; i--) {
+//             bp.log.fine(board[i].join(''))
+//         }
+//         bp.log.fine("--------------------")
+//         sync({waitFor: AnyPlay});
+//     }
+// })
 
 ///////////////////////////////////////////////////////////
 ///////////            strategies            //////////////
@@ -239,6 +239,8 @@ bthread("stop wandering around",  function () {
 ctx.bthread("Grab gold", "PlayerInCellWithGold", function (entity) {
     // the loop is required, because maybe the some other action was selected, and the gold wasn't grabbed
     while (true) {
+        //TODO remove prio
+        sync({request: Event("Finished plan")}, 240)
         //TODO remove prio
         sync({request: grab}, 110)  //Z removing 'block: grab' fixed the infinite loop ; also added back prio
     }

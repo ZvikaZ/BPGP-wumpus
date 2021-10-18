@@ -184,7 +184,8 @@ function updateCellStatus(action) {
     // update things that are in this cell
     if (cell.hasPit) {
         updateScore(-1000);
-        gameOver("fell in pit")
+        bp.log.info(cell)
+        gameOver("fell in pit " + getCellCords(cell))
     }
 
     if (cell.hasWumpus) {
