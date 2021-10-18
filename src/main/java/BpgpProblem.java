@@ -14,7 +14,6 @@ import org.mozilla.javascript.NativeObject;
 
 
 public class BpgpProblem extends GPProblem implements SimpleProblemForm {
-    static final String bpRunLog = "bpRun.log";
     static final boolean debug = false;
     static final int numOfBoards = 5;
 

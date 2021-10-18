@@ -8,8 +8,11 @@ import il.ac.bgu.cs.bp.bpjs.model.eventselection.PrioritizedBSyncEventSelectionS
 import org.mozilla.javascript.NativeObject;
 
 import javax.swing.plaf.basic.BasicEditorPaneUI;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static il.ac.bgu.cs.bp.bpjs.context.PrintCOBProgramRunnerListener.Level;
 
@@ -43,8 +46,8 @@ public class CobpRunner {
         BpgpListener listener = null;
 
         try {
-            // TODO keep log from previous runs (?)
-            PrintStream ps = new PrintStream(bpRunLog);
+            Path filePath = Paths.get("output").resolve(bpRunLog);
+            PrintStream ps = new PrintStream(filePath.toFile());
             listener = rnr.addListener( new BpgpListener(ps) );
         } catch (FileNotFoundException e) {
             e.printStackTrace();

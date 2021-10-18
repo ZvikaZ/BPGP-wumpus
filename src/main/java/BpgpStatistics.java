@@ -8,11 +8,14 @@ import ec.util.Parameter;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
 public class BpgpStatistics extends Statistics {
+    public static final String OUTPUT_DIR = "output";
     public int bpgpLog;
 
     final int SUBPOP = 0;
@@ -24,9 +27,9 @@ public class BpgpStatistics extends Statistics {
     }
 
     private int openLogFile(EvolutionState state, String fileName, boolean compress) {
-        File statisticsFile = new File(fileName);
+        Path filePath = Paths.get(OUTPUT_DIR).resolve(fileName);
         try {
-            return state.output.addLog(statisticsFile, !compress, compress);
+            return state.output.addLog(filePath.toFile(), !compress, compress);
         } catch (IOException e) {
             e.printStackTrace();
             return 0;

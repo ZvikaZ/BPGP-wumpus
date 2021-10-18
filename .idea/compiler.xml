@@ -10,5 +10,8 @@
         <module name="First" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="BPGP-wumpus" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

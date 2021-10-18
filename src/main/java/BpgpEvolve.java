@@ -1,9 +1,16 @@
 import ec.EvolutionState;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
 import java.io.IOException;
 
 public class BpgpEvolve {
-    public static void main(String[] args) {
+
+    public static final File OUTPUT_DIR = new File("output");
+
+    public static void main(String[] args) throws IOException {
+        FileUtils.deleteDirectory(OUTPUT_DIR);
+        OUTPUT_DIR.mkdir();
         String[] evolveArgs = {"-file", BpgpUtils.getResourceFileName("bpgp.params")};
         evolve(evolveArgs);
         if (!BpgpUtils.isSlurm()) {

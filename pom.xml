@@ -39,18 +39,35 @@
         </dependency>
     </dependencies>
 
-	<repositories>
-		<repository>
+    <repositories>
+        <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
-	</repositories>
+    </repositories>
 
 
     <properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${basedir}/output</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
