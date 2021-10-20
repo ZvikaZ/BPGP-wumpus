@@ -12,13 +12,18 @@
         <dependency>
             <groupId>com.github.ZvikaZ</groupId>
             <artifactId>ecj</artifactId>
-            <version>27.1-zvika-4</version>
+            <version>27.1-zvika-5</version>
         </dependency>
 
         <dependency>
             <groupId>com.github.bThink-BGU</groupId>
             <artifactId>BPjs-Context</artifactId>
             <version>0.4.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.bThink-BGU</groupId>
+            <artifactId>BPjs</artifactId>
+            <version>0.12.1</version>
         </dependency>
         <dependency>
             <!-- import org.apache.commons.io.IOUtils; -->
