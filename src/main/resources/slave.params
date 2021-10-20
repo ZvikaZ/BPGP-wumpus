@@ -1,5 +1,5 @@
 parent.0 = master.params
-#eval.master.host = 132.72.65.199
-eval.master.host = localhost
+eval.master.host = 132.72.65.199
+#eval.master.host = localhost
 eval.return-inds = false
 evalthreads = auto
