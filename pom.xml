@@ -12,12 +12,17 @@
         <dependency>
             <groupId>com.github.ZvikaZ</groupId>
             <artifactId>ecj</artifactId>
-            <version>27.1-zvika-4</version>
+            <version>27.1-zvika-5</version>
         </dependency>
         <dependency>
             <groupId>com.github.bThink-BGU</groupId>
             <artifactId>BPjs-Context</artifactId>
             <version>0.4.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.bThink-BGU</groupId>
+            <artifactId>BPjs</artifactId>
+            <version>0.12.1</version>
         </dependency>
         <dependency>
             <!-- import org.apache.commons.io.IOUtils; -->
@@ -68,21 +73,52 @@
                 </configuration>
             </plugin>
 
-<!--            allows running mvn clean compile exec:java   -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.0.0</version>
                 <executions>
                     <execution>
+                        <id>single</id>
                         <goals>
                             <goal>java</goal>
                         </goals>
+                        <configuration>
+                            <mainClass>BpgpEvolve</mainClass>
+                            <!--                            <mainClass>ec.Evolve</mainClass>-->
+                            <!--                            <arguments>-->
+                            <!--                                <argument>-file</argument>-->
+                            <!--                                <argument>src/main/resources/single_machine.params</argument>-->
+                            <!--                            </arguments>-->
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>master</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>ec.Evolve</mainClass>
+                            <arguments>
+                                <argument>-file</argument>
+                                <argument>src/main/resources/master.params</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>slave</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>ec.eval.Slave</mainClass>
+                            <arguments>
+                                <argument>-file</argument>
+                                <argument>src/main/resources/slave.params</argument>
+                            </arguments>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <mainClass>BpgpEvolve</mainClass>
-                </configuration>
             </plugin>
         </plugins>
 

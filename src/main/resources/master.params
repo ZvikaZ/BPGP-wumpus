@@ -1,0 +1,10 @@
+# parallel eval processing (master/slave)
+parent.0 = single_machine.params
+eval.masterproblem = ec.eval.MasterProblem
+eval.master.port = 18080
+# these two need to be 1, because num-tests>1
+eval.masterproblem.job-size = 1
+eval.masterproblem.max-jobs-per-slave = 1
+# eval.compression = true  #TODO add later
+eval.compression = false
+evalthreads = 1

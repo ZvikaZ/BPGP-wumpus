@@ -1,0 +1,86 @@
+# @ec.Evolve = <ECJ-DIR>/ecj/src/main/resources/ec/ , but inside Maven's .jar
+parent.0 = @ec.Evolve gp/ge/ge.params
+parent.1 = @ec.Evolve gp/koza/koza.params
+
+gp.fs.size = 1
+gp.fs.0.name = f0
+gp.fs.0.size = 7
+
+# Cons
+gp.fs.0.func.6 = func.Cons
+gp.fs.0.func.6.nc = nc2
+gp.fs.0.func.0 = func.Cons3
+gp.fs.0.func.0.nc = nc3
+
+# BP constructs
+gp.fs.0.func.1 = func.CtxBthread
+gp.fs.0.func.1.nc = nc2
+gp.fs.0.func.2 = func.RequestPlan
+gp.fs.0.func.2.nc = nc2
+
+# ERCs
+gp.fs.0.func.3 = func.PlannerERC
+gp.fs.0.func.3.nc = nc0
+gp.fs.0.func.4 = func.QueryERC
+gp.fs.0.func.4.nc = nc0
+gp.fs.0.func.5 = func.PrioERC
+gp.fs.0.func.5.nc = nc0
+
+
+eval.problem.problem = BpgpProblem
+eval.problem.problem.data = func.StringData
+
+ge.species.file.0 = bpgp.grammar
+
+# the default is 15, too small for us...
+pop.subpop.0.species.min-initial-size = 80
+pop.subpop.0.species.max-initial-size = 200
+
+# if the genome is still too small, wrap around 16 times before giving up
+pop.subpop.0.species.passes = 16
+
+
+# don't give up if the first crossover attempt fails, try more
+pop.subpop.0.species.pipe.source.0.source.0.tries = 4
+
+
+# elitism
+# TODO during development, it distracts, will be returned in later phases
+#breed.elite.0 = 2
+
+#TODO increase... maybe 200 generations
+#generations	= 50
+#pop.subpop.0.size	= 40
+generations	= 3
+pop.subpop.0.size	= 4
+
+## debug - turn off mutation
+#pop.subpop.0.species.mutation-prob = 0
+
+
+## commented, because master/slave model
+# use all CPU cores available for threads ; set seeds to 'time'
+# evalthreads = auto
+
+# disabled because of missing a miscMaps for stats ; TODO fix, or report issue to ecj
+#breedthreads = auto
+
+
+
+## debug params:
+# print-params = true
+
+stat.num-children = 2
+stat.child.0 = ec.simple.SimpleShortStatistics
+stat.child.0.file = $out.tab.stat
+stat.child.0.do-size = true
+stat.child.0.do-time = true
+stat.child.1 = BpgpStatistics
+
+pop.subpop.0.species = BpgpSpecies
+
+
+# for each ind, calc fitness 6 times, and return the average
+eval.num-tests = 6
+eval.merge = mean
+
