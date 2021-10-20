@@ -14,6 +14,7 @@
             <artifactId>ecj</artifactId>
             <version>27.1-zvika-4</version>
         </dependency>
+
         <dependency>
             <groupId>com.github.bThink-BGU</groupId>
             <artifactId>BPjs-Context</artifactId>
@@ -39,18 +40,58 @@
         </dependency>
     </dependencies>
 
-	<repositories>
-		<repository>
+    <repositories>
+        <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
-	</repositories>
+    </repositories>
 
 
     <properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>master</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>BpgpEvolve</mainClass>
+                            <!--                            <mainClass>ec.Evolve</mainClass>-->
+                            <!--                            <arguments>-->
+                            <!--                                <argument>-file</argument>-->
+                            <!--                                <argument>src/main/resources/master.params</argument>-->
+                            <!--                            </arguments>-->
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>slave</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>ec.eval.Slave</mainClass>
+                            <arguments>
+                                <argument>-file</argument>
+                                <argument>src/main/resources/slave.params</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 
 </project>

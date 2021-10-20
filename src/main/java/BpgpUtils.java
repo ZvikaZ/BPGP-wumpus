@@ -49,7 +49,7 @@ public class BpgpUtils {
     }
 
     private static File getResourcesPath() {
-        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        ClassLoader classLoader = BpgpUtils.class.getClassLoader();
         URL url = classLoader.getResource(".");
         File path = null;
         try {
@@ -66,7 +66,7 @@ public class BpgpUtils {
     }
 
     static String getResourceFileName(String resource) {
-        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        ClassLoader classLoader = BpgpUtils.class.getClassLoader();
         return classLoader.getResource(resource).getPath();
     }
 
