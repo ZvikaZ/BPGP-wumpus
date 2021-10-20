@@ -67,7 +67,7 @@
                 <version>3.0.0</version>
                 <executions>
                     <execution>
-                        <id>master</id>
+                        <id>single</id>
                         <goals>
                             <goal>java</goal>
                         </goals>
@@ -76,8 +76,21 @@
                             <!--                            <mainClass>ec.Evolve</mainClass>-->
                             <!--                            <arguments>-->
                             <!--                                <argument>-file</argument>-->
-                            <!--                                <argument>src/main/resources/master.params</argument>-->
+                            <!--                                <argument>src/main/resources/single_machine.params</argument>-->
                             <!--                            </arguments>-->
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>master</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>ec.Evolve</mainClass>
+                            <arguments>
+                                <argument>-file</argument>
+                                <argument>src/main/resources/master.params</argument>
+                            </arguments>
                         </configuration>
                     </execution>
                     <execution>

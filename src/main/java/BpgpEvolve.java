@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class BpgpEvolve {
     public static void main(String[] args) {
-        String[] evolveArgs = {"-file", BpgpUtils.getResourceFileName("bpgp.params")};
+        String[] evolveArgs = {"-file", BpgpUtils.getResourceFileName("single_machine.params")};
         evolve(evolveArgs);
         if (!BpgpUtils.isSlurm()) {
             plotGraph();
