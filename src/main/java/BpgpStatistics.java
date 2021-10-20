@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class BpgpStatistics extends Statistics {
-    public static final String OUTPUT_DIR = "output";
     public int bpgpLog;
 
     final int SUBPOP = 0;
@@ -27,9 +26,9 @@ public class BpgpStatistics extends Statistics {
     }
 
     private int openLogFile(EvolutionState state, String fileName, boolean compress) {
-        Path filePath = Paths.get(OUTPUT_DIR).resolve(fileName);
+        File statisticsFile = new File(fileName);
         try {
-            return state.output.addLog(filePath.toFile(), !compress, compress);
+            return state.output.addLog(statisticsFile, !compress, compress);
         } catch (IOException e) {
             e.printStackTrace();
             return 0;

@@ -10,6 +10,7 @@ import org.mozilla.javascript.NativeObject;
 import javax.swing.plaf.basic.BasicEditorPaneUI;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -35,7 +36,6 @@ public class CobpRunner {
     public int numOfEvents;
 
     static long seed = System.currentTimeMillis();
-    static final String bpRunLog = "bpRun.log";
 
     public CobpRunner(String... resourceNames) {
 
@@ -46,10 +46,11 @@ public class CobpRunner {
         BpgpListener listener = null;
 
         try {
-            Path filePath = Paths.get("output").resolve(bpRunLog);
-            PrintStream ps = new PrintStream(filePath.toFile());
+            File tempFile = File.createTempFile("bpRun-", ".log");
+            tempFile.deleteOnExit();
+            PrintStream ps = new PrintStream(tempFile);
             listener = rnr.addListener( new BpgpListener(ps) );
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
