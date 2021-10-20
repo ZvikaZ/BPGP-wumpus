@@ -70,15 +70,15 @@ public class BpgpUtils {
         return classLoader.getResource(resource).getPath();
     }
 
-    private String resourceToString(String resourceName) {
-        URL url = this.getClass().getResource(resourceName);
-        String result = null;
-        try {
-            result = IOUtils.toString(url);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
+//    private String resourceToString(String resourceName) {
+//        URL url = this.getClass().getResource(resourceName);
+//        String result = null;
+//        try {
+//            result = IOUtils.toString(url);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return result;
+//    }
 
 }
