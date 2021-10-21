@@ -20,7 +20,7 @@ public class BpgpSpecies extends ec.gp.ge.GESpecies {
     }
 
     public HashMap<String, Object> buildMisc(EvolutionState state, int subpopIndex, int thread) {
-        HashMap<String, Object> miscMap = new HashMap();
+        HashMap<String, Object> miscMap = new HashMap<String, Object>();
         IntBag[] bag = new IntBag[2];
         miscMap.put("parents", bag);
         miscMaps.add(miscMap);
