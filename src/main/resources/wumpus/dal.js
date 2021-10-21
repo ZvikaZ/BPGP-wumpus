@@ -74,6 +74,8 @@ const ROWS = gameBoard.length
 const COLS = gameBoard[0].length
 
 function init(){
+    ctx.disableWarning("propertyIsArray")
+
     let gameStatus = ctx.Entity("game status", "", {val: "ongoing"})
 
     let score = ctx.Entity("score", "", {val: 0})
