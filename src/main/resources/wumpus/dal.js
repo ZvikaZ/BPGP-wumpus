@@ -306,6 +306,10 @@ ctx.registerEffect("Wandering", function (effect) {
     gameOver("wandering")
 })
 
+ctx.registerEffect("StrategiesDontCare", function (effect) {
+    gameOver("StrategiesDontCare")
+})
+
 
 ///////////////////////////////////////////////////////////
 ///////////            strategies            //////////////
@@ -344,10 +348,14 @@ ctx.registerQuery("Cell.NearVisited_NoGold", function (entity) {
         cellNearPlayer(entity) && !ctx.getEntityById("kb").player_has_gold
 })
 
-ctx.registerQuery("Cell.UnVisitedSafeToVisit_NoGold_NoActivePlan", function (entity) {
+// return all cells that we have safe route to, and haven't been visited yet
+ctx.registerQuery("Cell.UnVisitedSafeToVisit", function (entity) {
     return entity.type.equals("cell") && ctx.getEntityById("kb").safe_unvisited_cells.contains(getCellCords(entity))
-        cellNearPlayer(entity) && !ctx.getEntityById("kb").player_has_gold &&
-        !ctx.getEntityById("plan").val.length > 0
+})
+
+// return all cells that we have (possible dangerous) route to, and haven't been visited yet
+ctx.registerQuery("Cell.UnVisitedPossibleDangerRoute", function (entity) {
+    return entity.type.equals("cell") && ctx.getEntityById("kb").potential_unvisited_cells.contains(getCellCords(entity))
 })
 
 

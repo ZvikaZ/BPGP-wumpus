@@ -62,8 +62,8 @@ function createPlanTo(dest) {
     // this function uses a lot of -1 because generally we start row (and col) from 1, while here the
     // array index starts from 0
 
-    if (!isCellSafe(dest))
-        return []
+    // if (!isCellSafe(dest))
+    //     return []
 
     let cells = []
     for (let i = 1; i <= ROWS; i++) {
@@ -143,8 +143,16 @@ bthread("start", function() {
 })
 
 ctx.bthread("Game over", "Game over", function (entity) {
-    bp.log.info("Game over: " + entity.reason + ", score: " + entity.score)
-    let ev = Event("Game over", {score: entity.score})
+    let numOfVisitedCells = 0
+    for (let i = 1; i <= ROWS; i++)
+        for (let j = 1; j <= COLS; j++) {
+            let cell = getCellEntity(i, j)
+            if (cell.Pit == "visited")
+                numOfVisitedCells++
+        }
+
+    bp.log.info("Game over: " + entity.reason + ", score: " + entity.score + ", visited cells: " + numOfVisitedCells)
+    let ev = Event("Game over", {score: entity.score, numOfVisitedCells: numOfVisitedCells, boardSize: ROWS * COLS})
     sync({request: ev, block: ev.negate()})
     sync({block: bp.all})
 })
@@ -193,15 +201,24 @@ ctx.bthread("Game over", "Game over", function (entity) {
 
 // moved 3 main strategies to evolved.js
 
-// random walker, with low prio - to do something when strategies don't care
-bthread("player - random walker", function () {
+// // random walker, with low prio - to do something when strategies don't care
+// bthread("player - random walker", function () {
+//     while(true) {
+//         // bp.log.fine(player.row + ":" + player.col + "," + player.facing + " visited nearby: " + cell.row + ":" + cell.col + ". direction: " + direction(player, cell) + ". plan: " + plan)
+//         sync({request: [
+//                 Event("Play", {id: 'turn-right'}),
+//                 Event("Play", {id: 'turn-left'}),
+//                 Event("Play", {id: 'forward'})
+//             ], waitFor: AnyPlay}, 10)
+//     }
+// })
+
+// notify (and finish) when strategies don't care
+bthread("player - strategies don't care", function () {
     while(true) {
-        // bp.log.fine(player.row + ":" + player.col + "," + player.facing + " visited nearby: " + cell.row + ":" + cell.col + ". direction: " + direction(player, cell) + ". plan: " + plan)
-        sync({request: [
-            Event("Play", {id: 'turn-right'}),
-            Event("Play", {id: 'turn-left'}),
-            Event("Play", {id: 'forward'})
-        ], waitFor: AnyPlay}, 10)
+        // it has low priority, selected only if there isn't any strategy
+        // important to finish properly, and calculate fitness
+        sync({request: Event("StrategiesDontCare")}, 10)
     }
 })
 
