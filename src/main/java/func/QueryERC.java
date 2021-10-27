@@ -17,7 +17,9 @@ public class QueryERC extends ERC {
     static public String[] queries = {
             "Cell.NearWithoutKnownDanger_NoGold",
             "Cell.NearUnvisitedNoDanger_NoGold",
-            "Cell.NearVisited_NoGold"
+            "Cell.NearVisited_NoGold",
+            "Cell.UnVisitedSafeToVisit",
+            "Cell.UnVisitedPossibleDangerRoute"
     };
 
     public String name() {
