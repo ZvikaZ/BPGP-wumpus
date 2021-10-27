@@ -21,7 +21,7 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
         generatedCode = "bp.log.setLevel(\"Warn\");\n" + generatedCode;   //TODO return
         String tempFile = BpgpUtils.writeToTempFile(generatedCode);
         CobpRunner runner = new CobpRunner("wumpus/boards/board"+boardNum+".js", "wumpus/dal.js", "wumpus/bl.js", tempFile);
-        return getRunFitness(runner.runResult, runner.numOfEvents, generatedCode);
+        return getRunFitness(runner.listener.runResult, runner.listener.numOfEvents, generatedCode);
     }
 
     // return a Koza fitness: 0 is best, infinity is worst
@@ -29,13 +29,22 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
     private double getRunFitness(BEvent runResult, int numOfEvents, String generatedCode) {
         if (runResult != null && runResult.getName().equals("Game over")) {
             double score = (double) ((NativeObject) runResult.getData()).get("score");
+            double numOfVisitedCells = (double) ((NativeObject) runResult.getData()).get("numOfVisitedCells");
+            double boardSize = (double) ((NativeObject) runResult.getData()).get("boardSize");
             int numOfBts = BpgpUtils.countInString(generatedCode, "bthread");
-            double result = (1000 - score) + (numOfBts * 4) + (numOfEvents / 10);
-            System.out.println("getRunFitness. score: " + score + ", numOfBts: " + numOfBts + ", numOfEvents: " + numOfEvents + ". result: " + result);
-//            if (score < -300) { //TODO
-//                System.out.println("negative score!");
-//                System.exit(1);
-//            }
+
+            double scoreNormalized = BpgpUtils.sigmoid((1000 - score) / 200.0);
+            double numOfBtsNormalized = BpgpUtils.sigmoid(numOfBts / 3.0);
+            double numOfEventsNormalized = BpgpUtils.sigmoid(numOfEvents / 20.0);
+            double boardMissingCoverageNormalized = 1 - (numOfVisitedCells / boardSize);
+
+            double result = 0.4 * scoreNormalized + 0.1 * numOfEventsNormalized + 0.4 * boardMissingCoverageNormalized + 0.1 * numOfBtsNormalized;
+            System.out.println("getRunFitness. score: " + score + ", numOfBts: " + numOfBts + ", numOfEvents: " + numOfEvents +
+                    ", numOfVisitedCells: " + numOfVisitedCells + ", scoreNormalized: " + scoreNormalized +
+                    ", numOfBtsNormalized: " + numOfBtsNormalized + ", numOfEventsNormalized: " + numOfEventsNormalized +
+                    ", boardMissingCoverageNormalized: " + boardMissingCoverageNormalized +
+                    ". result: " + result);
+
             return result;
         } else { //TODO
             System.out.println("getRunFitness. not finished! numOfEvents: " + numOfEvents + ". result: " + (2000 - numOfEvents));

@@ -70,6 +70,12 @@ public class BpgpUtils {
         return classLoader.getResource(resource).getPath();
     }
 
+    static double sigmoid(double x) {
+        //TODO is Apache's FastMath any better?
+        //TODO maybe another sigmoid function?
+        return 1.0 / (1 + Math.exp(-x));
+    }
+
 //    private String resourceToString(String resourceName) {
 //        URL url = this.getClass().getResource(resourceName);
 //        String result = null;

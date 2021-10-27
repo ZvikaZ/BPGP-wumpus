@@ -13,11 +13,11 @@ public class BpgpListener extends PrintBProgramRunnerListener {
         super(aStream);
     }
 
-    int counter = 0;
+    public int numOfEvents = 0;
 
     public void eventSelected(BProgram bp, BEvent theEvent) {
-        counter++;
-//        System.out.println("eventSelected: " + counter + ". event: " + theEvent);
+        numOfEvents++;
+//        System.out.println("eventSelected: " + numOfEvents + ". event: " + theEvent);
         super.eventSelected(bp, theEvent);
         if (theEvent.name.contains("Game over"))
             runResult = theEvent;

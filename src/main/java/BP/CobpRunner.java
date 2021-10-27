@@ -32,8 +32,8 @@ public class CobpRunner {
 //    private static final Level logLevel = Level.CtxChanged;
 //    private static final Level logLevel = Level.ALL;
 
-    public BEvent runResult;
-    public int numOfEvents;
+    public BpgpListener listener;
+
 
     static long seed = System.currentTimeMillis();
 
@@ -43,7 +43,7 @@ public class CobpRunner {
         final BProgramRunner rnr = new BProgramRunner(bprog);
 //        rnr.addListener(new PrintCOBProgramRunnerListener(logLevel, new PrintBProgramRunnerListener()));
 
-        BpgpListener listener = null;
+        listener = null;
 
         try {
             File tempFile = File.createTempFile("bpRun-", ".log");
@@ -60,9 +60,6 @@ public class CobpRunner {
         bprog.setEventSelectionStrategy(prio);
 //      bprog.setWaitForExternalEvents(true);
         rnr.run();
-
-        runResult = listener.runResult;
-        numOfEvents = listener.counter;
     }
 }
 
