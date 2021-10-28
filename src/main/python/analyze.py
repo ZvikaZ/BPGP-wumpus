@@ -15,14 +15,17 @@ def get_dirs(path):
 def get_run_result(d):
     with open(os.path.join(d, STAT_FILE)) as f:
         lines = f.readlines()
+
     # Generation 0, best: 47.000000, mean: 423.200000, median: 74.000000, num_of_inds: 10, unique_values: 3, unique_ratio: 0.300000
-    r = re.compile(r'Generation (\d+), best: (\d+\.\d+), mean: (\d+\.\d+), median: (\d+\.\d+), .*, unique_ratio: (\d+\.\d+)')
+    r = re.compile(r'Generation (\d+), best: (\d+\.\d+), mean: (\d+\.\d+|Infinity), median: (\d+\.\d+), .*, unique_ratio: (\d+\.\d+)')
     generations = [int(r.match(l).group(1)) for l in lines]
     bests = [float(r.match(l).group(2)) for l in lines]
     means = [float(r.match(l).group(3)) for l in lines]
     medians = [float(r.match(l).group(4)) for l in lines]
     unique_ratios = [float(r.match(l).group(5)) for l in lines]
     assert len(lines) == len(generations) == len(bests) == len(means) == len(medians) == len(unique_ratios)
+    if float('inf') in means:
+        print("Warning: there is an inifinity in means: ", means)
     return {
         'run': d,
         'bests': bests,
