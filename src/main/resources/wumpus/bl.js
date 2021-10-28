@@ -16,6 +16,14 @@ function direction(a, b) {
         return 270
 }
 
+function manhattanDistance(a, b) {
+    return Math.abs(a.row - b.row) + Math.abs(a.col - b.col)
+}
+
+function manhattanDistanceFromPlayer(cell) {
+    return manhattanDistance(cell, ctx.getEntityById("player"))
+}
+
 // return plan from player to dest, assuming near(player,dest)
 function planToNear(dest) {
     let player = ctx.getEntityById("player")

@@ -19,8 +19,9 @@ GRAMMAR
 <name> ::= "arbitrary string"
 <query> ::= Cell.NearVisited_NoGold | Cell.NearUnvisitedNoDanger_NoGold | Cell.NearVisited_NoGold | Cell.UnVisitedSafeToVisit | Cell.UnVisitedPossibleDangerRoute
 
-<request_plan> ::= sync({request: Event("Plan", {plan: <planner>}), waitFor: ContextChanged}, <prio>)
+<request_plan> ::= sync({request: Event("Plan", {plan: <planner>}), waitFor: ContextChanged}, <prio_func>)
 <planner> ::= createPlanTo(entity)
+<prio_func> ::= <prio> | <prio> + manhattanDistanceFromPlayer(entity) | <prio> - manhattanDistanceFromPlayer(entity)
 <prio> ::= 50 | 51 | ... | 69 | 70
 ```
 

@@ -4,7 +4,7 @@ parent.1 = @ec.Evolve gp/koza/koza.params
 
 gp.fs.size = 1
 gp.fs.0.name = f0
-gp.fs.0.size = 7
+gp.fs.0.size = 9
 
 # Cons
 gp.fs.0.func.6 = func.Cons
@@ -17,6 +17,10 @@ gp.fs.0.func.1 = func.CtxBthread
 gp.fs.0.func.1.nc = nc2
 gp.fs.0.func.2 = func.RequestPlan
 gp.fs.0.func.2.nc = nc2
+gp.fs.0.func.7 = func.PrioPlusDist
+gp.fs.0.func.7.nc = nc1
+gp.fs.0.func.8 = func.PrioMinusDist
+gp.fs.0.func.8.nc = nc1
 
 # ERCs
 gp.fs.0.func.3 = func.PlannerERC

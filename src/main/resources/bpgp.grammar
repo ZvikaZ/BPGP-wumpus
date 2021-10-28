@@ -1,7 +1,8 @@
 <start> ::= (Cons <bt> <more-bts>)
 <more-bts> ::= (Cons <bt> <more-bts>) | <bt>
 <bt> ::= (CtxBthread <query> <request_plan>)
-<request_plan> ::= (RequestPlan <planner> <prio>)
+<request_plan> ::= (RequestPlan <planner> <prio_func>)
 <planner> ::= (PlannerERC)
+<prio_func> ::= <prio> | (PrioPlusDist <prio>) | (PrioMinusDist <prio>)
 <query> ::= (QueryERC)
 <prio> ::= (PrioERC)
