@@ -17,9 +17,10 @@ GRAMMAR
 })
 
 <name> ::= "arbitrary string"
-<query> ::= Cell.NearVisited_NoGold | Cell.NearUnvisitedNoDanger_NoGold | Cell.NearVisited_NoGold
+<query> ::= Cell.NearVisited_NoGold | Cell.NearUnvisitedNoDanger_NoGold | Cell.NearVisited_NoGold | Cell.UnVisitedSafeToVisit | Cell.UnVisitedPossibleDangerRoute
+
 <request_plan> ::= sync({request: Event("Plan", {plan: <planner>}), waitFor: ContextChanged}, <prio>)
-<planner> ::= planToNear(entity) 
+<planner> ::= createPlanTo(entity)
 <prio> ::= 50 | 51 | ... | 69 | 70
 ```
 
