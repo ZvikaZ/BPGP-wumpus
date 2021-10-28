@@ -15,7 +15,7 @@ import org.mozilla.javascript.NativeObject;
 
 public class BpgpProblem extends GPProblem implements SimpleProblemForm {
     static final boolean debug = false;
-    static final int numOfBoards = 5;
+    static final int numOfBoards = 70;      //TODO use split point
 
     protected double bpRun(String generatedCode, int boardNum) {
         generatedCode = "bp.log.setLevel(\"Warn\");\n" + generatedCode;   //TODO return

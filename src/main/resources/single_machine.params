@@ -52,11 +52,10 @@ pop.subpop.0.species.pipe.source.0.source.0.tries = 4
 # TODO during development, it distracts, will be returned in later phases
 #breed.elite.0 = 2
 
-#TODO increase... maybe 200 generations
-generations	= 200
-pop.subpop.0.size	= 400
+generations	= 300
+pop.subpop.0.size	= 100
 
-## debug - turn off mutation
+## debug - turn off mutation  #TODO
 #pop.subpop.0.species.mutation-prob = 0
 
 
@@ -82,7 +81,7 @@ stat.child.1 = BpgpStatistics
 pop.subpop.0.species = BpgpSpecies
 
 
-# for each ind, calc fitness 6 times, and return the average
-eval.num-tests = 6
-eval.merge = mean
+## for each ind, calc fitness 6 times, and return the average
+#eval.num-tests = 6
+#eval.merge = mean
 
