@@ -91,11 +91,6 @@
                         </goals>
                         <configuration>
                             <mainClass>BpgpEvolve</mainClass>
-                            <!--                            <mainClass>ec.Evolve</mainClass>-->
-                            <!--                            <arguments>-->
-                            <!--                                <argument>-file</argument>-->
-                            <!--                                <argument>src/main/resources/single_machine.params</argument>-->
-                            <!--                            </arguments>-->
                         </configuration>
                     </execution>
                     <execution>
@@ -119,8 +114,12 @@
                         <configuration>
                             <mainClass>ec.eval.Slave</mainClass>
                             <arguments>
-                                <argument>-file</argument>
-                                <argument>src/main/resources/slave.params</argument>
+<!--                                the following are commented,-->
+<!--                                because they are passed from 'run_slave.sh' -->
+<!--                                <argument>-file</argument>-->
+<!--                                <argument>src/main/resources/slave.params</argument>-->
+<!--                                <argument>-p</argument>-->
+<!--                                <argument>eval.master.host=localhost</argument>-->
                             </arguments>
                         </configuration>
                     </execution>

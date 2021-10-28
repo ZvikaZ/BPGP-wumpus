@@ -3,8 +3,8 @@
 # sends slaves
 # should be run only from its directory!
 
-for i in {1..50}
+for i in {1..250}
 do
-   sbatch ./run_slave.sh
+   sbatch ./run_slave.sh `hostname -i`
 done
 
