@@ -35,18 +35,20 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
 
 //            double scoreNormalized = BpgpUtils.sigmoid((1000 - score) / 200.0);
             double scoreNormalized = (1000 - score) / 2000.0;
-            double pressuredScore = BpgpUtils.pressure(scoreNormalized);
+//            double pressuredScore = BpgpUtils.pressure(scoreNormalized);
 //            double numOfBtsNormalized = BpgpUtils.sigmoid(numOfBts / 3.0);
 //            double numOfEventsNormalized = BpgpUtils.sigmoid(numOfEvents / 20.0);
             double boardMissingCoverageNormalized = 1 - (numOfVisitedCells / boardSize);
 
-            double result = 0.8 * pressuredScore  + 0.2 * boardMissingCoverageNormalized;
+            double result = score > 0 ?
+                    scoreNormalized :
+                    0.8 * scoreNormalized  + 0.2 * boardMissingCoverageNormalized;
             System.out.println("getRunFitness. score: " + score +
 //                    ", numOfBts: " + numOfBts +
                     ", numOfEvents: " + numOfEvents +
                     ", numOfVisitedCells: " + numOfVisitedCells +
                     ", scoreNormalized: " + scoreNormalized +
-                    ", pressuredScore: " + pressuredScore +
+//                    ", pressuredScore: " + pressuredScore +
 //                    ", numOfBtsNormalized: " + numOfBtsNormalized + ", numOfEventsNormalized: " + numOfEventsNormalized +
                     ", boardMissingCoverageNormalized: " + boardMissingCoverageNormalized +
                     ". result: " + result);

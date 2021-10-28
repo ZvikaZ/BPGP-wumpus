@@ -74,10 +74,10 @@ public class BpgpUtils {
 //        return 1.0 / (1 + Math.exp(-x));
 //    }
 
-    static double pressure(double x) {
-        //TODO remember denom?
-        return (1.0 - Math.exp(-x)) / (1 - Math.exp(-1));
-    }
+//    static double pressure(double x) {
+//        //TODO remember denom?
+//        return (1.0 - Math.exp(-x)) / (1 - Math.exp(-1));
+//    }
 
 //    private String resourceToString(String resourceName) {
 //        URL url = this.getClass().getResource(resourceName);
