@@ -64,11 +64,11 @@ def plot_single_run(ax, r):
     return out
 
 
-def analyze(d, single_run):
-    if single_run:
-        analyze_single_run(d)
-    else:
+def analyze(d, regression):
+    if regression:
         analyze_regression(d)
+    else:
+        analyze_single_run(d)
 
 
 def analyze_regression(regression_dir):
@@ -91,8 +91,8 @@ def analyze_regression(regression_dir):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter,
                                      description="Analyze regression results",)
-    parser.add_argument("dir", help="directory containing regression, or run results")
-    parser.add_argument("--single_run", "-s",  action='store_true', help="'dir' points to single run, instead of regression")
+    parser.add_argument("dir", help="directory containing run results, or regression")
+    parser.add_argument("--regression", "-r",  action='store_true', help="'dir' points to regression, instead of single run")
 
     args = parser.parse_args()
-    analyze(args.dir, args.single_run)
+    analyze(args.dir, args.regression)
