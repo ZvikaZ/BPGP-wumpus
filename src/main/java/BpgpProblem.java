@@ -31,17 +31,23 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
             double score = (double) ((NativeObject) runResult.getData()).get("score");
             double numOfVisitedCells = (double) ((NativeObject) runResult.getData()).get("numOfVisitedCells");
             double boardSize = (double) ((NativeObject) runResult.getData()).get("boardSize");
-            int numOfBts = BpgpUtils.countInString(generatedCode, "bthread");
+//            int numOfBts = BpgpUtils.countInString(generatedCode, "bthread");
 
-            double scoreNormalized = BpgpUtils.sigmoid((1000 - score) / 200.0);
-            double numOfBtsNormalized = BpgpUtils.sigmoid(numOfBts / 3.0);
-            double numOfEventsNormalized = BpgpUtils.sigmoid(numOfEvents / 20.0);
+//            double scoreNormalized = BpgpUtils.sigmoid((1000 - score) / 200.0);
+            double scoreNormalized = (1000 - score) / 2000.0;
+            double pressuredScore = BpgpUtils.pressure(scoreNormalized);
+//            double numOfBtsNormalized = BpgpUtils.sigmoid(numOfBts / 3.0);
+//            double numOfEventsNormalized = BpgpUtils.sigmoid(numOfEvents / 20.0);
             double boardMissingCoverageNormalized = 1 - (numOfVisitedCells / boardSize);
 
-            double result = 0.4 * scoreNormalized + 0.1 * numOfEventsNormalized + 0.4 * boardMissingCoverageNormalized + 0.1 * numOfBtsNormalized;
-            System.out.println("getRunFitness. score: " + score + ", numOfBts: " + numOfBts + ", numOfEvents: " + numOfEvents +
-                    ", numOfVisitedCells: " + numOfVisitedCells + ", scoreNormalized: " + scoreNormalized +
-                    ", numOfBtsNormalized: " + numOfBtsNormalized + ", numOfEventsNormalized: " + numOfEventsNormalized +
+            double result = 0.8 * pressuredScore  + 0.2 * boardMissingCoverageNormalized;
+            System.out.println("getRunFitness. score: " + score +
+//                    ", numOfBts: " + numOfBts +
+                    ", numOfEvents: " + numOfEvents +
+                    ", numOfVisitedCells: " + numOfVisitedCells +
+                    ", scoreNormalized: " + scoreNormalized +
+                    ", pressuredScore: " + pressuredScore +
+//                    ", numOfBtsNormalized: " + numOfBtsNormalized + ", numOfEventsNormalized: " + numOfEventsNormalized +
                     ", boardMissingCoverageNormalized: " + boardMissingCoverageNormalized +
                     ". result: " + result);
 
