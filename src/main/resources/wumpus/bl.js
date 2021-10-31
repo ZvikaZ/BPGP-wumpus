@@ -147,7 +147,7 @@ const grab = Event("Play", {id: 'grab'})
 // required in order to make some initial effects to our kb in dal
 bthread("start", function() {
     //TODO here, and in all 'request's - try to remove priority
-    sync({request: Event("Start")}, 1000)
+    sync({request: Event("Start")}, 10000)
 })
 
 ctx.bthread("Game over", "Game over", function (entity) {
@@ -256,7 +256,7 @@ bthread("stop wandering around",  function () {
         sync({waitFor: Event("Play", {id: 'forward'})})
         // bp.log.info("event " + i + " out of " + max_actions)
     }
-    sync({request: Event("Wandering")}, 200)
+    sync({request: Event("Wandering")}, 2000)
 })
 
 
@@ -265,9 +265,9 @@ ctx.bthread("Grab gold", "PlayerInCellWithGold", function (entity) {
     // the loop is required, because maybe the some other action was selected, and the gold wasn't grabbed
     while (true) {
         //TODO remove prio
-        sync({request: Event("Finished plan")}, 240)
+        sync({request: Event("Finished plan")}, 2400)
         //TODO remove prio
-        sync({request: grab}, 110)  //Z removing 'block: grab' fixed the infinite loop ; also added back prio
+        sync({request: grab}, 1100)  //Z removing 'block: grab' fixed the infinite loop ; also added back prio
     }
 })
 
@@ -277,7 +277,7 @@ ctx.bthread("Escape from cave with gold", "PlayerHasGold", function (kb) {
     let plan = createPlanTo({row: 1, col: 1})
     plan.push('climb')
     let p = Event("Plan", {plan: plan})
-    sync({request: p, block: p.negate()}, 100)  //Z returned prio
+    sync({request: p, block: p.negate()}, 1000)  //Z returned prio
 })
 
 //TODO del
@@ -300,12 +300,12 @@ ctx.bthread("Execute plan", "Active plan", function (entity) {
     let plan = entity.val
     bp.log.fine("execute plan, got: " + plan)
     for (var i = 0; i < plan.length; i++) {
-        let e = sync({request: Event("Play", {id: plan[i]}), block: AnyPlan}, 140) //Z returned prio
+        let e = sync({request: Event("Play", {id: plan[i]}), block: AnyPlan}, 1400) //Z returned prio
         bp.log.fine("Executed " + plan[i] + ", step #" + i + " of plan: " + plan)
         if (e.data.id != plan[i])
             throw new Error("plan execution failure!")
     }
-    sync({request: Event("Finished plan")}, 240)  // uncommented this
+    sync({request: Event("Finished plan")}, 2400)  // uncommented this
 
     let player = ctx.getEntityById("player")
     bp.log.fine("Finished executing plan: " + plan + ". Now player in: " + player.row + ":" + player.col)

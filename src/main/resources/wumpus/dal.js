@@ -438,7 +438,9 @@ function updateSafeNewCells(kb) {
             kb.safe_unvisited_cells.add(getCellCords(cell))
             // bp.log.info("Moving from potential to safe " + getCellCords(cell))
         }
-
+        if (cell.Pit == "visited" && cell.Wumpus == "visited") {
+            it.remove()
+        }
     }
     for (let it = kb.safe_unvisited_cells.iterator(); it.hasNext(); ) {
         let cell = getCellEntityFromCords(it.next())

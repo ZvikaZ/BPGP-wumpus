@@ -29,7 +29,7 @@ public class BpgpUtils {
         return i;
     }
 
-    public static String writeToTempFile(String generatedCode) {
+    public static File writeToTempFile(String generatedCode) {
         File tempFile = null;
         try {
             tempFile = File.createTempFile("BPGP-", ".tmp.js", getResourcesPath());
@@ -41,7 +41,7 @@ public class BpgpUtils {
             BufferedWriter bw = new BufferedWriter(fileWriter);
             bw.write(generatedCode.toString());
             bw.close();
-            return tempFile.getName();
+            return tempFile;
         } catch (IOException e) {
             e.printStackTrace();
             return null;

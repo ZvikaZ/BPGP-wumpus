@@ -12,6 +12,8 @@ import il.ac.bgu.cs.bp.bpjs.model.BEvent;
 
 import org.mozilla.javascript.NativeObject;
 
+import java.io.File;
+
 
 public class BpgpProblem extends GPProblem implements SimpleProblemForm {
     static final boolean debug = false;
@@ -19,8 +21,13 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
 
     protected double bpRun(String generatedCode, int boardNum) {
         generatedCode = "bp.log.setLevel(\"Warn\");\n" + generatedCode;   //TODO return
-        String tempFile = BpgpUtils.writeToTempFile(generatedCode);
-        CobpRunner runner = new CobpRunner("wumpus/boards/board"+boardNum+".js", "wumpus/dal.js", "wumpus/bl.js", tempFile);
+        File tempFile = BpgpUtils.writeToTempFile(generatedCode);
+        CobpRunner runner = new CobpRunner("wumpus/boards/board"+boardNum+".js", "wumpus/dal.js", "wumpus/bl.js", tempFile.getName());
+
+        File dest = new File(tempFile+".done");
+        var success = tempFile.renameTo(dest);
+
+
         return getRunFitness(runner.listener.runResult, runner.listener.numOfEvents, generatedCode);
     }
 
