@@ -8,6 +8,11 @@
     <artifactId>BPGP-wumpus</artifactId>
     <version>1.0-SNAPSHOT</version>
     <dependencies>
+        <dependency>
+            <groupId>com.github.ZvikaZ</groupId>
+            <artifactId>jslurm</artifactId>
+            <version>ced70f4</version>
+        </dependency>
         <!-- using my private version, until https://github.com/GMUEClab/ecj/issues/75 and https://github.com/GMUEClab/ecj/issues/77 will be fixed and version 27.1 (or 28) will be issued...-->
         <dependency>
             <groupId>com.github.ZvikaZ</groupId>
@@ -106,35 +111,45 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>master</id>
+<!--                        used to split evaluations with many slurm calls -->
+                        <id>bpRun</id>
                         <goals>
                             <goal>java</goal>
                         </goals>
                         <configuration>
-                            <mainClass>ec.Evolve</mainClass>
-                            <arguments>
-                                <argument>-file</argument>
-                                <argument>src/main/resources/master.params</argument>
-                            </arguments>
+                            <mainClass>BpgpProblem</mainClass>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>slave</id>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                        <configuration>
-                            <mainClass>ec.eval.Slave</mainClass>
-                            <arguments>
-<!--                                the following are commented,-->
-<!--                                because they are passed from 'run_slave.sh' -->
+<!--                    <execution>-->
+<!--                        <id>master</id>-->
+<!--                        <goals>-->
+<!--                            <goal>java</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <mainClass>ec.Evolve</mainClass>-->
+<!--                            <arguments>-->
 <!--                                <argument>-file</argument>-->
-<!--                                <argument>src/main/resources/slave.params</argument>-->
-<!--                                <argument>-p</argument>-->
-<!--                                <argument>eval.master.host=localhost</argument>-->
-                            </arguments>
-                        </configuration>
-                    </execution>
+<!--                                <argument>src/main/resources/master.params</argument>-->
+<!--                            </arguments>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                    <execution>-->
+<!--                        <id>slave</id>-->
+<!--                        <goals>-->
+<!--                            <goal>java</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <mainClass>ec.eval.Slave</mainClass>-->
+<!--                            <arguments>-->
+<!--&lt;!&ndash;                                the following are commented,&ndash;&gt;-->
+<!--&lt;!&ndash;                                because they are passed from 'run_slave.sh' &ndash;&gt;-->
+<!--&lt;!&ndash;                                <argument>-file</argument>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <argument>src/main/resources/slave.params</argument>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <argument>-p</argument>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <argument>eval.master.host=localhost</argument>&ndash;&gt;-->
+<!--                            </arguments>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
                 </executions>
             </plugin>
         </plugins>

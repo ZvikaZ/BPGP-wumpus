@@ -13,27 +13,34 @@ import il.ac.bgu.cs.bp.bpjs.model.BEvent;
 import org.mozilla.javascript.NativeObject;
 
 import java.io.File;
+import java.io.IOException;
 
 
 public class BpgpProblem extends GPProblem implements SimpleProblemForm {
     static final boolean debug = false;
     static final int numOfBoards = 70;      //TODO use split point
+    static final int slurmRerunTries = 3;
 
-    protected double bpRun(String generatedCode, int boardNum) {
-        generatedCode = "bp.log.setLevel(\"Warn\");\n" + generatedCode;   //TODO return
-        File tempFile = BpgpUtils.writeToTempFile(generatedCode);
-        CobpRunner runner = new CobpRunner("wumpus/boards/board"+boardNum+".js", "wumpus/dal.js", "wumpus/bl.js", tempFile.getName());
+    // used for slurm call when splitting evaluations
+    public static void main(String[] args) throws IOException {
+        BpgpProblem problem = new BpgpProblem();
+        System.out.println(problem.bpRun(new File(args[0]), Integer.parseInt(args[1])));
+        // without this 'mvn exec' takes ages to finish, and issues warnings
+        System.exit(0);
+    }
 
-        File dest = new File(tempFile+".done");
-        var success = tempFile.renameTo(dest);
+    protected double bpRun(File indCodeFile, int boardNum) {
+        CobpRunner runner = new CobpRunner("wumpus/boards/board"+boardNum+".js", "wumpus/dal.js", "wumpus/bl.js", indCodeFile.getName());
 
+//        File dest = new File(indCodeFile+".done");
+//        var success = indCodeFile.renameTo(dest);
 
-        return getRunFitness(runner.listener.runResult, runner.listener.numOfEvents, generatedCode);
+        return getRunFitness(runner.listener.runResult, runner.listener.numOfEvents);
     }
 
     // return a Koza fitness: 0 is best, infinity is worst
     // Wumpus score: -inf is worse, 1000 is best
-    private double getRunFitness(BEvent runResult, int numOfEvents, String generatedCode) {
+    private double getRunFitness(BEvent runResult, int numOfEvents) {
         if (runResult != null && runResult.getName().equals("Game over")) {
             double score = (double) ((NativeObject) runResult.getData()).get("score");
             double numOfVisitedCells = (double) ((NativeObject) runResult.getData()).get("numOfVisitedCells");
@@ -96,14 +103,10 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
 //        String niceTree = treeToString(((GPIndividual) ind).trees[0], state);
 //        System.out.println("grammar: " + niceTree + "---------");
 
-        double totalRunResults = 0;
+        indCode = "bp.log.setLevel(\"Warn\");\n" + indCode;
+        File indCodeFile = BpgpUtils.writeToTempFile(indCode);
 
-        for (int i=1; i <= numOfBoards; i++) {
-            double runResult = bpRun(indCode, i);
-            if (debug)
-                System.out.println("runResult:" + runResult);
-            totalRunResults += runResult;
-        }
+        double totalRunResults = runAndCalcFitnesses(indCodeFile);
 
         if (debug)
             System.out.println("totalRunResults: " + totalRunResults);
@@ -111,6 +114,49 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
         f.setStandardizedFitness(state, totalRunResults / numOfBoards);
         f.printFitnessForHumans(state, 0);
         ind.evaluated = true;
+    }
+
+    private double runAndCalcFitnesses(File indCodeFile) {
+        double totalRunResults = 0;
+
+        if (Slurm.isSlurmInstalled()) {
+            Slurm[] slurms = new Slurm[numOfBoards];
+            for (int i = 1; i <= numOfBoards; i++) {
+                slurms[i-1] = new Slurm(String.format(
+                        "mvn exec:java@bpRun -Dexec.args=\'%s %d\'",
+                        indCodeFile, i));
+            }
+            for (int k = 0; k <= slurmRerunTries - 1; k++) {
+                for (int i = 0; i <= numOfBoards - 1; i++) {
+                    if (slurms[i].getStatus() == Slurm.Status.FAILED)
+                        slurms[i].runJob();
+                }
+            }
+            for (int i = 0; i <= numOfBoards - 1; i++) {
+                slurms[i].waitFinished();
+            }
+            for (int i = 0; i <= numOfBoards - 1; i++) {
+                if (slurms[i].getStatus() != Slurm.Status.COMPLETED)
+                    try {
+                        throw new IOException();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                String[] output = slurms[i].getOutput().split("\n");
+                double runResult = Double.parseDouble(output[output.length-1]);
+                System.out.println(runResult);
+                totalRunResults += runResult;
+            }
+        } else {
+            // no Slurm
+            for (int i = 1; i <= numOfBoards; i++) {
+                double runResult = bpRun(indCodeFile, i);
+                if (debug)
+                    System.out.println("runResult:" + runResult);
+                totalRunResults += runResult;
+            }
+        }
+        return totalRunResults;
     }
 
 
