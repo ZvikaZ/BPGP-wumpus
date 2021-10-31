@@ -19,7 +19,7 @@ import java.io.IOException;
 public class BpgpProblem extends GPProblem implements SimpleProblemForm {
     static final boolean debug = false;
     static final int numOfBoards = 70;      //TODO use split point
-    static final int slurmRerunTries = 3;
+    static final int slurmRerunTries = 5000;
 
     // used for slurm call when splitting evaluations
     public static void main(String[] args) throws IOException {
@@ -127,24 +127,29 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
                         indCodeFile, i));
             }
             for (int k = 0; k <= slurmRerunTries - 1; k++) {
+                //TODO break if all OK
                 for (int i = 0; i <= numOfBoards - 1; i++) {
                     if (slurms[i].getStatus() == Slurm.Status.FAILED)
                         slurms[i].runJob();
                 }
             }
             for (int i = 0; i <= numOfBoards - 1; i++) {
+                if (slurms[i].getStatus() == Slurm.Status.FAILED) {
+                    System.out.println("ERROR: job failed, exiting: " + slurms[i]);
+                    throw new RuntimeException();
+                }
+            }
+            for (int i = 0; i <= numOfBoards - 1; i++) {
+                // System.out.println("waitFinished. i: " + i + ", job: " + slurms[i].jobId);
                 slurms[i].waitFinished();
             }
             for (int i = 0; i <= numOfBoards - 1; i++) {
-                if (slurms[i].getStatus() != Slurm.Status.COMPLETED)
-                    try {
-                        throw new IOException();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                if (slurms[i].getStatus() != Slurm.Status.COMPLETED) {
+                    System.out.println("ERROR: job not completed, exiting: " + slurms[i]);
+                    throw new RuntimeException();
+                }
                 String[] output = slurms[i].getOutput().split("\n");
                 double runResult = Double.parseDouble(output[output.length-1]);
-                System.out.println(runResult);
                 totalRunResults += runResult;
             }
         } else {
