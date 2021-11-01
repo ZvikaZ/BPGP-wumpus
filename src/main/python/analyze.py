@@ -44,9 +44,9 @@ def analyze_single_run(d):
 
 
 def plot_single_run(ax, r):
-    out = ax.plot(r['bests'], 'o-', label='best')
-    ax.plot(r['means'], 'o-', label='mean')
-    ax.plot(r['medians'], 'o-', alpha=0.6, label='median')
+    out = ax.plot(r['bests'], '.-', label='best')
+    ax.plot(r['means'], '.-', label='mean')
+    ax.plot(r['medians'], '.-', alpha=0.6, label='median')
     # plot nothing, just add to our legend
     ax.plot([], [], '.-', label = 'unique_ratios', color='tab:pink')
     ax.set_ylim(bottom=0)
