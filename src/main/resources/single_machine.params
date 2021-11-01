@@ -55,8 +55,8 @@ pop.subpop.0.species.pipe.source.0.source.0.tries = 4
 generations	= 300
 pop.subpop.0.size	= 100
 
-## debug - turn off mutation  #TODO
-#pop.subpop.0.species.mutation-prob = 0
+# TODO is 0.0
+pop.subpop.0.species.mutation-prob = 0.01
 
 
 ## commented, because master/slave model
