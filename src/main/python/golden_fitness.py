@@ -1,3 +1,5 @@
+#!/home/zvikah/.conda/envs/bpgp/bin/python
+
 # calcs the fitness of golden.js over all boards
 # should be run from main directory of project
 

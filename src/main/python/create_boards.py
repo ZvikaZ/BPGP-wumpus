@@ -1,3 +1,5 @@
+#!/home/zvikah/.conda/envs/bpgp/bin/python
+
 import random
 
 LENGTH = 10
