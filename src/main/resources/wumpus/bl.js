@@ -207,7 +207,7 @@ ctx.bthread("Game over", "Game over", function (entity) {
 ///////////            strategies            //////////////
 ///////////////////////////////////////////////////////////
 
-// moved 3 main strategies to evolved.js
+// moved main strategies to golden.js
 
 // // random walker, with low prio - to do something when strategies don't care
 // bthread("player - random walker", function () {

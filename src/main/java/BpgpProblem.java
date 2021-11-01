@@ -22,6 +22,8 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
     static final int slurmRerunTries = 5000;
 
     // used for slurm call when splitting evaluations
+    // first arg is file.js ; second arg is boardNum
+    // it prints the calculated fitness
     public static void main(String[] args) throws IOException {
         BpgpProblem problem = new BpgpProblem();
         System.out.println(problem.bpRun(new File(args[0]), Integer.parseInt(args[1])));
