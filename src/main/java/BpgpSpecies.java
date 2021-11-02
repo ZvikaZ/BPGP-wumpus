@@ -10,9 +10,12 @@ import java.util.List;
 public class BpgpSpecies extends ec.gp.ge.GESpecies {
     public List<HashMap<String, Object>> miscMaps;
 
+    public List<BpgpIndInfo> indInfos;
+
     public void setup(EvolutionState state, Parameter base) {
         super.setup(state, base);
         miscMaps = new ArrayList<>();
+        indInfos = new ArrayList<BpgpIndInfo>();
     }
 
     public void updateSubpopulation(EvolutionState state, Subpopulation subpop) {

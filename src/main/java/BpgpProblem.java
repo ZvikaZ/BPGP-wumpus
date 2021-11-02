@@ -1,4 +1,5 @@
 import BP.CobpRunner;
+import ec.Subpopulation;
 import func.StringData;
 
 import ec.EvolutionState;
@@ -108,6 +109,10 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
         indCode = "bp.log.setLevel(\"Warn\");\n" + indCode;
         File indCodeFile = BpgpUtils.writeToTempFile(indCode);
 
+        BpgpIndInfo indInfo = new BpgpIndInfo((GPIndividual)ind, indCode);
+        BpgpSpecies species = (BpgpSpecies) state.population.subpops.get(subpopulation).species;
+        species.indInfos.add(indInfo);
+
         double totalRunResults = runAndCalcFitnesses(indCodeFile);
 
         if (debug)
@@ -151,6 +156,7 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
                     throw new RuntimeException();
                 }
                 String[] output = slurms[i].getOutput().split("\n");
+                new File(slurms[i].getOutputFileName()).delete();
                 double runResult = Double.parseDouble(output[output.length-1]);
                 totalRunResults += runResult;
             }
@@ -163,6 +169,8 @@ public class BpgpProblem extends GPProblem implements SimpleProblemForm {
                 totalRunResults += runResult;
             }
         }
+
+        indCodeFile.delete();
         return totalRunResults;
     }
 

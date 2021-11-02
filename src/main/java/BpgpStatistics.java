@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -43,6 +44,7 @@ public class BpgpStatistics extends Statistics {
         HashSet<Double> fitnessesSet = new HashSet<Double>();
         double sumFitnesses = 0;
         double bestFitness = Double.POSITIVE_INFINITY;
+        double worstFitness = Double.NEGATIVE_INFINITY;
 
         long stopTime = System.currentTimeMillis();
         double elapsedSeconds = (stopTime - startTime) / 1000.0;
@@ -65,14 +67,34 @@ public class BpgpStatistics extends Statistics {
             sumFitnesses += fitnesses[index];
             if (fitnesses[index] < bestFitness)
                 bestFitness = fitnesses[index];
+            if (fitnesses[index] > worstFitness)
+                worstFitness = fitnesses[index];
         }
+
+		// TODO avoid suplicate information
+        state.output.println("=================", log);
+
+        BpgpSpecies species = (BpgpSpecies)state.population.subpops.get(SUBPOP).species;
+        for (BpgpIndInfo indInfo : species.indInfos) {
+            indInfo.ind.printIndividualForHumans(state, log);
+            state.output.println("\n////////////////////", log);
+            state.output.println(indInfo.code, log);
+            state.output.println("-----------------", log);
+        }
+
+        // it's a little bit ugly that stats code modifies core code
+        // TODO: find better way
+        species.indInfos = new ArrayList<BpgpIndInfo>();
+
+        state.output.println("=================", log);
+
         Arrays.sort(fitnesses);
         var median = fitnesses[individuals.size() / 2];
         var mean = sumFitnesses / individuals.size();
         double unique_ratio = (double)fitnessesSet.size() / individuals.size();
         state.output.println(
-                String.format("Generation %d, best: %f, mean: %f, median: %f, num_of_inds: %d, unique_values: %d, unique_ratio: %f, time(s): %f",
-                        state.generation, bestFitness, mean, median, individuals.size(), fitnessesSet.size(),
+                String.format("Generation %d, best: %f, mean: %f, median: %f, worst: %f, num_of_inds: %d, unique_values: %d, unique_ratio: %f, time(s): %f",
+                        state.generation, bestFitness, mean, median, worstFitness, individuals.size(), fitnessesSet.size(),
                         unique_ratio, elapsedSeconds), bpgpLog);
 
     }
