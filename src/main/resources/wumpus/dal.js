@@ -307,6 +307,7 @@ ctx.registerEffect("Wandering", function (effect) {
 })
 
 ctx.registerEffect("StrategiesDontCare", function (effect) {
+    updateScore(-700);
     gameOver("StrategiesDontCare")
 })
 
